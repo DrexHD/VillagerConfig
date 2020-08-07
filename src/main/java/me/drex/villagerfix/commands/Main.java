@@ -4,8 +4,11 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import me.drex.villagerfix.VillagerFix;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.Formatting;
 
 public class Main {
@@ -26,7 +29,16 @@ public class Main {
     }
 
     private int execute(CommandContext<ServerCommandSource> context) {
-        context.getSource().sendFeedback(new LiteralText("Version: " + VillagerFix.version()).formatted(Formatting.AQUA), false);
+        ModMetadata meta = FabricLoader.getInstance().getModContainer("villagerfix").get().getMetadata();
+        boolean lock = VillagerFix.INSTANCE.config().lock;
+        MutableText text = new LiteralText("")
+                .append(new LiteralText("VillagerFix Version: " + meta.getVersion().getFriendlyString()).formatted(Formatting.WHITE, Formatting.BOLD))
+                .append(new LiteralText("\n\nSettings: ").formatted(Formatting.WHITE, Formatting.BOLD))
+                .append(new LiteralText("\nDiscount (max): ").formatted(Formatting.AQUA))
+                .append(new LiteralText(VillagerFix.INSTANCE.config().maxdiscount + "%").formatted(Formatting.GRAY, Formatting.ITALIC))
+                .append(new LiteralText("\nLock Villagers: ").formatted(Formatting.AQUA))
+                .append(new LiteralText(String.valueOf(lock)).formatted(Formatting.GRAY, Formatting.ITALIC));
+        context.getSource().sendFeedback(text, false);
         return 1;
     }
 

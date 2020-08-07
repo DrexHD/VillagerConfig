@@ -14,7 +14,6 @@ public class VillagerFix {
     public static final Logger LOG = LogManager.getLogger();
     public static VillagerFix INSTANCE;
     private final Config config;
-    private static String version = "1.0.0-Beta";
 
 
     public VillagerFix() {
@@ -35,7 +34,4 @@ public class VillagerFix {
         return new File(path + "/config").toPath();
     }
 
-    public static String version() {
-        return version;
-    }
 }
