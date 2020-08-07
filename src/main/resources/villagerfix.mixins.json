@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "me.drex.villagerfix.mixin",
   "compatibilityLevel": "JAVA_8",
-  "server": [
+  "mixins": [
     "TradeOfferMixin",
     "GoToWorkTaskMixin"
   ],
