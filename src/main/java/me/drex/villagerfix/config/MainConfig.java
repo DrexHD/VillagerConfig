@@ -13,7 +13,7 @@ public class MainConfig {
             "More info at: https://minecraft.tools/en/color-code.php \ne.g: \"&eThe Yellow Thing\" will be yellow";
 
     @Setting(comment = "The highest possible discount a villager can give on it's trades")
-    public double maxdiscount = 50;
+    public double maxdiscount = 30;
 
     @Setting(comment = "Whether or not villagers should be locked to a profession once they claim it")
     public boolean lock = true;
