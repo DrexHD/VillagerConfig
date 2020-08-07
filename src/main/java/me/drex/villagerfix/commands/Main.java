@@ -13,8 +13,8 @@ public class Main {
     public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         LiteralArgumentBuilder<ServerCommandSource> main = LiteralArgumentBuilder.literal("villagerfix");
         LiteralArgumentBuilder<ServerCommandSource> alias = LiteralArgumentBuilder.literal("vf");
-        main.executes(this::execute);
-        alias.executes(this::execute);
+        main.executes(this::execute).requires(src -> src.hasPermissionLevel(2));
+        alias.executes(this::execute).requires(src -> src.hasPermissionLevel(2));
         then(main);
         then(alias);
         dispatcher.register(main);
