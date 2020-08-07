@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "villagerfix",
+  "version": "${version}",
+
+  "name": "Villager Fix",
+  "description": "This mod aims to fix OP villagers introduced in 1.14",
+  "authors": [
+    "Drex"
+  ],
+  "contact": {
+    "homepage": "https://github.com/DrexHD/VillagerFix",
+    "sources": "https://github.com/DrexHD/VillagerFix"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/modid/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "server": [
+      "me.drex.villagerfix.Mod"
+    ]
+  },
+  "mixins": [
+    "villagerfix.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  }
+}
