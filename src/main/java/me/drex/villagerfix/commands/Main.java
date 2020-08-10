@@ -7,6 +7,8 @@ import me.drex.villagerfix.VillagerFix;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.util.Formatting;
@@ -34,6 +36,9 @@ public class Main {
         MutableText text = new LiteralText("")
                 .append(new LiteralText("VillagerFix Version: " + meta.getVersion().getFriendlyString()).formatted(Formatting.WHITE, Formatting.BOLD))
                 .append(new LiteralText("\n\nSettings: ").formatted(Formatting.WHITE, Formatting.BOLD))
+                .styled(style -> style
+                        .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Click to copy config file location.").formatted(Formatting.AQUA)))
+                        .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, VillagerFix.configPath().resolve("villagerfix.conf").toFile().getAbsolutePath())))
                 .append(new LiteralText("\nDiscount (max): ").formatted(Formatting.AQUA))
                 .append(new LiteralText(VillagerFix.INSTANCE.config().maxdiscount + "%").formatted(Formatting.GRAY, Formatting.ITALIC))
                 .append(new LiteralText("\nLock Villagers: ").formatted(Formatting.AQUA))
