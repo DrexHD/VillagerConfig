@@ -1,6 +1,7 @@
 package me.drex.villagerfix.config;
 
 import com.google.common.reflect.TypeToken;
+import me.drex.villagerfix.Mod;
 import me.drex.villagerfix.VillagerFix;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.ConfigurationOptions;
@@ -29,6 +30,7 @@ public class Config {
             if (!file.exists()) {
                 file.createNewFile();
             }
+            Mod.LOGGER.info("Loading villagerfix config file at " + file.getAbsolutePath());
 
             node = loader.load(
                     ConfigurationOptions.defaults()

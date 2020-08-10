@@ -12,10 +12,10 @@ public class MainConfig {
             "\nYou can use Color Codes in string parameters, the character is \"&\" " +
             "More info at: https://minecraft.tools/en/color-code.php \ne.g: \"&eThe Yellow Thing\" will be yellow";
 
-    @Setting(comment = "The highest possible discount a villager can give on it's trades")
-    public double maxdiscount = 30;
+    @Setting(comment = "The highest possible discount a villager can give on it's trades (100 = vanilla, 0 = none)")
+    public double maxdiscount = 100;
 
-    @Setting(comment = "Whether or not villagers should be locked to a profession once they claim it")
-    public boolean lock = true;
+    @Setting(comment = "Whether or not villagers should be locked to a profession once they claim it (false = vanilla)")
+    public boolean lock = false;
 
 }
