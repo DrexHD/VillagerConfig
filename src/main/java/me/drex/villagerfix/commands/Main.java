@@ -16,6 +16,7 @@ import net.minecraft.util.Formatting;
 public class Main {
 
     public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+        String s = "a";
         LiteralArgumentBuilder<ServerCommandSource> main = LiteralArgumentBuilder.literal("villagerfix");
         LiteralArgumentBuilder<ServerCommandSource> alias = LiteralArgumentBuilder.literal("vf");
         main.executes(this::execute).requires(src -> src.hasPermissionLevel(2));
@@ -34,15 +35,30 @@ public class Main {
         ModMetadata meta = FabricLoader.getInstance().getModContainer("villagerfix").get().getMetadata();
         boolean lock = VillagerFix.INSTANCE.config().lock;
         MutableText text = new LiteralText("")
-                .append(new LiteralText("VillagerFix Version: " + meta.getVersion().getFriendlyString()).formatted(Formatting.WHITE, Formatting.BOLD))
+                .append(new LiteralText("VillagerFix Version: " + meta.getVersion().getFriendlyString()).formatted(Formatting.WHITE, Formatting.BOLD)
+                    .styled(style -> style
+                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Click to copy config file location.").formatted(Formatting.AQUA)))
+                        .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, VillagerFix.configPath().resolve("villagerfix.conf").toFile().getAbsolutePath()))))
                 .append(new LiteralText("\n\nSettings: ").formatted(Formatting.WHITE, Formatting.BOLD))
-                .styled(style -> style
-                        .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Click to copy config file location.").formatted(Formatting.AQUA)))
-                        .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, VillagerFix.configPath().resolve("villagerfix.conf").toFile().getAbsolutePath())))
                 .append(new LiteralText("\nDiscount (max): ").formatted(Formatting.AQUA))
-                .append(new LiteralText(VillagerFix.INSTANCE.config().maxdiscount + "%").formatted(Formatting.GRAY, Formatting.ITALIC))
+                .append(new LiteralText(VillagerFix.INSTANCE.config().maxdiscount + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
+                    .styled(style -> style
+                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Vanilla: ").formatted(Formatting.AQUA).append(new LiteralText("100%").formatted(Formatting.GRAY))))))
+                .append(new LiteralText("\nConversion chance: ").formatted(Formatting.AQUA))
+                .append(new LiteralText(VillagerFix.INSTANCE.config().conversionchance + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
+                    .styled(style -> style
+                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Vanilla: ").formatted(Formatting.AQUA)
+                                .append(new LiteralText("\nHard: ").formatted(Formatting.RED))
+                                .append(new LiteralText("100%").formatted(Formatting.GRAY))
+                                .append(new LiteralText("\nNormal: ").formatted(Formatting.YELLOW))
+                                .append(new LiteralText("50%").formatted(Formatting.GRAY))
+                                .append(new LiteralText("\nEasy / Peaceful: ").formatted(Formatting.GREEN))
+                                .append(new LiteralText("0%").formatted(Formatting.GRAY))
+                        ))))
                 .append(new LiteralText("\nLock Villagers: ").formatted(Formatting.AQUA))
-                .append(new LiteralText(String.valueOf(lock)).formatted(Formatting.GRAY, Formatting.ITALIC));
+                .append(new LiteralText(String.valueOf(lock)).formatted(Formatting.GRAY, Formatting.ITALIC)
+                    .styled(style -> style
+                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Vanilla: ").formatted(Formatting.AQUA).append(new LiteralText("false").formatted(Formatting.GRAY))))));
         context.getSource().sendFeedback(text, false);
         return 1;
     }

@@ -15,6 +15,9 @@ public class MainConfig {
     @Setting(comment = "The highest possible discount a villager can give on it's trades (100 = vanilla, 0 = none)")
     public double maxdiscount = 100;
 
+    @Setting(comment = "The chance of a villager to converting to a villagerzombie (-1 = vanilla behaviour)")
+    public double conversionchance = 100;
+
     @Setting(comment = "Whether or not villagers should be locked to a profession once they claim it (false = vanilla)")
     public boolean lock = false;
 
