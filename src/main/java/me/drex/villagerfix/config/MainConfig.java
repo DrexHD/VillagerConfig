@@ -12,8 +12,11 @@ public class MainConfig {
             "\nYou can use Color Codes in string parameters, the character is \"&\" " +
             "More info at: https://minecraft.tools/en/color-code.php \ne.g: \"&eThe Yellow Thing\" will be yellow";
 
-    @Setting(comment = "The highest possible discount a villager can give on it's trades (100 = vanilla, 0 = none)")
+    @Setting(comment = "The highest possible price discount a villager can give on it's default trade price (100 = vanilla, 0 = none)")
     public double maxdiscount = 100;
+
+    @Setting(comment = "The highest possible price raise a villager can give on it's default trade price (100 = vanilla, 0 = none)")
+    public double maxraise = 100;
 
     @Setting(comment = "The chance of a villager to converting to a villagerzombie (-1 = vanilla behaviour)")
     public double conversionchance = 100;

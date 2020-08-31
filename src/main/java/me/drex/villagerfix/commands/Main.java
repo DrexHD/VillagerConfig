@@ -44,6 +44,10 @@ public class Main {
                 .append(new LiteralText(VillagerFix.INSTANCE.config().maxdiscount + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
                     .styled(style -> style
                             .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Vanilla: ").formatted(Formatting.AQUA).append(new LiteralText("100%").formatted(Formatting.GRAY))))))
+                .append(new LiteralText("\nRaise (max): ").formatted(Formatting.AQUA))
+                .append(new LiteralText(VillagerFix.INSTANCE.config().maxraise + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
+                        .styled(style -> style
+                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Vanilla: ").formatted(Formatting.AQUA).append(new LiteralText("100%").formatted(Formatting.GRAY))))))
                 .append(new LiteralText("\nConversion chance: ").formatted(Formatting.AQUA))
                 .append(new LiteralText(VillagerFix.INSTANCE.config().conversionchance + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
                     .styled(style -> style
