@@ -1,6 +1,7 @@
 package me.drex.villagerfix.mixin;
 
 import me.drex.villagerfix.VillagerFix;
+import me.drex.villagerfix.util.Helper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -32,6 +33,7 @@ public class ZombieEntityMixin extends HostileEntity {
 
     /**
      * @author Drex
+     * @reason Manipulate villager conversion rate
      */
     @Overwrite
     public void onKilledOther(ServerWorld serverWorld, LivingEntity livingEntity) {
@@ -53,8 +55,7 @@ public class ZombieEntityMixin extends HostileEntity {
             }
         } else {
             //Custom chance
-            double r = (new Random().nextDouble() * 100) + 1;
-            if (r > conversionchance) {
+            if (Helper.chance(conversionchance)) {
                 return;
             }
         }

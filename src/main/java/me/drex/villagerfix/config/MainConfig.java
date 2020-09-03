@@ -1,5 +1,6 @@
 package me.drex.villagerfix.config;
 
+import me.drex.villagerfix.OldTradeOffer;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 
@@ -23,5 +24,8 @@ public class MainConfig {
 
     @Setting(comment = "Whether or not villagers should be locked to a profession once they claim it (false = vanilla)")
     public boolean lock = false;
+
+    @Setting(comment = "In this config section you can configure how trade (un)locking works")
+    public OldTradesSection oldtrades = new OldTradesSection();
 
 }
