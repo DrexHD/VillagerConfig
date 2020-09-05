@@ -20,9 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(TradeOutputSlot.class)
 public class TradeOutputSlotMixin {
 
-    @Shadow
-    @Final
-    private Trader trader;
+    @Shadow @Final private Trader trader;
 
     @Inject(method = "onTakeItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/village/Trader;trade(Lnet/minecraft/village/TradeOffer;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     public void onTrade(PlayerEntity player, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
