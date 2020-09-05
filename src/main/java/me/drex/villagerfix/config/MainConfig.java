@@ -27,7 +27,7 @@ public class MainConfig {
     @Setting(comment = "Whether or not villagers should be locked to a profession once they claim it (false = vanilla)")
     public boolean lock = false;
 
-    @Setting(comment = "Blacklist trades (this only effects newly generated trades)")
+    @Setting(comment = "Blacklist trades (this only effects newly generated trades). Example value: [\"minecraft:stick\",\"minecraft:clay\",\"minecraft:pumpkin\"]")
     public ArrayList<String> blacklisted_trades = new ArrayList<>();
 
     @Setting(comment = "In this config section you can configure how trade (un)locking works")
