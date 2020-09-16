@@ -21,6 +21,9 @@ public class MainConfig {
     @Setting(comment = "The highest possible price raise a villager can give on it's default trade price (100 = vanilla, 0 = none)")
     public double maxraise = 100;
 
+    @Setting(comment = "Defines how high the max usages should be (100 = vanilla, 200 = 2 x more than vanilla)")
+    public double maxuses = 100;
+
     @Setting(comment = "The chance of a villager to converting to a villagerzombie (-1 = vanilla behaviour)")
     public double conversionchance = 100;
 
