@@ -27,27 +27,26 @@ public abstract class AbstractTraderEntityMixin extends PassiveEntity {
      */
     @Overwrite
     protected void fillRecipesFromPool(TraderOfferList recipeList, TradeOffers.Factory[] pool, int count) {
-        int currentSize = recipeList.size();
-        //Loop through all possible trade offers and
         outer:
         for (TradeOffers.Factory factory : pool) {
-            if (currentSize + count > recipeList.size()) {
-                TradeOffer tradeOffer = factory.create(this, this.random);
-                for (String string : VillagerFix.INSTANCE.config().blacklisted_trades) {
-                    Item item = ItemHelper.toItem(string);
-                    if (item == null) {
-                        VillagerFix.LOG.error("Unable to parse " + string + " to item.");
-                        continue;
-                    }
-                    if (tradeOffer == null ||
-                            item == tradeOffer.getOriginalFirstBuyItem().getItem() ||
-                            item == tradeOffer.getSecondBuyItem().getItem() ||
-                            item == tradeOffer.getSellItem().getItem()) {
-                        continue outer;
-                    }
+            TradeOffer tradeOffer = factory.create(this, this.random);
+            for (String string : VillagerFix.INSTANCE.config().blacklisted_trades) {
+                Item item = ItemHelper.toItem(string);
+                if (item == null) {
+                    VillagerFix.LOG.error("Unable to parse " + string + " to item.");
+                    continue;
                 }
-                recipeList.add(tradeOffer);
+                if (tradeOffer == null ||
+                        item == tradeOffer.getOriginalFirstBuyItem().getItem() ||
+                        item == tradeOffer.getSecondBuyItem().getItem() ||
+                        item == tradeOffer.getSellItem().getItem()) {
+                continue outer;
+                }
             }
+            recipeList.add(tradeOffer);
+        }
+        while (recipeList.size() > count) {
+            recipeList.remove(this.random.nextInt(recipeList.size()));
         }
     }
 }
