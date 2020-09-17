@@ -57,9 +57,6 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
                 this.disabled = compoundTag.getBoolean("disabled");
             }
         }
-        if (compoundTag.contains("maxUses", 99)) {
-            this.maxUses = (int) (compoundTag.getInt("maxUses") * (VillagerFix.INSTANCE.config().maxuses / 100));
-        }
     }
 
     @Inject(method = "toTag", at = @At(value = "RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
