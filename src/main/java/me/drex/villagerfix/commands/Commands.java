@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import me.drex.villagerfix.VillagerFix;
-import me.drex.villagerfix.config.MainConfig;
+import me.drex.villagerfix.config.ConfigEntries;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.server.command.ServerCommandSource;
@@ -14,10 +14,9 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.util.Formatting;
 
-public class Main {
+public class Commands {
 
     public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-        String s = "a";
         LiteralArgumentBuilder<ServerCommandSource> main = LiteralArgumentBuilder.literal("villagerfix");
         LiteralArgumentBuilder<ServerCommandSource> alias = LiteralArgumentBuilder.literal("vf");
         main.executes(this::execute).requires(src -> src.hasPermissionLevel(2));
@@ -33,29 +32,30 @@ public class Main {
     }
 
     private int execute(CommandContext<ServerCommandSource> context) {
-        final MainConfig CONFIG = VillagerFix.INSTANCE.config();
         ModMetadata meta = FabricLoader.getInstance().getModContainer("villagerfix").get().getMetadata();
-        boolean lock = CONFIG.lock;
+        boolean lock = ConfigEntries.features.lock;
+        ConfigEntries.OldTradesGroup oldTrades = ConfigEntries.oldTrades;
+        ConfigEntries.FeaturesGroup features = ConfigEntries.features;
         MutableText text = new LiteralText("")
                 .append(new LiteralText("VillagerFix Version: " + meta.getVersion().getFriendlyString()).formatted(Formatting.WHITE, Formatting.BOLD)
                     .styled(style -> style
                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Click to copy config file location.").formatted(Formatting.AQUA)))
-                        .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, VillagerFix.configPath().resolve("villagerfix.conf").toFile().getAbsolutePath()))))
+                        .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, FabricLoader.getInstance().getConfigDir().resolve("villagerfix.json5").toFile().getAbsolutePath()))))
                 .append(new LiteralText("\n\nSettings: ").formatted(Formatting.WHITE, Formatting.BOLD))
                 .append(new LiteralText("\nDiscount (max): ").formatted(Formatting.AQUA))
-                .append(new LiteralText(CONFIG.maxdiscount + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
+                .append(new LiteralText(features.maxDiscount + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
                     .styled(style -> style
                             .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Vanilla: ").formatted(Formatting.AQUA).append(new LiteralText("100%").formatted(Formatting.GRAY))))))
                 .append(new LiteralText("\nRaise (max): ").formatted(Formatting.AQUA))
-                .append(new LiteralText(CONFIG.maxraise + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
+                .append(new LiteralText(features.maxRaise + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
                         .styled(style -> style
                                 .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Vanilla: ").formatted(Formatting.AQUA).append(new LiteralText("100%").formatted(Formatting.GRAY))))))
                 .append(new LiteralText("\nUses (max): ").formatted(Formatting.AQUA))
-                .append(new LiteralText(CONFIG.maxuses + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
+                .append(new LiteralText(features.maxUses + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
                         .styled(style -> style
                                 .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Vanilla: ").formatted(Formatting.AQUA).append(new LiteralText("100%").formatted(Formatting.GRAY))))))
                 .append(new LiteralText("\nConversion chance: ").formatted(Formatting.AQUA))
-                .append(new LiteralText(CONFIG.conversionchance + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
+                .append(new LiteralText(features.conversionChance + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
                     .styled(style -> style
                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Vanilla: ").formatted(Formatting.AQUA)
                                 .append(new LiteralText("\nHard: ").formatted(Formatting.RED))
@@ -70,12 +70,12 @@ public class Main {
                     .styled(style -> style
                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Vanilla: ").formatted(Formatting.AQUA).append(new LiteralText("false").formatted(Formatting.GRAY))))))
                 .append(new LiteralText("\nOld Trade Mechanics: ").formatted(Formatting.AQUA))
-                .append(new LiteralText(String.valueOf(CONFIG.oldtrades.enabled)).formatted(Formatting.GRAY, Formatting.ITALIC)
+                .append(new LiteralText(String.valueOf(oldTrades.enabled)).formatted(Formatting.GRAY, Formatting.ITALIC)
                         .styled(style -> style
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("uses (min): ").formatted(Formatting.AQUA).append(new LiteralText(String.valueOf(CONFIG.oldtrades.minUses)).formatted(Formatting.GRAY))
-                                .append(new LiteralText("\nuses (max): ").formatted(Formatting.AQUA).append(new LiteralText(String.valueOf(CONFIG.oldtrades.maxuses)).formatted(Formatting.GRAY))
-                                .append(new LiteralText("\nlockchance: ").formatted(Formatting.AQUA).append(new LiteralText(String.valueOf(CONFIG.oldtrades.lockchance)).formatted(Formatting.GRAY))
-                                .append(new LiteralText("\nunlockchance: ").formatted(Formatting.AQUA).append(new LiteralText(String.valueOf(CONFIG.oldtrades.unlockchance)).formatted(Formatting.GRAY)))))))));
+                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("uses (min): ").formatted(Formatting.AQUA).append(new LiteralText(String.valueOf(oldTrades.minUses)).formatted(Formatting.GRAY))
+                                .append(new LiteralText("\nuses (max): ").formatted(Formatting.AQUA).append(new LiteralText(String.valueOf(oldTrades.maxUses)).formatted(Formatting.GRAY))
+                                .append(new LiteralText("\nlockchance: ").formatted(Formatting.AQUA).append(new LiteralText(String.valueOf(oldTrades.lockChance)).formatted(Formatting.GRAY))
+                                .append(new LiteralText("\nunlockchance: ").formatted(Formatting.AQUA).append(new LiteralText(String.valueOf(oldTrades.unlockChance)).formatted(Formatting.GRAY)))))))));
         context.getSource().sendFeedback(text, false);
         return 1;
     }

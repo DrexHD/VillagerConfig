@@ -1,6 +1,7 @@
 package me.drex.villagerfix.mixin;
 
 import me.drex.villagerfix.VillagerFix;
+import me.drex.villagerfix.config.ConfigEntries;
 import me.drex.villagerfix.util.Helper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -39,7 +40,7 @@ public class ZombieEntityMixin extends HostileEntity {
     public void onKilledOther(ServerWorld serverWorld, LivingEntity livingEntity) {
         //Vanilla copy
         super.onKilledOther(serverWorld, livingEntity);
-        double conversionchance = VillagerFix.INSTANCE.config().conversionchance;
+        double conversionchance = ConfigEntries.features.conversionChance;
         if (!(livingEntity instanceof VillagerEntity)) {
             return;
         }

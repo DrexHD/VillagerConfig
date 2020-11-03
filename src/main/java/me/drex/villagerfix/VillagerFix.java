@@ -1,7 +1,7 @@
 package me.drex.villagerfix;
 
 import me.drex.villagerfix.config.Config;
-import me.drex.villagerfix.config.MainConfig;
+import me.drex.villagerfix.config.ConfigEntries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,21 +13,15 @@ public class VillagerFix {
     private static final String path = System.getProperty("user.dir");
     public static final Logger LOG = LogManager.getLogger();
     public static VillagerFix INSTANCE;
-    private final Config config;
 
 
     public VillagerFix() {
         INSTANCE = this;
-        this.config = new Config();
-        config.load();
+        Config.load();
     }
 
     public void reload() {
-        this.config.load();
-    }
-
-    public MainConfig config() {
-        return this.config.get();
+        Config.load();
     }
 
     public static Path configPath() {

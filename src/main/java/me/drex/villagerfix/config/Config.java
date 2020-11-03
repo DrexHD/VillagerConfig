@@ -1,54 +1,52 @@
 package me.drex.villagerfix.config;
 
-import com.google.common.reflect.TypeToken;
-import me.drex.villagerfix.Mod;
-import me.drex.villagerfix.VillagerFix;
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.ConfigurationOptions;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
-import ninja.leaping.configurate.loader.ConfigurationLoader;
-import ninja.leaping.configurate.objectmapping.DefaultObjectMapperFactory;
-import ninja.leaping.configurate.objectmapping.ObjectMappingException;
+import io.github.fablabsmc.fablabs.api.fiber.v1.annotation.AnnotatedSettings;
+import io.github.fablabsmc.fablabs.api.fiber.v1.annotation.SettingNamingConvention;
+import io.github.fablabsmc.fablabs.api.fiber.v1.exception.FiberException;
+import io.github.fablabsmc.fablabs.api.fiber.v1.serialization.FiberSerialization;
+import io.github.fablabsmc.fablabs.api.fiber.v1.serialization.JanksonValueSerializer;
+import io.github.fablabsmc.fablabs.api.fiber.v1.tree.ConfigTree;
+import net.fabricmc.loader.api.FabricLoader;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Config {
-    private MainConfig config;
-    private ConfigurationNode node;
 
-    public Config() {
-    }
+    public static boolean isConfigLoaded = false;
+    public static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("villagerfix.json5");
+    private static final AnnotatedSettings ANNOTATED_SETTINGS = AnnotatedSettings.builder()
+            .useNamingConvention(SettingNamingConvention.SNAKE_CASE)
+            .build();
+    private static final ConfigEntries CONFIG = new ConfigEntries();
+    public static final ConfigTree TREE = ConfigTree.builder()
+            .applyFromPojo(CONFIG, ANNOTATED_SETTINGS)
+            .build();
+    private static JanksonValueSerializer serializer = new JanksonValueSerializer(false);
 
-    public void load() {
-        try {
-            File file = VillagerFix.configPath().resolve("villagerfix.conf").toFile();
-            ConfigurationLoader<CommentedConfigurationNode> loader = HoconConfigurationLoader.builder()
-                    .setFile(file).build();
-
-            if (!file.exists()) {
-                file.createNewFile();
+    public static void load() {
+        if (Files.exists(CONFIG_PATH)) {
+            try {
+                ANNOTATED_SETTINGS.applyToNode(TREE, CONFIG);
+                FiberSerialization.deserialize(TREE, Files.newInputStream(CONFIG_PATH), serializer);
+                isConfigLoaded = true;
+            } catch (IOException | FiberException e) {
+                e.printStackTrace();
             }
-            Mod.LOGGER.info("Loading villagerfix config file at " + file.getAbsolutePath());
-
-            node = loader.load(
-                    ConfigurationOptions.defaults()
-                            .setHeader(MainConfig.HEADER)
-                            .setObjectMapperFactory(DefaultObjectMapperFactory.getInstance())
-                            .setShouldCopyDefaults(true)
-            );
-            config = node.getValue(TypeToken.of(MainConfig.class), new MainConfig());
-
-            loader.save(node);
-        } catch (IOException e) {
-            VillagerFix.LOG.error("Could not generate the Config File!", e);
-        } catch (ObjectMappingException e) {
-            VillagerFix.LOG.error("Exception while generating the Config File!", e);
+        } else {
+            saveModConfig();
+            isConfigLoaded = true;
         }
     }
 
-    public MainConfig get() {
-        return this.config;
+    public static void saveModConfig() {
+        try {
+            ANNOTATED_SETTINGS.applyToNode(TREE, CONFIG);
+            FiberSerialization.serialize(TREE, Files.newOutputStream(CONFIG_PATH), serializer);
+        } catch (IOException | FiberException e) {
+            e.printStackTrace();
+        }
     }
+
 }

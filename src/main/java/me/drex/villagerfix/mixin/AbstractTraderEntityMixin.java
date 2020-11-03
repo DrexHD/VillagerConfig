@@ -1,6 +1,7 @@
 package me.drex.villagerfix.mixin;
 
 import me.drex.villagerfix.VillagerFix;
+import me.drex.villagerfix.config.ConfigEntries;
 import me.drex.villagerfix.util.ItemHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.AbstractTraderEntity;
@@ -30,7 +31,7 @@ public abstract class AbstractTraderEntityMixin extends PassiveEntity {
         outer:
         for (TradeOffers.Factory factory : pool) {
             TradeOffer tradeOffer = factory.create(this, this.random);
-            for (String string : VillagerFix.INSTANCE.config().blacklisted_trades) {
+            for (String string : ConfigEntries.features.blacklistedTrades) {
                 Item item = ItemHelper.toItem(string);
                 if (item == null) {
                     VillagerFix.LOG.error("Unable to parse " + string + " to item.");

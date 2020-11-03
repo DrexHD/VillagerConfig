@@ -2,6 +2,7 @@ package me.drex.villagerfix.mixin;
 
 import me.drex.villagerfix.OldTradeOffer;
 import me.drex.villagerfix.VillagerFix;
+import me.drex.villagerfix.config.ConfigEntries;
 import me.drex.villagerfix.util.Helper;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,8 +25,8 @@ public class TradeOutputSlotMixin {
 
     @Inject(method = "onTakeItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/village/Trader;trade(Lnet/minecraft/village/TradeOffer;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     public void onTrade(PlayerEntity player, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
-        if (VillagerFix.INSTANCE.config().oldtrades.enabled) {
-            if (Helper.chance(VillagerFix.INSTANCE.config().oldtrades.unlockchance)) {
+        if (ConfigEntries.oldTrades.enabled) {
+            if (Helper.chance(ConfigEntries.oldTrades.unlockChance)) {
                 this.trader.getOffers().forEach(tradeOffer -> {
                     ((OldTradeOffer) tradeOffer).enable();
                 });
