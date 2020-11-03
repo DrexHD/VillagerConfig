@@ -1,6 +1,7 @@
 package me.drex.villagerfix.mixin;
 
 import me.drex.villagerfix.VillagerFix;
+import me.drex.villagerfix.config.ConfigEntries;
 import net.minecraft.entity.ai.brain.task.GoToWorkTask;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -14,6 +15,6 @@ public class GoToWorkTaskMixin {
 
     @Inject(method = "run", at = @At(value = "RETURN"))
     private void acquireProfession(ServerWorld serverWorld, VillagerEntity villagerEntity, long l, CallbackInfo ci) {
-        if (villagerEntity.getExperience() == 0 && VillagerFix.INSTANCE.config().lock) villagerEntity.setExperience(1);
+        if (villagerEntity.getExperience() == 0 && ConfigEntries.features.lock) villagerEntity.setExperience(1);
     }
 }

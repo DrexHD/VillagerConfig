@@ -4,12 +4,13 @@
   "version": "${version}",
 
   "name": "Villager Fix",
-  "description": "This mod aims to fix OP villagers introduced in 1.14",
+  "description": "Aims to fix / tweak overpowered villager mechanics introduced in 1.14",
   "authors": [
     "Drex"
   ],
   "contact": {
     "homepage": "https://github.com/DrexHD/VillagerFix",
+
     "sources": "https://github.com/DrexHD/VillagerFix"
   },
 
@@ -20,6 +21,9 @@
   "entrypoints": {
     "main": [
       "me.drex.villagerfix.Mod"
+    ],
+    "modmenu": [
+      "me.drex.villagerfix.config.modmenu.VillagerFixModMenuEntry"
     ]
   },
   "mixins": [
@@ -27,8 +31,13 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.7.4",
-    "fabric": "*",
-    "minecraft": "1.16.x"
+    "fabricloader": ">=0.9.0",
+    "fabric": ">=0.14.0",
+    "fiber": ">=0.23.0-",
+    "minecraft": ">=1.16.2"
+  },
+  "recommends": {
+    "modmenu": ">=1.14.6"
+
   }
 }

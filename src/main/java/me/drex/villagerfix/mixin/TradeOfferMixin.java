@@ -2,15 +2,13 @@ package me.drex.villagerfix.mixin;
 
 import me.drex.villagerfix.OldTradeOffer;
 import me.drex.villagerfix.VillagerFix;
+import me.drex.villagerfix.config.ConfigEntries;
 import me.drex.villagerfix.util.Helper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.village.TradeOffer;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -32,6 +30,7 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
     @Shadow
     private int uses;
 
+    @Mutable
     @Shadow
     @Final
     private int maxUses;
@@ -42,14 +41,19 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
      */
     @Overwrite
     public void increaseSpecialPrice(int i) {
-        int maxDiscount = (int) ((this.firstBuyItem.getCount()) * -(VillagerFix.INSTANCE.config().maxdiscount / 100));
-        int maxRaise = (int) ((this.firstBuyItem.getCount()) * +(VillagerFix.INSTANCE.config().maxraise / 100));
+        int maxDiscount = (int) ((this.firstBuyItem.getCount()) * -(ConfigEntries.features.maxDiscount / 100));
+        int maxRaise = (int) ((this.firstBuyItem.getCount()) * +(ConfigEntries.features.maxRaise / 100));
         this.specialPrice = MathHelper.clamp(this.specialPrice + i, maxDiscount, maxRaise);
+    }
+
+    @Inject(method = "<init>(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;IIIFI)V", at = @At(value = "RETURN"))
+    public void onCreate(ItemStack itemStack, ItemStack itemStack2, ItemStack itemStack3, int i, int j, int k, float f, int l, CallbackInfo ci) {
+        this.maxUses = (int) (j * (ConfigEntries.features.maxUses / 100));
     }
 
     @Inject(method = "<init>(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "RETURN"))
     public void fromTag(CompoundTag compoundTag, CallbackInfo ci) {
-        if (VillagerFix.INSTANCE.config().oldtrades.enabled) {
+        if (ConfigEntries.oldTrades.enabled) {
             if (compoundTag.contains("villagerfix_disabled", 1)) {
                 this.disabled = compoundTag.getBoolean("disabled");
             }
@@ -58,7 +62,7 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
 
     @Inject(method = "toTag", at = @At(value = "RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
     public void toTag(CallbackInfoReturnable<CompoundTag> cir, CompoundTag compoundTag) {
-        if (VillagerFix.INSTANCE.config().oldtrades.enabled) {
+        if (ConfigEntries.oldTrades.enabled) {
             compoundTag.putBoolean("villagerfix_disabled", this.disabled);
         }
     }
@@ -68,14 +72,13 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
      * */
     @Inject(method = "use", at = @At(value = "RETURN"))
     public void onUse(CallbackInfo ci) {
-        if (VillagerFix.INSTANCE.config().oldtrades.enabled) {
-            if (this.uses > VillagerFix.INSTANCE.config().oldtrades.minUses) {
-                if (Helper.chance(VillagerFix.INSTANCE.config().oldtrades.lockchance)) {
+        if (ConfigEntries.oldTrades.enabled) {
+            if (this.uses > ConfigEntries.oldTrades.minUses) {
+                if (Helper.chance(ConfigEntries.oldTrades.lockChance)) {
                     this.disable();
                 }
             }
-            if (this.uses > VillagerFix.INSTANCE.config().oldtrades.maxuses - 1) {
-                VillagerFix.LOG.info("Disabling trade " + this.uses + " "+ (VillagerFix.INSTANCE.config().oldtrades.maxuses - 1));
+            if (this.uses > ConfigEntries.oldTrades.maxUses - 1) {
                 this.disable();
             }
         }
@@ -88,7 +91,7 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
      */
     @Overwrite
     public boolean isDisabled() {
-        return VillagerFix.INSTANCE.config().oldtrades.enabled ? this.disabled : this.uses >= this.maxUses;
+        return ConfigEntries.oldTrades.enabled ? this.disabled : this.uses >= this.maxUses;
     }
 
     public void enable() {
