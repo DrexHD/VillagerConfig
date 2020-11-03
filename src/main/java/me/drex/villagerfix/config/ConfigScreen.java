@@ -64,6 +64,7 @@ public class ConfigScreen {
         features.addEntry(entryBuilder.startStrList(new TranslatableText("config.villagerfix.blacklisted_trades"), ConfigEntries.features.blacklistedTrades)
         .setDefaultValue(ArrayList::new)
             .setSaveConsumer(strings -> ConfigEntries.features.blacklistedTrades = strings)
+        .setTooltip(new TranslatableText("config.villagerfix.blacklisted_trades.tooltip"))
         .build());
 
         ConfigCategory oldTrades = builder.getOrCreateCategory(new TranslatableText("config.villagerfix.category.old_trades"))
