@@ -33,7 +33,7 @@ public class ZombieEntityMixin extends HostileEntity {
     @Overwrite
     public void onKilledOther(LivingEntity other) {
         //Vanilla copy
-        super.onKilledOther(serverWorld, other);
+        super.onKilledOther(other);
         double conversionchance = ConfigEntries.features.conversionChance;
         if (!(other instanceof VillagerEntity)) {
             return;
@@ -55,7 +55,7 @@ public class ZombieEntityMixin extends HostileEntity {
             }
         }
         VillagerEntity villagerEntity = (VillagerEntity)other;
-        ZombieVillagerEntity zombieVillagerEntity = (ZombieVillagerEntity)EntityType.ZOMBIE_VILLAGER.create(this.world);
+        ZombieVillagerEntity zombieVillagerEntity = EntityType.ZOMBIE_VILLAGER.create(this.world);
         zombieVillagerEntity.copyPositionAndRotation(villagerEntity);
         villagerEntity.remove();
         zombieVillagerEntity.initialize(this.world, this.world.getLocalDifficulty(zombieVillagerEntity.getBlockPos()), SpawnReason.CONVERSION, new ZombieEntity.ZombieData(false, true), (CompoundTag)null);
