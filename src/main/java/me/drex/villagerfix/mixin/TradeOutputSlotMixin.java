@@ -1,14 +1,11 @@
 package me.drex.villagerfix.mixin;
 
 import me.drex.villagerfix.OldTradeOffer;
-import me.drex.villagerfix.VillagerFix;
 import me.drex.villagerfix.config.ConfigEntries;
 import me.drex.villagerfix.util.Helper;
-import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.TradeOutputSlot;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.village.Trader;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
