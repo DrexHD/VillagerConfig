@@ -1,7 +1,6 @@
 package me.drex.villagerfix;
 
 import me.drex.villagerfix.config.Config;
-import me.drex.villagerfix.config.ConfigEntries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

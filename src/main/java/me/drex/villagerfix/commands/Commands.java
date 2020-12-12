@@ -3,7 +3,6 @@ package me.drex.villagerfix.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import me.drex.villagerfix.VillagerFix;
 import me.drex.villagerfix.config.ConfigEntries;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
