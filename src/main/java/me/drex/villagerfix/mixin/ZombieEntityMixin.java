@@ -56,19 +56,19 @@ public class ZombieEntityMixin extends HostileEntity {
             }
         } else {
             //Custom chance
-            if (Helper.chance(conversionchance)) {
+            if (!Helper.chance(conversionchance)) {
                 return;
             }
         }
         VillagerEntity villagerEntity = (VillagerEntity)livingEntity;
-        ZombieVillagerEntity zombieVillagerEntity = (ZombieVillagerEntity)villagerEntity.method_29243(EntityType.ZOMBIE_VILLAGER, false);
+        ZombieVillagerEntity zombieVillagerEntity = villagerEntity.method_29243(EntityType.ZOMBIE_VILLAGER, false);
         zombieVillagerEntity.initialize(serverWorld, serverWorld.getLocalDifficulty(zombieVillagerEntity.getBlockPos()), SpawnReason.CONVERSION, new ZombieEntity.ZombieData(false, true), (CompoundTag)null);
         zombieVillagerEntity.setVillagerData(villagerEntity.getVillagerData());
-        zombieVillagerEntity.setGossipData((Tag)villagerEntity.getGossip().serialize(NbtOps.INSTANCE).getValue());
+        zombieVillagerEntity.setGossipData(villagerEntity.getGossip().serialize(NbtOps.INSTANCE).getValue());
         zombieVillagerEntity.setOfferData(villagerEntity.getOffers().toTag());
         zombieVillagerEntity.setXp(villagerEntity.getExperience());
         if (!this.isSilent()) {
-            serverWorld.syncWorldEvent((PlayerEntity)null, 1026, this.getBlockPos(), 0);
+            serverWorld.syncWorldEvent(null, 1026, this.getBlockPos(), 0);
         }
 
     }
