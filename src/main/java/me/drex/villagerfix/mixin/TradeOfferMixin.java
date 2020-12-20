@@ -1,7 +1,6 @@
 package me.drex.villagerfix.mixin;
 
 import me.drex.villagerfix.OldTradeOffer;
-import me.drex.villagerfix.VillagerFix;
 import me.drex.villagerfix.config.ConfigEntries;
 import me.drex.villagerfix.util.Helper;
 import net.minecraft.item.ItemStack;
