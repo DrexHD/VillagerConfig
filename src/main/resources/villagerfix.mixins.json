@@ -4,7 +4,7 @@
   "package": "me.drex.villagerfix.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MerchantEntityMixin",
+    "AbstractTraderEntityMixin",
     "GoToWorkTaskMixin",
     "TradeOfferMixin",
     "TradeOutputSlotMixin",
