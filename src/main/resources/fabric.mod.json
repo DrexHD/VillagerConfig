@@ -41,6 +41,5 @@
   },
   "recommends": {
     "modmenu": ">=1.14.6"
-
   }
 }

@@ -5,12 +5,12 @@ import me.drex.villagerfix.VillagerFix;
 import me.drex.villagerfix.config.ConfigEntries;
 import me.drex.villagerfix.util.ItemHelper;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.AbstractTraderEntity;
+import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.item.Item;
 import net.minecraft.village.TradeOffer;
+import net.minecraft.village.TradeOfferList;
 import net.minecraft.village.TradeOffers;
-import net.minecraft.village.TraderOfferList;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import java.util.Iterator;
 import java.util.Set;
 
-@Mixin(AbstractTraderEntity.class)
+@Mixin(MerchantEntity.class)
 public abstract class AbstractTraderEntityMixin extends PassiveEntity {
 
     protected AbstractTraderEntityMixin(EntityType<? extends PassiveEntity> entityType, World world) {
@@ -30,7 +30,7 @@ public abstract class AbstractTraderEntityMixin extends PassiveEntity {
      * @reason blacklist trades
      */
     @Overwrite
-    protected void fillRecipesFromPool(TraderOfferList recipeList, TradeOffers.Factory[] pool, int count) {
+    protected void fillRecipesFromPool(TradeOfferList recipeList, TradeOffers.Factory[] pool, int count) {
         Set<Integer> set = Sets.newHashSet();
         int failed = 0;
         if (pool.length > count) {

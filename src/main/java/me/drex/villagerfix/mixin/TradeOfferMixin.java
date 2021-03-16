@@ -59,7 +59,7 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
         }
     }
 
-    @Inject(method = "toTag", at = @At(value = "RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
+    @Inject(method = "toNbt", at = @At(value = "RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
     public void toTag(CallbackInfoReturnable<CompoundTag> cir, CompoundTag compoundTag) {
         if (ConfigEntries.oldTrades.enabled) {
             compoundTag.putBoolean("villagerfix_disabled", this.disabled);
