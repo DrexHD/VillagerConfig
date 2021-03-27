@@ -38,8 +38,5 @@
     "fabric": ">=0.14.0",
     "fiber": ">=0.23.0-",
     "minecraft": ">=1.16.2"
-  },
-  "recommends": {
-    "modmenu": ">=1.14.6"
   }
 }
