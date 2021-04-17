@@ -3,9 +3,6 @@ package me.drex.villagerfix.config;
 import io.github.fablabsmc.fablabs.api.fiber.v1.annotation.Setting;
 import io.github.fablabsmc.fablabs.api.fiber.v1.annotation.Setting.Group;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ConfigEntries {
 
     @Group
@@ -30,9 +27,6 @@ public class ConfigEntries {
 
         @Setting(comment = "Whether or not villagers should be locked to a profession once they claim it (false = vanilla)")
         public boolean lock = false;
-
-        @Setting(comment = "Blacklist trades (this only effects newly generated trades). Example value: [\"minecraft:stick\",\"minecraft:clay\",\"minecraft:pumpkin\"]")
-        public List<String> blacklistedTrades = new ArrayList<>();
     }
 
     @Group

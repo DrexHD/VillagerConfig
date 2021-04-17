@@ -9,7 +9,17 @@
     "TradeOutputSlotMixin",
     "VillagerEntityMixin",
     "WanderingTraderEntityMixin",
-    "ZombieEntityMixin"
+    "ZombieEntityMixin",
+    "types.BuyForOneEmeraldMixin",
+    "types.EnchantBookMixin",
+    "types.ProcessItemMixin",
+    "types.SellDyedArmorMixin",
+    "types.SellEnchantedToolMixin",
+    "types.SellItemMixin",
+    "types.SellMapMixin",
+    "types.SellPotionHoldingItemMixin",
+    "types.SellSuspiciousStewMixin",
+    "types.TypeAwareBuyForOneEmeraldMixin"
   ],
   "injectors": {
     "defaultRequire": 1

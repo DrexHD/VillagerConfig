@@ -7,8 +7,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-
 public class ConfigScreen {
 
     public static Screen getConfigScreen(Screen parentScreen) {
@@ -59,12 +57,6 @@ public class ConfigScreen {
         .setDefaultValue(false)
             .setSaveConsumer(value -> ConfigEntries.features.lock = value)
         .setTooltip(new TranslatableText("config.villagerfix.lock.tooltip"))
-        .build());
-
-        features.addEntry(entryBuilder.startStrList(new TranslatableText("config.villagerfix.blacklisted_trades"), ConfigEntries.features.blacklistedTrades)
-        .setDefaultValue(ArrayList::new)
-            .setSaveConsumer(strings -> ConfigEntries.features.blacklistedTrades = strings)
-        .setTooltip(new TranslatableText("config.villagerfix.blacklisted_trades.tooltip"))
         .build());
 
         ConfigCategory oldTrades = builder.getOrCreateCategory(new TranslatableText("config.villagerfix.category.old_trades"))

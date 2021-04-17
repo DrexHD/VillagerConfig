@@ -1,13 +1,10 @@
 package me.drex.villagerfix.util;
 
-import me.drex.villagerfix.VillagerFix;
-import me.drex.villagerfix.config.ConfigEntries;
-import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.item.Item;
-import net.minecraft.village.TradeOffer;
-import net.minecraft.village.TradeOffers;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.village.VillagerProfession;
 
-import java.util.*;
+import java.util.Random;
 
 public class Helper {
 
@@ -15,32 +12,19 @@ public class Helper {
         return percentage >= new Random().nextDouble() * 100;
     }
 
-    public static TradeOffers.Factory[] removeBlackListedItems(TradeOffers.Factory[] pool, MerchantEntity entity) {
-        List<TradeOffers.Factory> list = new ArrayList<>(Arrays.asList(pool));
-        Iterator<TradeOffers.Factory> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            TradeOffers.Factory factory = iterator.next();
-            TradeOffer tradeOffer = factory.create(entity, entity.getRandom());
-            if (shouldRemove(tradeOffer)) iterator.remove();
-        }
-        return list.toArray(new TradeOffers.Factory[0]);
+    public static String toName(Item item) {
+        return Registry.ITEM.getId(item).toString();
     }
 
-    public static boolean shouldRemove(TradeOffer tradeOffer) {
-        for (String string : ConfigEntries.features.blacklistedTrades) {
-            Item item = ItemHelper.toItem(string);
-            if (item == null) {
-                VillagerFix.LOG.error("Unable to parse " + string + " to item.");
-                continue;
-            }
-            if (tradeOffer == null ||
-                    item == tradeOffer.getOriginalFirstBuyItem().getItem() ||
-                    item == tradeOffer.getSecondBuyItem().getItem() ||
-                    item == tradeOffer.getSellItem().getItem()) {
-                return true;
-            }
+    public static Item toItem(String string) {
+        for (Item item : Registry.ITEM) {
+            if (toName(item).equals(string)) return item;
         }
-        return false;
+        return null;
     }
 
+    public static String toName(VillagerProfession profession) {
+        String s = profession.toString();
+        return s.substring(0, 1).toUpperCase() + s.substring(1);
+    }
 }

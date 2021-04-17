@@ -11,8 +11,6 @@
   "config.villagerfix.maxuses.tooltip":  "Defines how high the max usages should be (100 = vanilla, 200 = 2 x more than vanilla)",
   "config.villagerfix.lock": "Lock Profession",
   "config.villagerfix.lock.tooltip": "Whether or not villagers should be locked to a profession once they claim it (false = vanilla)",
-  "config.villagerfix.blacklisted_trades": "Blacklist Trades",
-  "config.villagerfix.blacklisted_trades.tooltip": "Blacklist trades (this only effects newly generated trades). Example values: minecraft:stick, minecraft:clay, minecraft:pumpkin",
   "config.villagerfix.category.old_trades": "Old Trade Mechanics",
   "config.villagerfix.enabled": "Use",
   "config.villagerfix.enabled.tooltip": "Whether or not https://minecraft.gamepedia.com/Trading/Before_Village_%26_Pillage#Mechanics should be used for trade (un)locking",

@@ -14,6 +14,10 @@ repositories {
     mavenCentral()
 }
 
+minecraft {
+    accessWidener "src/main/resources/villagerfix.accesswidener"
+}
+
 dependencies {
 	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -28,6 +32,11 @@ dependencies {
 
     include "me.shedaniel.cloth:config-2:${project.cloth_config_version}"
     include "me.zeroeightsix:fiber:${project.fiber_version}"
+
+    compile "org.json:json:${project.json_version}"
+    include "org.json:json:${project.json_version}"
+
+
 }
 
 processResources {
