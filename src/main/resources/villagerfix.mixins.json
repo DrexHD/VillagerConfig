@@ -4,10 +4,11 @@
   "package": "me.drex.villagerfix.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "AbstractTraderEntityMixin",
     "GoToWorkTaskMixin",
     "TradeOfferMixin",
     "TradeOutputSlotMixin",
+    "VillagerEntityMixin",
+    "WanderingTraderEntityMixin",
     "ZombieEntityMixin"
   ],
   "injectors": {
