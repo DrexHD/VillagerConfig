@@ -1,7 +1,6 @@
 package me.drex.villagerfix.mixin;
 
 import me.drex.villagerfix.OldTradeOffer;
-import me.drex.villagerfix.VillagerFix;
 import me.drex.villagerfix.config.ConfigEntries;
 import me.drex.villagerfix.util.Helper;
 import net.minecraft.item.ItemStack;
@@ -60,7 +59,7 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
         }
     }
 
-    @Inject(method = "toTag", at = @At(value = "RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
+    @Inject(method = "toNbt", at = @At(value = "RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
     public void toTag(CallbackInfoReturnable<CompoundTag> cir, CompoundTag compoundTag) {
         if (ConfigEntries.oldTrades.enabled) {
             compoundTag.putBoolean("villagerfix_disabled", this.disabled);

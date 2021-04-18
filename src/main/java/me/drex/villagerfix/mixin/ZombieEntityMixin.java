@@ -1,6 +1,5 @@
 package me.drex.villagerfix.mixin;
 
-import me.drex.villagerfix.VillagerFix;
 import me.drex.villagerfix.config.ConfigEntries;
 import me.drex.villagerfix.util.Helper;
 import net.minecraft.entity.EntityType;
@@ -10,20 +9,13 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.mob.ZombieVillagerEntity;
 import net.minecraft.entity.passive.VillagerEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Random;
 
 @Mixin(ZombieEntity.class)
 public class ZombieEntityMixin extends HostileEntity {
@@ -56,19 +48,19 @@ public class ZombieEntityMixin extends HostileEntity {
             }
         } else {
             //Custom chance
-            if (Helper.chance(conversionchance)) {
+            if (!Helper.chance(conversionchance)) {
                 return;
             }
         }
         VillagerEntity villagerEntity = (VillagerEntity)livingEntity;
-        ZombieVillagerEntity zombieVillagerEntity = (ZombieVillagerEntity)villagerEntity.method_29243(EntityType.ZOMBIE_VILLAGER, false);
+        ZombieVillagerEntity zombieVillagerEntity = villagerEntity.convertTo(EntityType.ZOMBIE_VILLAGER, false);
         zombieVillagerEntity.initialize(serverWorld, serverWorld.getLocalDifficulty(zombieVillagerEntity.getBlockPos()), SpawnReason.CONVERSION, new ZombieEntity.ZombieData(false, true), (CompoundTag)null);
         zombieVillagerEntity.setVillagerData(villagerEntity.getVillagerData());
-        zombieVillagerEntity.setGossipData((Tag)villagerEntity.getGossip().serialize(NbtOps.INSTANCE).getValue());
-        zombieVillagerEntity.setOfferData(villagerEntity.getOffers().toTag());
+        zombieVillagerEntity.setGossipData(villagerEntity.getGossip().serialize(NbtOps.INSTANCE).getValue());
+        zombieVillagerEntity.setOfferData(villagerEntity.getOffers().toNbt());
         zombieVillagerEntity.setXp(villagerEntity.getExperience());
         if (!this.isSilent()) {
-            serverWorld.syncWorldEvent((PlayerEntity)null, 1026, this.getBlockPos(), 0);
+            serverWorld.syncWorldEvent(null, 1026, this.getBlockPos(), 0);
         }
 
     }

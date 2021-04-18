@@ -19,8 +19,11 @@
 
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "me.drex.villagerfix.Mod"
+    "client": [
+      "me.drex.villagerfix.entry.ClientMod"
+    ],
+    "server": [
+      "me.drex.villagerfix.entry.ServerMod"
     ],
     "modmenu": [
       "me.drex.villagerfix.config.modmenu.VillagerFixModMenuEntry"
@@ -29,15 +32,11 @@
   "mixins": [
     "villagerfix.mixins.json"
   ],
-
+  "accessWidener" : "villagerfix.accesswidener",
   "depends": {
     "fabricloader": ">=0.9.0",
     "fabric": ">=0.14.0",
     "fiber": ">=0.23.0-",
     "minecraft": ">=1.16.2"
-  },
-  "recommends": {
-    "modmenu": ">=1.14.6"
-
   }
 }
