@@ -4,7 +4,7 @@ import me.drex.villagerfix.OldTradeOffer;
 import me.drex.villagerfix.config.ConfigEntries;
 import me.drex.villagerfix.util.Helper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.village.TradeOffer;
 import org.spongepowered.asm.mixin.*;
@@ -50,19 +50,19 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
         this.maxUses = (int) (j * (ConfigEntries.features.maxUses / 100));
     }
 
-    @Inject(method = "<init>(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "RETURN"))
-    public void fromTag(CompoundTag compoundTag, CallbackInfo ci) {
+    @Inject(method = "<init>(Lnet/minecraft/nbt/NbtCompound;)V", at = @At(value = "RETURN"))
+    public void fromTag(NbtCompound nbt, CallbackInfo ci) {
         if (ConfigEntries.oldTrades.enabled) {
-            if (compoundTag.contains("villagerfix_disabled", 1)) {
-                this.disabled = compoundTag.getBoolean("disabled");
+            if (nbt.contains("villagerfix_disabled", 1)) {
+                this.disabled = nbt.getBoolean("disabled");
             }
         }
     }
 
     @Inject(method = "toNbt", at = @At(value = "RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
-    public void toTag(CallbackInfoReturnable<CompoundTag> cir, CompoundTag compoundTag) {
+    public void toTag(CallbackInfoReturnable<NbtCompound> cir, NbtCompound nbt) {
         if (ConfigEntries.oldTrades.enabled) {
-            compoundTag.putBoolean("villagerfix_disabled", this.disabled);
+            nbt.putBoolean("villagerfix_disabled", this.disabled);
         }
     }
 
