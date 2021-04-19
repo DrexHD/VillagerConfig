@@ -35,8 +35,10 @@
   "accessWidener" : "villagerfix.accesswidener",
   "depends": {
     "fabricloader": ">=0.9.0",
-    "fabric": ">=0.14.0",
+    "fabric-api-base": "*",
+    "fabric-command-api-v1": "*",
+    "fabric-lifecycle-events-v1": "*",
     "fiber": ">=0.23.0-",
-    "minecraft": ">=1.16.2"
+    "minecraft": ">=1.16.4"
   }
 }
