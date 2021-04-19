@@ -1,5 +1,6 @@
 package me.drex.villagerfix.entry;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import me.drex.villagerfix.VillagerFix;
 import me.drex.villagerfix.commands.Commands;
@@ -40,6 +41,7 @@ public abstract class AbstractMod {
             saveDataToFile(Helper.toName(entry.getKey()), entry.getValue());
         }
         saveDataToFile("Wandering_Trader", TradeOffers.WANDERING_TRADER_TRADES);
+        saveDataToFile("Nitwit", new Int2ObjectArrayMap<>());
     }
 
     private void saveDataToFile(String fileName, Int2ObjectMap<TradeOffers.Factory[]> data) {
