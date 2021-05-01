@@ -10,6 +10,7 @@ import net.minecraft.village.TradeOffer;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
@@ -18,9 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public abstract class TradeOfferMixin implements OldTradeOffer {
 
     public boolean disabled = false;
-
-    @Shadow
-    private int specialPrice;
 
     @Shadow
     @Final
@@ -34,20 +32,11 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
     @Final
     private int maxUses;
 
-    /**
-     * @author Drex
-     * @reason Manipulate the villager discount to not be underneath a configurable threshold
-     */
-    @Overwrite
-    public void increaseSpecialPrice(int i) {
+    @Redirect(method = "increaseSpecialPrice", at = @At(value = "FIELD", target = "Lnet/minecraft/village/TradeOffer;specialPrice:I", opcode = 181))
+    public void adjustSpecialPrice(TradeOffer tradeOffer, int increment) {
         int maxDiscount = (int) ((this.firstBuyItem.getCount()) * -(ConfigEntries.features.maxDiscount / 100));
         int maxRaise = (int) ((this.firstBuyItem.getCount()) * +(ConfigEntries.features.maxRaise / 100));
-        this.specialPrice = MathHelper.clamp(this.specialPrice + i, maxDiscount, maxRaise);
-    }
-
-    @Inject(method = "<init>(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;IIIFI)V", at = @At(value = "RETURN"))
-    public void onCreate(ItemStack itemStack, ItemStack itemStack2, ItemStack itemStack3, int i, int j, int k, float f, int l, CallbackInfo ci) {
-        this.maxUses = (int) (j * (ConfigEntries.features.maxUses / 100));
+        tradeOffer.setSpecialPrice(MathHelper.clamp(tradeOffer.getSpecialPrice() + increment, maxDiscount, maxRaise));
     }
 
     @Inject(method = "<init>(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "RETURN"))
@@ -81,7 +70,6 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
                 this.disable();
             }
         }
-
     }
 
     /**
@@ -101,6 +89,5 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
     public void disable() {
         this.disabled = true;
     }
-
 
 }

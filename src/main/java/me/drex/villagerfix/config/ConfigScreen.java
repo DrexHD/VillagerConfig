@@ -38,13 +38,6 @@ public class ConfigScreen {
         .setTooltip(new TranslatableText("config.villagerfix.maxraise.tooltip"))
         .build());
 
-        features.addEntry(entryBuilder.startDoubleField(new TranslatableText("config.villagerfix.maxuses"), ConfigEntries.features.maxUses)
-        .setDefaultValue(100)
-        .setMin(0.0)
-            .setSaveConsumer(value -> ConfigEntries.features.maxUses = value)
-        .setTooltip(new TranslatableText("config.villagerfix.maxuses.tooltip"))
-        .build());
-
         features.addEntry(entryBuilder.startDoubleField(new TranslatableText("config.villagerfix.conversionchance"), ConfigEntries.features.conversionChance)
         .setDefaultValue(-1)
         .setMin(-1.0)

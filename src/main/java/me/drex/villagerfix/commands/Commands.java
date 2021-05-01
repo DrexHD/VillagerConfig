@@ -49,10 +49,6 @@ public class Commands {
                 .append(new LiteralText(features.maxRaise + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
                         .styled(style -> style
                                 .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Vanilla: ").formatted(Formatting.AQUA).append(new LiteralText("100%").formatted(Formatting.GRAY))))))
-                .append(new LiteralText("\nUses (max): ").formatted(Formatting.AQUA))
-                .append(new LiteralText(features.maxUses + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
-                        .styled(style -> style
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Vanilla: ").formatted(Formatting.AQUA).append(new LiteralText("100%").formatted(Formatting.GRAY))))))
                 .append(new LiteralText("\nConversion chance: ").formatted(Formatting.AQUA))
                 .append(new LiteralText(features.conversionChance + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
                     .styled(style -> style
