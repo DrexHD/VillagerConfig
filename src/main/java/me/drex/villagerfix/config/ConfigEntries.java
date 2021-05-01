@@ -17,10 +17,6 @@ public class ConfigEntries {
         @Setting(comment = "The highest possible price raise a villager can give on it's default trade price (100 = vanilla, 0 = none)")
         public double maxRaise = 100;
 
-        @Setting.Constrain.Range(min = 0)
-        @Setting(comment = "Defines how high the max usages should be (100 = vanilla, 200 = 2 x more than vanilla)")
-        public double maxUses = 100;
-
         @Setting.Constrain.Range(min = -1, max = 100)
         @Setting(comment = "The chance of a villager to converting to a villagerzombie (-1 = vanilla behaviour)")
         public double conversionChance = -1;
