@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.map.MapIcon;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.village.VillagerType;
@@ -120,6 +121,10 @@ public class TradeOfferParser {
                     map.put(Registry.VILLAGER_TYPE.get(new Identifier(key)), Helper.toItem(jsonMap.getString(key)));
                 }
                 factory = new TradeOffers.TypeAwareBuyForOneEmeraldFactory(jsonObject.getInt("count"), jsonObject.getInt("max_uses"), jsonObject.getInt("experience"), map);
+                break;
+            }
+            case "custom": {
+                factory = (entity, random) -> new TradeOffer(JsonSerializer.parseItemStack(jsonObject.getJSONObject("firstBuy")), JsonSerializer.parseItemStack(jsonObject.getJSONObject("secondBuy")), JsonSerializer.parseItemStack(jsonObject.getJSONObject("sell")), jsonObject.getInt("max_uses"), jsonObject.getInt("experience"), jsonObject.getInt("multiplier"));
                 break;
             }
             default:
