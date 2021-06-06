@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ZombieEntity.class)
+@Mixin(value = ZombieEntity.class, priority = 999)
 public class ZombieEntityMixin extends HostileEntity {
 
     protected ZombieEntityMixin(EntityType<? extends HostileEntity> entityType, World world) {
