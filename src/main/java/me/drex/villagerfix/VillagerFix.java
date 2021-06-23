@@ -5,15 +5,10 @@ import me.drex.villagerfix.villager.TradeOfferParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-import java.nio.file.Path;
-
 public class VillagerFix {
 
-    private static final String path = System.getProperty("user.dir");
-    public static final Logger LOG = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
     public static VillagerFix INSTANCE;
-
 
     public VillagerFix() {
         INSTANCE = this;
@@ -23,10 +18,6 @@ public class VillagerFix {
     public void reload() {
         Config.load();
         TradeOfferParser.cache.clear();
-    }
-
-    public static Path configPath() {
-        return new File(path + "/config").toPath();
     }
 
 }

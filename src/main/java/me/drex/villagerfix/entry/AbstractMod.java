@@ -3,13 +3,13 @@ package me.drex.villagerfix.entry;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import me.drex.villagerfix.VillagerFix;
+import me.drex.villagerfix.api.TradeFactoryStorage;
+import me.drex.villagerfix.api.VillagerFixAPI;
 import me.drex.villagerfix.commands.Commands;
 import me.drex.villagerfix.config.Config;
 import me.drex.villagerfix.util.Helper;
-import me.drex.villagerfix.villager.types.JsonSerializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
 import org.apache.logging.log4j.LogManager;
@@ -26,11 +26,16 @@ public abstract class AbstractMod {
 
     public static final Path DATA_PATH = FabricLoader.getInstance().getConfigDir().resolve("VillagerData");
     public static final Logger LOGGER = LogManager.getFormatterLogger("VillagerFix");
+    public static final TradeFactoryStorage data = new TradeFactoryStorage();
 
     public void load() {
         LOGGER.info("Initializing VillagerFix!");
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             new Commands().register(dispatcher);
+        });
+        FabricLoader.getInstance().getEntrypointContainers("villagerfix", VillagerFixAPI.class).forEach(entrypoint -> {
+            VillagerFixAPI api = entrypoint.getEntrypoint();
+            api.onInitialize(data);
         });
         new VillagerFix();
         initializeVillagerData();
@@ -51,30 +56,8 @@ public abstract class AbstractMod {
             TradeOffers.Factory[] tradeOffers = data.get(i);
             JSONArray jsonArray = new JSONArray();
             for (TradeOffers.Factory factory : tradeOffers) {
-                JSONObject jsonObject;
-                if (factory instanceof JsonSerializer) {
-                    jsonObject = ((JsonSerializer) factory).toJson();
-                } else {
-                    try {
-                        /*
-                        * Note:
-                        * We are intentionally passing null values, to fail and inform the user that a non parsable TradeOfferFactory was found.
-                        * */
-                        TradeOffer tradeOffer = factory.create(null, null);
-                        jsonObject = new JSONObject();
-                        jsonObject.put("type", "custom");
-                        jsonObject.put("firstBuy", JsonSerializer.parseItemStack(tradeOffer.getOriginalFirstBuyItem()));
-                        jsonObject.put("secondBuy", JsonSerializer.parseItemStack(tradeOffer.getSecondBuyItem()));
-                        jsonObject.put("sell", JsonSerializer.parseItemStack(tradeOffer.getSellItem()));
-                        jsonObject.put("max_uses", tradeOffer.getMaxUses());
-                        jsonObject.put("experience", tradeOffer.getMerchantExperience());
-                        jsonObject.put("multiplier", tradeOffer.getPriceMultiplier());
-                    } catch (Exception e) {
-                        LOGGER.error("Unable to serialize " + factory.getClass().getSimpleName() + ", ignoring it");
-                        continue;
-                    }
-                }
-                jsonArray.put(jsonObject);
+                JSONObject serialize = AbstractMod.data.serialize(factory);
+                jsonArray.put(serialize);
             }
             jsonArr.put(jsonArray);
         }
@@ -83,10 +66,9 @@ public abstract class AbstractMod {
             if (!path.toFile().exists())
             Files.write(path, jsonArr.toString(4).getBytes());
         } catch (Exception e) {
-            VillagerFix.LOG.error("Couldn't save " + fileName + ".json", e);
+            VillagerFix.LOGGER.error("Couldn't save " + fileName + ".json", e);
         }
     }
-
 
     public void loadConfig() {
         if (!Config.isConfigLoaded) {

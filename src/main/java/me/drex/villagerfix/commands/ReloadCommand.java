@@ -7,7 +7,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Formatting;
 
-public class Reload {
+public class ReloadCommand {
 
     public void register(LiteralArgumentBuilder<ServerCommandSource> command) {
         LiteralArgumentBuilder<ServerCommandSource> reload = LiteralArgumentBuilder.literal("reload");

@@ -27,10 +27,14 @@
     ],
     "modmenu": [
       "me.drex.villagerfix.config.modmenu.VillagerFixModMenuEntry"
+    ],
+    "villagerfix": [
+      "me.drex.villagerfix.vanilla.VanillaTradeInitializer"
     ]
   },
   "mixins": [
-    "villagerfix.mixins.json"
+    "villagerfix.mixins.json",
+    "villagerfix.accessor.mixins.json"
   ],
   "accessWidener" : "villagerfix.accesswidener",
   "depends": {

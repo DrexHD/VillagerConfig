@@ -27,7 +27,7 @@ public class Commands {
     }
 
     private void then(LiteralArgumentBuilder<ServerCommandSource> literal) {
-        new Reload().register(literal);
+        new ReloadCommand().register(literal);
     }
 
     private int execute(CommandContext<ServerCommandSource> context) {
