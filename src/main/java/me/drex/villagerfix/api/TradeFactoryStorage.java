@@ -1,5 +1,6 @@
 package me.drex.villagerfix.api;
 
+import me.drex.villagerfix.util.Deobfuscator;
 import net.minecraft.village.TradeOffers;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
@@ -12,7 +13,7 @@ public class TradeFactoryStorage {
     private final Map<String, TradeEntry> data = new HashMap<>();
 
     public void registerTradeFactory(Class<? extends TradeOffers.Factory> clazz, TradeEntry tradeEntry) {
-        data.put(clazz.getSimpleName(), tradeEntry);
+        data.put(formatClassName(clazz.getName()), tradeEntry);
     }
 
     @Nullable
@@ -27,7 +28,7 @@ public class TradeFactoryStorage {
 
     @Nullable
     public JSONObject serialize(TradeOffers.Factory factory) {
-        String type = factory.getClass().getSimpleName();
+        String type = formatClassName(factory.getClass().getName());
         TradeEntry tradeEntry = data.get(type);
         if (tradeEntry != null) {
             JSONObject jsonObject = tradeEntry.getSerialization().apply(factory);
@@ -35,6 +36,10 @@ public class TradeFactoryStorage {
             return jsonObject;
         }
         return null;
+    }
+
+    private String formatClassName(String input) {
+        return Deobfuscator.deobfuscate(input).replaceAll("(?:[\\w]+\\.)+[\\w]+[?:$|.]([\\w]+)", "$1");
     }
 
 

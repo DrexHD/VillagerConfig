@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import me.drex.villagerfix.api.TradeFactoryStorage;
 import me.drex.villagerfix.api.VillagerFixAPI;
 import me.drex.villagerfix.config.Config;
+import me.drex.villagerfix.util.Deobfuscator;
 import me.drex.villagerfix.villager.TradeOfferParser;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.village.TradeOffers;
@@ -26,6 +27,7 @@ public class VillagerFix {
 
     public static void initializeData() {
         loadConfig();
+        Deobfuscator.init();
         FabricLoader.getInstance().getEntrypointContainers("villagerfix", VillagerFixAPI.class).forEach(entrypoint -> {
             VillagerFixAPI api = entrypoint.getEntrypoint();
             api.onInitialize(data);

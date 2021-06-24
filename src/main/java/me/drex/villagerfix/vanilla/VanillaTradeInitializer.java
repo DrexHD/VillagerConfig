@@ -23,7 +23,6 @@ public class VanillaTradeInitializer implements VillagerFixAPI {
     
     @Override
     public void onInitialize(TradeFactoryStorage storage) {
-        System.out.println("onInitialize");
         storage.registerTradeFactory(TradeOffers.BuyForOneEmeraldFactory.class, new TradeEntry(jsonObject -> new TradeOffers.BuyForOneEmeraldFactory(Helper.toItem(jsonObject.getString("buy")), jsonObject.getInt("price"), jsonObject.getInt("max_uses"), jsonObject.getInt("experience")), factory -> {
             JSONObject jsonObject = new JSONObject();
             if (factory instanceof BuyForOneEmeraldFactoryAccessor accessor) {
