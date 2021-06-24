@@ -57,7 +57,13 @@ public abstract class AbstractMod {
             JSONArray jsonArray = new JSONArray();
             for (TradeOffers.Factory factory : tradeOffers) {
                 JSONObject serialize = AbstractMod.data.serialize(factory);
-                jsonArray.put(serialize);
+                if (serialize != null) {
+                    jsonArray.put(serialize);
+                } else {
+                    JSONObject unknown = new JSONObject();
+                    unknown.put("type", "unknown");
+                    jsonArray.put(unknown);
+                }
             }
             jsonArr.put(jsonArray);
         }

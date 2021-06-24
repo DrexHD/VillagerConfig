@@ -22,43 +22,58 @@ public class TradeOfferParser {
     public static final Map<String, TradeOfferParser> cache = new HashMap<>();
     private final List<List<TradeOffers.Factory>> data = new ArrayList<>();
 
-    private TradeOfferParser(String fileName) {
+    private TradeOfferParser(String fileName, Int2ObjectMap<TradeOffers.Factory[]> original) {
         cache.put(fileName, this);
         Path path = AbstractMod.DATA_PATH.resolve(fileName + ".json");
         try {
             JSONArray input = new JSONArray(new String(Files.readAllBytes(path)));
+            int level = 1;
             for (Object o : input) {
                 if (o instanceof JSONArray jsonArray) {
                     List<TradeOffers.Factory> tradeOffers = new ArrayList<>();
+                    int trade = 0;
                     for (Object tradeOffer : jsonArray) {
                         try {
-                            tradeOffers.add(AbstractMod.data.deserialize((JSONObject) tradeOffer));
+                            TradeOffers.Factory factory = AbstractMod.data.deserialize((JSONObject) tradeOffer);
+                            if (factory != null) {
+                                tradeOffers.add(factory);
+                            } else {
+                                TradeOffers.Factory[] factories = original.get(level);
+                                if (factories != null) {
+                                    if (factories.length > trade) {
+                                        tradeOffers.add(factories[trade]);
+                                    }
+                                }
+                            }
                         } catch (Exception e) {
                             VillagerFix.LOGGER.error("There was an error initializing villager trading json data", e);
                         }
+                        trade++;
                     }
                     data.add(tradeOffers);
                 } else {
                     VillagerFix.LOGGER.warn("Unable to parse " + o);
                 }
+                level++;
             }
         } catch (Exception e) {
             VillagerFix.LOGGER.error("Couldn't load " + fileName + ".json" + e);
         }
     }
 
-    TradeOfferParser() { }
-
-    public static TradeOfferParser of(VillagerProfession profession) {
-        if (profession == VillagerProfession.NONE) return new TradeOfferParser();
-        return of(Helper.toName(profession));
+    TradeOfferParser() {
     }
 
-    public static TradeOfferParser of(String fileName) {
+    public static TradeOfferParser of(VillagerProfession profession, Int2ObjectMap<TradeOffers.Factory[]> original) {
+        if (profession == VillagerProfession.NONE) return new TradeOfferParser();
+        return of(Helper.toName(profession), original);
+    }
+
+    public static TradeOfferParser of(String fileName, Int2ObjectMap<TradeOffers.Factory[]> original) {
         if (cache.containsKey(fileName)) {
             return cache.get(fileName);
         } else {
-            return new TradeOfferParser(fileName);
+            return new TradeOfferParser(fileName, original);
         }
     }
 

@@ -29,9 +29,12 @@ public class TradeFactoryStorage {
     public JSONObject serialize(TradeOffers.Factory factory) {
         String type = factory.getClass().getSimpleName();
         TradeEntry tradeEntry = data.get(type);
-        JSONObject jsonObject = tradeEntry.getSerialization().apply(factory);
-        jsonObject.put("type", type);
-        return jsonObject;
+        if (tradeEntry != null) {
+            JSONObject jsonObject = tradeEntry.getSerialization().apply(factory);
+            jsonObject.put("type", type);
+            return jsonObject;
+        }
+        return null;
     }
 
 

@@ -20,7 +20,7 @@ public abstract class WanderingTraderEntityMixin extends MerchantEntity {
 
     @Redirect(method = "fillRecipes", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;get(I)Ljava/lang/Object;"))
     public <V> V putCustomRecipes(Int2ObjectMap int2ObjectMap, int key) {
-        TradeOfferParser parser = TradeOfferParser.of("Wandering_Trader");
+        TradeOfferParser parser = TradeOfferParser.of("Wandering_Trader", int2ObjectMap);
         TradeOffers.Factory[] result = parser.build().get(key);
         return (V) result;
     }
