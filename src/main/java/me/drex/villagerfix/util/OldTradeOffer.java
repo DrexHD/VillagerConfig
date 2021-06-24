@@ -1,4 +1,4 @@
-package me.drex.villagerfix;
+package me.drex.villagerfix.util;
 
 public interface OldTradeOffer {
 

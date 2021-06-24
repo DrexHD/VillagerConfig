@@ -3,7 +3,6 @@ package me.drex.villagerfix.util;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.village.VillagerProfession;
 import org.json.JSONObject;
 
 import java.util.Random;
@@ -23,11 +22,6 @@ public class Helper {
             if (toName(item).equals(string)) return item;
         }
         return null;
-    }
-
-    public static String toName(VillagerProfession profession) {
-        String s = profession.toString();
-        return s.substring(0, 1).toUpperCase() + s.substring(1);
     }
 
     public static ItemStack parseItemStack(JSONObject jsonObject) {

@@ -3,8 +3,6 @@ package me.drex.villagerfix.villager;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import me.drex.villagerfix.VillagerFix;
-import me.drex.villagerfix.entry.AbstractMod;
-import me.drex.villagerfix.util.Helper;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
 import org.json.JSONArray;
@@ -24,7 +22,7 @@ public class TradeOfferParser {
 
     private TradeOfferParser(String fileName, Int2ObjectMap<TradeOffers.Factory[]> original) {
         cache.put(fileName, this);
-        Path path = AbstractMod.DATA_PATH.resolve(fileName + ".json");
+        Path path = VillagerFix.DATA_PATH.resolve(fileName + ".json");
         try {
             JSONArray input = new JSONArray(new String(Files.readAllBytes(path)));
             int level = 1;
@@ -34,7 +32,7 @@ public class TradeOfferParser {
                     int trade = 0;
                     for (Object tradeOffer : jsonArray) {
                         try {
-                            TradeOffers.Factory factory = AbstractMod.data.deserialize((JSONObject) tradeOffer);
+                            TradeOffers.Factory factory = VillagerFix.data.deserialize((JSONObject) tradeOffer);
                             if (factory != null) {
                                 tradeOffers.add(factory);
                             } else {
@@ -66,7 +64,7 @@ public class TradeOfferParser {
 
     public static TradeOfferParser of(VillagerProfession profession, Int2ObjectMap<TradeOffers.Factory[]> original) {
         if (profession == VillagerProfession.NONE) return new TradeOfferParser();
-        return of(Helper.toName(profession), original);
+        return of(profession.toString(), original);
     }
 
     public static TradeOfferParser of(String fileName, Int2ObjectMap<TradeOffers.Factory[]> original) {

@@ -16,7 +16,7 @@ public class ReloadCommand {
     }
 
     private int execute(CommandContext<ServerCommandSource> context) {
-        VillagerFix.INSTANCE.reload();
+        VillagerFix.reload();
         context.getSource().sendFeedback(new LiteralText("Config reloaded!").formatted(Formatting.GREEN), false);
         return 1;
     }

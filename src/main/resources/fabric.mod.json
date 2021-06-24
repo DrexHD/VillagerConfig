@@ -19,11 +19,8 @@
 
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "me.drex.villagerfix.entry.ClientMod"
-    ],
-    "server": [
-      "me.drex.villagerfix.entry.ServerMod"
+    "main": [
+      "me.drex.villagerfix.Mod"
     ],
     "modmenu": [
       "me.drex.villagerfix.config.modmenu.VillagerFixModMenuEntry"
