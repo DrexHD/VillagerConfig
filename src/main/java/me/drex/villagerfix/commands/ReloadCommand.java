@@ -9,13 +9,13 @@ import net.minecraft.util.Formatting;
 
 public class ReloadCommand {
 
-    public void register(LiteralArgumentBuilder<ServerCommandSource> command) {
+    public static void register(LiteralArgumentBuilder<ServerCommandSource> command) {
         LiteralArgumentBuilder<ServerCommandSource> reload = LiteralArgumentBuilder.literal("reload");
-        reload.executes(this::execute);
+        reload.executes(ReloadCommand::execute);
         command.then(reload);
     }
 
-    private int execute(CommandContext<ServerCommandSource> context) {
+    private static int execute(CommandContext<ServerCommandSource> context) {
         VillagerFix.reload();
         context.getSource().sendFeedback(new LiteralText("Config reloaded!").formatted(Formatting.GREEN), false);
         return 1;

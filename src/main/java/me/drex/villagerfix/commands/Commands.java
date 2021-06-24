@@ -15,22 +15,22 @@ import net.minecraft.util.Formatting;
 
 public class Commands {
 
-    public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         LiteralArgumentBuilder<ServerCommandSource> main = LiteralArgumentBuilder.literal("villagerfix");
         LiteralArgumentBuilder<ServerCommandSource> alias = LiteralArgumentBuilder.literal("vf");
-        main.executes(this::execute).requires(src -> src.hasPermissionLevel(2));
-        alias.executes(this::execute).requires(src -> src.hasPermissionLevel(2));
+        main.executes(Commands::execute).requires(src -> src.hasPermissionLevel(2));
+        alias.executes(Commands::execute).requires(src -> src.hasPermissionLevel(2));
         then(main);
         then(alias);
         dispatcher.register(main);
         dispatcher.register(alias);
     }
 
-    private void then(LiteralArgumentBuilder<ServerCommandSource> literal) {
-        new ReloadCommand().register(literal);
+    private static void then(LiteralArgumentBuilder<ServerCommandSource> literal) {
+        ReloadCommand.register(literal);
     }
 
-    private int execute(CommandContext<ServerCommandSource> context) {
+    private static int execute(CommandContext<ServerCommandSource> context) {
         ModMetadata meta = FabricLoader.getInstance().getModContainer("villagerfix").get().getMetadata();
         boolean lock = ConfigEntries.features.lock;
         ConfigEntries.OldTradesGroup oldTrades = ConfigEntries.oldTrades;
