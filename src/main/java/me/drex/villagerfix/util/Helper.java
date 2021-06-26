@@ -5,6 +5,7 @@ import me.drex.villagerfix.VillagerFix;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.StringNbtReader;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.json.JSONObject;
 
@@ -21,10 +22,7 @@ public class Helper {
     }
 
     public static Item toItem(String string) {
-        for (Item item : Registry.ITEM) {
-            if (toName(item).equals(string)) return item;
-        }
-        return null;
+        return Registry.ITEM.get(new Identifier(string));
     }
 
     public static ItemStack parseItemStack(JSONObject jsonObject) {

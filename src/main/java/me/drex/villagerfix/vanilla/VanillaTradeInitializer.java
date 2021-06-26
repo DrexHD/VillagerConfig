@@ -17,13 +17,13 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import static me.drex.villagerfix.util.Helper.parseItemStack;
+import static me.drex.villagerfix.util.Helper.*;
 
 public class VanillaTradeInitializer implements VillagerFixAPI {
     
     @Override
     public void onInitialize(TradeFactoryStorage storage) {
-        storage.registerTradeFactory(TradeOffers.BuyForOneEmeraldFactory.class, new TradeEntry(jsonObject -> new TradeOffers.BuyForOneEmeraldFactory(Helper.toItem(jsonObject.getString("buy")), jsonObject.getInt("price"), jsonObject.getInt("max_uses"), jsonObject.getInt("experience")), factory -> {
+        storage.registerTradeFactory(TradeOffers.BuyForOneEmeraldFactory.class, new TradeEntry(jsonObject -> new TradeOffers.BuyForOneEmeraldFactory(toItem(jsonObject.getString("buy")), jsonObject.getInt("price"), jsonObject.getInt("max_uses"), jsonObject.getInt("experience")), factory -> {
             JSONObject jsonObject = new JSONObject();
             if (factory instanceof BuyForOneEmeraldFactoryAccessor accessor) {
                 jsonObject.put("buy", Helper.toName(accessor.getBuy()));
@@ -40,17 +40,13 @@ public class VanillaTradeInitializer implements VillagerFixAPI {
             }
             return jsonObject;
         }));
-        storage.registerTradeFactory(TradeOffers.ProcessItemFactory.class, new TradeEntry(jsonObject -> {
-            ItemStack secondBuy = parseItemStack(jsonObject.getJSONObject("secondBuy"));
-            ItemStack sellItem = parseItemStack(jsonObject.getJSONObject("sell"));
-            return new TradeOffers.ProcessItemFactory(secondBuy.getItem(), secondBuy.getCount(), jsonObject.getInt("price"), sellItem.getItem(), sellItem.getCount(), jsonObject.getInt("max_uses"), jsonObject.getInt("experience"));
-        }, factory -> {
+        storage.registerTradeFactory(TradeOffers.ProcessItemFactory.class, new TradeEntry(jsonObject -> new TradeOffers.ProcessItemFactory(toItem(jsonObject.getString("secondBuy")), jsonObject.getInt("secondCount"), jsonObject.getInt("price"), toItem(jsonObject.getString("sell")), jsonObject.getInt("sellCount"), jsonObject.getInt("max_uses"), jsonObject.getInt("experience")), factory -> {
             JSONObject jsonObject = new JSONObject();
             if (factory instanceof ProccessItemFactoryAccessor accessor) {
-                jsonObject.put("secondBuy", parseItemStack(accessor.getSecondBuy()));
+                jsonObject.put("secondBuy", toName(accessor.getSecondBuy().getItem()));
                 jsonObject.put("secondCount", accessor.getSecondCount());
                 jsonObject.put("price", accessor.getPrice());
-                jsonObject.put("sell", parseItemStack(accessor.getSell()));
+                jsonObject.put("sell", toName(accessor.getSell().getItem()));
                 jsonObject.put("sellCount", accessor.getSellCount());
                 jsonObject.put("max_uses", accessor.getMaxUses());
                 jsonObject.put("experience", accessor.getExperience());
@@ -58,7 +54,7 @@ public class VanillaTradeInitializer implements VillagerFixAPI {
             }
             return jsonObject;
         }));
-        storage.registerTradeFactory(TradeOffers.SellDyedArmorFactory.class, new TradeEntry(jsonObject -> new TradeOffers.SellDyedArmorFactory(Helper.toItem(jsonObject.getString("sell")), jsonObject.getInt("price"), jsonObject.getInt("max_uses"), jsonObject.getInt("experience")), factory -> {
+        storage.registerTradeFactory(TradeOffers.SellDyedArmorFactory.class, new TradeEntry(jsonObject -> new TradeOffers.SellDyedArmorFactory(toItem(jsonObject.getString("sell")), jsonObject.getInt("price"), jsonObject.getInt("max_uses"), jsonObject.getInt("experience")), factory -> {
             JSONObject jsonObject = new JSONObject();
             if (factory instanceof SellDyedArmorFactoryAccessor accessor) {
                 jsonObject.put("sell", Helper.toName(accessor.getSell()));
@@ -68,7 +64,7 @@ public class VanillaTradeInitializer implements VillagerFixAPI {
             }
             return jsonObject;
         }));
-        storage.registerTradeFactory(TradeOffers.SellEnchantedToolFactory.class, new TradeEntry(jsonObject -> new TradeOffers.SellEnchantedToolFactory(Helper.toItem(jsonObject.getString("tool")), jsonObject.getInt("basePrice"), jsonObject.getInt("max_uses"), jsonObject.getInt("experience"), jsonObject.getInt("multiplier")), factory -> {
+        storage.registerTradeFactory(TradeOffers.SellEnchantedToolFactory.class, new TradeEntry(jsonObject -> new TradeOffers.SellEnchantedToolFactory(toItem(jsonObject.getString("tool")), jsonObject.getInt("basePrice"), jsonObject.getInt("max_uses"), jsonObject.getInt("experience"), jsonObject.getInt("multiplier")), factory -> {
             JSONObject jsonObject = new JSONObject();
             if (factory instanceof SellEnchantedToolFactoryAccessor accessor) {
                 jsonObject.put("tool", Helper.toName(accessor.getTool().getItem()));
@@ -79,7 +75,7 @@ public class VanillaTradeInitializer implements VillagerFixAPI {
             }
             return jsonObject;
         }));
-        storage.registerTradeFactory(TradeOffers.SellItemFactory.class, new TradeEntry(jsonObject -> new TradeOffers.SellItemFactory(new ItemStack(Helper.toItem(jsonObject.getString("sell"))), jsonObject.getInt("price"), jsonObject.getInt("count"), jsonObject.getInt("max_uses"), jsonObject.getInt("experience"), jsonObject.getFloat("multiplier")), factory -> {
+        storage.registerTradeFactory(TradeOffers.SellItemFactory.class, new TradeEntry(jsonObject -> new TradeOffers.SellItemFactory(new ItemStack(toItem(jsonObject.getString("sell"))), jsonObject.getInt("price"), jsonObject.getInt("count"), jsonObject.getInt("max_uses"), jsonObject.getInt("experience"), jsonObject.getFloat("multiplier")), factory -> {
             JSONObject jsonObject = new JSONObject();
             if (factory instanceof SellItemFactoryAccessor accessor) {
                 jsonObject.put("sell", Helper.toName(accessor.getSell().getItem()));
@@ -132,7 +128,7 @@ public class VanillaTradeInitializer implements VillagerFixAPI {
             Map<VillagerType, Item> map = new HashMap<>();
             JSONObject jsonMap = jsonObject.getJSONObject("map");
             for (String key : jsonMap.keySet()) {
-                map.put(Registry.VILLAGER_TYPE.get(new Identifier(key)), Helper.toItem(jsonMap.getString(key)));
+                map.put(Registry.VILLAGER_TYPE.get(new Identifier(key)), toItem(jsonMap.getString(key)));
             }
             return new TradeOffers.TypeAwareBuyForOneEmeraldFactory(jsonObject.getInt("count"), jsonObject.getInt("max_uses"), jsonObject.getInt("experience"), map);
         }, factory -> {
