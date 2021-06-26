@@ -77,7 +77,7 @@ public class VanillaTradeInitializer implements VillagerFixAPI {
             }
             return jsonObject;
         }));
-        storage.registerTradeFactory(TradeOffers.SellItemFactory.class, new TradeEntry(jsonObject -> new TradeOffers.SellItemFactory(new ItemStack(Helper.toItem(jsonObject.getString("sell"))), jsonObject.getInt("price"), jsonObject.getInt("count"), jsonObject.getInt("max_uses"), jsonObject.getInt("experience")), factory -> {
+        storage.registerTradeFactory(TradeOffers.SellItemFactory.class, new TradeEntry(jsonObject -> new TradeOffers.SellItemFactory(new ItemStack(Helper.toItem(jsonObject.getString("sell"))), jsonObject.getInt("price"), jsonObject.getInt("count"), jsonObject.getInt("max_uses"), jsonObject.getInt("experience"), jsonObject.getFloat("multiplier")), factory -> {
             JSONObject jsonObject = new JSONObject();
             if (factory instanceof SellItemFactoryAccessor accessor) {
                 jsonObject.put("sell", Helper.toName(accessor.getSell().getItem()));
