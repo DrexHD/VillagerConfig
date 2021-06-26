@@ -46,6 +46,6 @@
     "fabric-command-api-v1": "*",
     "fabric-lifecycle-events-v1": "*",
     "fiber": ">=0.23.0-",
-    "minecraft": ">=1.16.4"
+    "minecraft": ">=1.17"
   }
 }

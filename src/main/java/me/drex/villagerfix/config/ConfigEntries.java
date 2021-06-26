@@ -18,7 +18,7 @@ public class ConfigEntries {
         public double maxRaise = 100;
 
         @Setting.Constrain.Range(min = -1, max = 100)
-        @Setting(comment = "The chance of a villager to converting to a villagerzombie (-1 = vanilla behaviour)")
+        @Setting(comment = "The chance of a villager to converting to a villagerzombie (-1 = vanilla behaviour, 100 = 100%)")
         public double conversionChance = -1;
 
         @Setting(comment = "Whether or not villagers should be locked to a profession once they claim it (false = vanilla)")
