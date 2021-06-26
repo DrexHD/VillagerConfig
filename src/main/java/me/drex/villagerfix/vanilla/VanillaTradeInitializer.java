@@ -48,8 +48,10 @@ public class VanillaTradeInitializer implements VillagerFixAPI {
             JSONObject jsonObject = new JSONObject();
             if (factory instanceof ProccessItemFactoryAccessor accessor) {
                 jsonObject.put("secondBuy", parseItemStack(accessor.getSecondBuy()));
+                jsonObject.put("secondCount", accessor.getSecondCount());
                 jsonObject.put("price", accessor.getPrice());
                 jsonObject.put("sell", parseItemStack(accessor.getSell()));
+                jsonObject.put("sellCount", accessor.getSellCount());
                 jsonObject.put("max_uses", accessor.getMaxUses());
                 jsonObject.put("experience", accessor.getExperience());
                 jsonObject.put("multiplier", accessor.getMultiplier());

@@ -16,11 +16,18 @@ public interface ProccessItemFactoryAccessor {
 
     @Accessor("experience")
     public int getExperience();
+
     @Accessor("secondBuy")
     public ItemStack getSecondBuy();
 
     @Accessor("sell")
     public ItemStack getSell();
+
+    @Accessor("secondCount")
+    public int getSecondCount();
+
+    @Accessor("sellCount")
+    public int getSellCount();
 
     @Accessor("multiplier")
     public float getMultiplier();
