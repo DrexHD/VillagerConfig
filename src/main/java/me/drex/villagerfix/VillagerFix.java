@@ -24,15 +24,21 @@ public class VillagerFix {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final Path DATA_PATH = FabricLoader.getInstance().getConfigDir().resolve("VillagerData");
     public static final TradeFactoryStorage data = new TradeFactoryStorage();
+    private static boolean init = false;
 
     public static void initializeData() {
         loadConfig();
         Deobfuscator.init();
+    }
+
+    public static void onStarted() {
+        if (init) return;
         FabricLoader.getInstance().getEntrypointContainers("villagerfix", VillagerFixAPI.class).forEach(entrypoint -> {
             VillagerFixAPI api = entrypoint.getEntrypoint();
             api.onInitialize(data);
         });
         initializeVillagerData();
+        init = true;
     }
 
     public static void reload() {

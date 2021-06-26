@@ -22,6 +22,12 @@
     "main": [
       "me.drex.villagerfix.Mod"
     ],
+    "client": [
+      "me.drex.villagerfix.entry.ClientEntry"
+    ],
+    "server": [
+      "me.drex.villagerfix.entry.ServerEntry"
+    ],
     "modmenu": [
       "me.drex.villagerfix.config.modmenu.VillagerFixModMenuEntry"
     ],
