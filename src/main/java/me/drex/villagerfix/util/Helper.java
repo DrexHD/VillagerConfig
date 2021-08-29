@@ -29,7 +29,7 @@ public class Helper {
         ItemStack itemStack = new ItemStack(Helper.toItem(jsonObject.getString("id")), jsonObject.getInt("Count"));
         if (jsonObject.keySet().contains("tag")) {
             try {
-                itemStack.setTag(StringNbtReader.parse(jsonObject.get("tag").toString()));
+                itemStack.setNbt(StringNbtReader.parse(jsonObject.get("tag").toString()));
             } catch (CommandSyntaxException e) {
                 VillagerFix.LOGGER.error("Error parsing item tag", e);
             }
@@ -41,8 +41,8 @@ public class Helper {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", Helper.toName(itemStack.getItem()));
         jsonObject.put("Count", itemStack.getCount());
-        if (itemStack.getTag() != null) {
-            jsonObject.put("tag", new JSONObject(itemStack.getTag().toString()));
+        if (itemStack.getNbt() != null) {
+            jsonObject.put("tag", new JSONObject(itemStack.getNbt().toString()));
         }
         return jsonObject;
     }

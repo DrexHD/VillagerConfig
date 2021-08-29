@@ -80,7 +80,7 @@ public final class Deobfuscator {
 
     private static void loadMappings() {
         if (!Files.exists(CACHED_MAPPINGS)) {
-            VillagerFix.LOGGER.warn("Could not download mappings, stack trace won't be deobfuscated");
+            VillagerFix.LOGGER.warn("Could not download mappings, trade factories won't be deobfuscated");
             return;
         }
 
