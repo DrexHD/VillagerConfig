@@ -21,7 +21,13 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         super(entityType, world);
     }
 
-    @Redirect(method = "fillRecipes", at = @At(value = "INVOKE", target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;"))
+    @Redirect(
+            method = "fillRecipes",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;"
+            )
+    )
     public <V> V putCustomRecipes(Map map, Object key) {
         TradeOfferParser parser = TradeOfferParser.of((VillagerProfession) key, (Int2ObjectMap<TradeOffers.Factory[]>) map.get(key));
         Int2ObjectMap<TradeOffers.Factory[]> result = parser.build();

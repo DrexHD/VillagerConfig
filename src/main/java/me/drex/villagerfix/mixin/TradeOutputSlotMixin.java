@@ -15,12 +15,18 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(TradeOutputSlot.class)
-public class TradeOutputSlotMixin {
+public abstract class TradeOutputSlotMixin {
 
 
     @Shadow @Final private Merchant merchant;
 
-    @Inject(method = "onTakeItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/village/Merchant;trade(Lnet/minecraft/village/TradeOffer;)V"))
+    @Inject(
+            method = "onTakeItem",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/village/Merchant;trade(Lnet/minecraft/village/TradeOffer;)V"
+            )
+    )
     public void onTrade(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
         if (ConfigEntries.oldTrades.enabled) {
             if (Helper.chance(ConfigEntries.oldTrades.unlockChance)) {

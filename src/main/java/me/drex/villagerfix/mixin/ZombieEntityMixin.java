@@ -2,30 +2,25 @@ package me.drex.villagerfix.mixin;
 
 import me.drex.villagerfix.config.ConfigEntries;
 import me.drex.villagerfix.util.Helper;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = ZombieEntity.class, priority = 999)
-public class ZombieEntityMixin extends HostileEntity {
-
-    protected ZombieEntityMixin(EntityType<? extends HostileEntity> entityType, World world) {
-        super(entityType, world);
-    }
-
+@Mixin(ZombieEntity.class)
+public abstract class ZombieEntityMixin {
 
     private Difficulty difficulty = Difficulty.PEACEFUL;
 
-    @Inject(method = "onKilledOther", at = @At(value = "HEAD"))
+    @Inject(
+            method = "onKilledOther",
+            at = @At("HEAD")
+    )
     public void calculateConversionChance(ServerWorld world, LivingEntity other, CallbackInfo ci) {
         double conversionChance = ConfigEntries.features.conversionChance;
         if (conversionChance == -1) {
@@ -39,7 +34,13 @@ public class ZombieEntityMixin extends HostileEntity {
         }
     }
 
-    @Redirect(method = "onKilledOther", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;getDifficulty()Lnet/minecraft/world/Difficulty;"))
+    @Redirect(
+            method = "onKilledOther",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/server/world/ServerWorld;getDifficulty()Lnet/minecraft/world/Difficulty;"
+            )
+    )
     public Difficulty shouldConvert(ServerWorld world) {
         return difficulty;
     }

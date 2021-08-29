@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.village.TradeOffer;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,20 +28,25 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
     @Shadow
     private int uses;
 
-    @Mutable
-    @Shadow
-    @Final
-    private int maxUses;
-
-    @Redirect(method = "increaseSpecialPrice", at = @At(value = "FIELD", target = "Lnet/minecraft/village/TradeOffer;specialPrice:I", opcode = 181))
+    @Redirect(
+            method = "increaseSpecialPrice",
+            at = @At(
+                    value = "FIELD",
+                    target = "Lnet/minecraft/village/TradeOffer;specialPrice:I",
+                    opcode = Opcodes.PUTFIELD
+            )
+    )
     public void adjustSpecialPrice(TradeOffer tradeOffer, int increment) {
         int maxDiscount = (int) ((this.firstBuyItem.getCount()) * -(ConfigEntries.features.maxDiscount / 100));
         int maxRaise = (int) ((this.firstBuyItem.getCount()) * +(ConfigEntries.features.maxRaise / 100));
         tradeOffer.setSpecialPrice(MathHelper.clamp(tradeOffer.getSpecialPrice() + increment, maxDiscount, maxRaise));
     }
 
-    @Inject(method = "<init>(Lnet/minecraft/nbt/NbtCompound;)V", at = @At(value = "RETURN"))
-    public void fromTag(NbtCompound nbt, CallbackInfo ci) {
+    @Inject(
+            method = "<init>(Lnet/minecraft/nbt/NbtCompound;)V",
+            at = @At("RETURN")
+    )
+    public void readCustomTags(NbtCompound nbt, CallbackInfo ci) {
         if (ConfigEntries.oldTrades.enabled) {
             if (nbt.contains("villagerfix_disabled", 1)) {
                 this.disabled = nbt.getBoolean("disabled");
@@ -48,8 +54,12 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
         }
     }
 
-    @Inject(method = "toNbt", at = @At(value = "RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
-    public void toTag(CallbackInfoReturnable<NbtCompound> cir, NbtCompound nbt) {
+    @Inject(
+            method = "toNbt",
+            at = @At("RETURN"),
+            locals = LocalCapture.CAPTURE_FAILHARD
+    )
+    public void writeCustomTags(CallbackInfoReturnable<NbtCompound> cir, NbtCompound nbt) {
         if (ConfigEntries.oldTrades.enabled) {
             nbt.putBoolean("villagerfix_disabled", this.disabled);
         }
@@ -58,7 +68,10 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
     /*
      * Re-implement old trading https://minecraft.gamepedia.com/Trading/Before_Village_%26_Pillage
      * */
-    @Inject(method = "use", at = @At(value = "RETURN"))
+    @Inject(
+            method = "use",
+            at = @At("RETURN")
+    )
     public void onUse(CallbackInfo ci) {
         if (ConfigEntries.oldTrades.enabled) {
             if (this.uses > ConfigEntries.oldTrades.minUses) {
@@ -72,13 +85,13 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
         }
     }
 
-    /**
-     * @author Drex
-     * @reason Re-add 1.12 villager trade reset mechanics
-     */
-    @Overwrite
-    public boolean isDisabled() {
-        return ConfigEntries.oldTrades.enabled ? this.disabled : this.uses >= this.maxUses;
+    @Inject(
+            method = "isDisabled",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void addOldTradeMechanics(CallbackInfoReturnable<Boolean> cir) {
+        if (ConfigEntries.oldTrades.enabled) cir.setReturnValue(this.disabled);
     }
 
     public void enable() {
