@@ -9,15 +9,15 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface SellDyedArmorFactoryAccessor {
 
     @Accessor("price")
-    public int getPrice();
+    int getPrice();
 
     @Accessor("maxUses")
-    public int getMaxUses();
+    int getMaxUses();
 
     @Accessor("experience")
-    public int getExperience();
+    int getExperience();
 
     @Accessor("sell")
-    public Item getSell();
+    Item getSell();
 
 }

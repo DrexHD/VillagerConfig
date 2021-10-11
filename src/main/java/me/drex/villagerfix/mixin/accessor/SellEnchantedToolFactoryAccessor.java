@@ -9,19 +9,18 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface SellEnchantedToolFactoryAccessor {
 
     @Accessor("tool")
-    public ItemStack getTool();
+    ItemStack getTool();
 
     @Accessor("basePrice")
-    public int getBasePrice();
+    int getBasePrice();
 
     @Accessor("maxUses")
-    public int getMaxUses();
+    int getMaxUses();
 
     @Accessor("experience")
-    public int getExperience();
+    int getExperience();
 
     @Accessor("multiplier")
-    public float getMultiplier();
-
+    float getMultiplier();
 
 }

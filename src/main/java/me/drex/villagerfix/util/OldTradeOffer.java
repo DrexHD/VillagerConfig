@@ -6,6 +6,4 @@ public interface OldTradeOffer {
 
     void disable();
 
-    void onTrade();
-
 }

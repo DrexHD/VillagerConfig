@@ -10,19 +10,18 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface SellMapFactoryAccessor {
 
     @Accessor("price")
-    public int getPrice();
+    int getPrice();
 
     @Accessor("structure")
-    public StructureFeature<?> getStructure();
+    StructureFeature<?> getStructure();
 
     @Accessor("iconType")
-    public MapIcon.Type getType();
+    MapIcon.Type getType();
 
     @Accessor("maxUses")
-    public int getMaxUses();
+    int getMaxUses();
 
     @Accessor("experience")
-    public int getExperience();
-
+    int getExperience();
 
 }

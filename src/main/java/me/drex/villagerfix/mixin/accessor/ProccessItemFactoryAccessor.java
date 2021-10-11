@@ -9,27 +9,27 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface ProccessItemFactoryAccessor {
 
     @Accessor("price")
-    public int getPrice();
+    int getPrice();
 
     @Accessor("maxUses")
-    public int getMaxUses();
+    int getMaxUses();
 
     @Accessor("experience")
-    public int getExperience();
+    int getExperience();
 
     @Accessor("secondBuy")
-    public ItemStack getSecondBuy();
+    ItemStack getSecondBuy();
 
     @Accessor("sell")
-    public ItemStack getSell();
+    ItemStack getSell();
 
     @Accessor("secondCount")
-    public int getSecondCount();
+    int getSecondCount();
 
     @Accessor("sellCount")
-    public int getSellCount();
+    int getSellCount();
 
     @Accessor("multiplier")
-    public float getMultiplier();
+    float getMultiplier();
 
 }

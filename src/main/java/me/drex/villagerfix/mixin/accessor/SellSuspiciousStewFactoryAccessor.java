@@ -9,15 +9,15 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface SellSuspiciousStewFactoryAccessor {
 
     @Accessor("effect")
-    public StatusEffect getEffect();
+    StatusEffect getEffect();
 
     @Accessor("duration")
-    public int getDuration();
+    int getDuration();
 
     @Accessor("experience")
-    public int getExperience();
+    int getExperience();
 
     @Accessor("multiplier")
-    public float getMultiplier();
+    float getMultiplier();
 
 }

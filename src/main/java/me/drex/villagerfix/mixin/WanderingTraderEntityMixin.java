@@ -25,10 +25,9 @@ public abstract class WanderingTraderEntityMixin extends MerchantEntity {
                     target = "Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;get(I)Ljava/lang/Object;"
             )
     )
-    public <V> V putCustomRecipes(Int2ObjectMap int2ObjectMap, int key) {
+    public <V> V putCustomRecipes(Int2ObjectMap<TradeOffers.Factory[]> int2ObjectMap, int key) {
         TradeOfferParser parser = TradeOfferParser.of("wandering_trader", int2ObjectMap);
-        TradeOffers.Factory[] result = parser.build().get(key);
-        return (V) result;
+        return (V) parser.build().get(key);
     }
 
 }

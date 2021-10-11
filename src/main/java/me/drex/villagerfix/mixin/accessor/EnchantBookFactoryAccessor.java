@@ -8,6 +8,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface EnchantBookFactoryAccessor {
 
     @Accessor("experience")
-    public int getExperience();
+    int getExperience();
 
 }

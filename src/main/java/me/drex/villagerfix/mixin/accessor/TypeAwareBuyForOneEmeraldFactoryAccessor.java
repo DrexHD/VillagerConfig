@@ -12,15 +12,15 @@ import java.util.Map;
 public interface TypeAwareBuyForOneEmeraldFactoryAccessor {
 
     @Accessor("count")
-    public int getCount();
+    int getCount();
 
     @Accessor("maxUses")
-    public int getMaxUses();
+    int getMaxUses();
 
     @Accessor("experience")
-    public int getExperience();
+    int getExperience();
 
     @Accessor("map")
-    public Map<VillagerType, Item> getMap();
+    Map<VillagerType, Item> getMap();
 
 }
