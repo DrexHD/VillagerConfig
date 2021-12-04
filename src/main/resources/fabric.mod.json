@@ -10,7 +10,6 @@
   ],
   "contact": {
     "homepage": "https://github.com/DrexHD/VillagerFix",
-
     "sources": "https://github.com/DrexHD/VillagerFix"
   },
 
@@ -20,26 +19,21 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "me.drex.villagerfix.Mod"
+      "me.drex.villagerfix.VillagerFix"
     ],
     "client": [
-      "me.drex.villagerfix.entry.ClientEntry"
+      "me.drex.villagerfix.VillagerFix"
     ],
     "server": [
-      "me.drex.villagerfix.entry.ServerEntry"
+      "me.drex.villagerfix.VillagerFix"
     ],
     "modmenu": [
       "me.drex.villagerfix.config.modmenu.VillagerFixModMenuEntry"
-    ],
-    "villagerfix": [
-      "me.drex.villagerfix.vanilla.VanillaTradeInitializer"
     ]
   },
   "mixins": [
-    "villagerfix.mixins.json",
-    "villagerfix.accessor.mixins.json"
+    "villagerfix.mixins.json"
   ],
-  "accessWidener" : "villagerfix.accesswidener",
   "depends": {
     "fabricloader": ">=0.9.0",
     "fabric-api-base": "*",

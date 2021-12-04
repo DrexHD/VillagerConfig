@@ -2,7 +2,6 @@ package me.drex.villagerfix.util;
 
 import com.google.gson.Gson;
 import me.drex.villagerfix.VillagerFix;
-import net.minecraft.MinecraftVersion;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,14 +13,15 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import static me.drex.villagerfix.util.Deobfuscator.MAPPINGS_PATH;
+
 public class YarnVersion {
     public int build;
     public String version;
 
-    private static final String YARN_API_ENTRYPOINT = "https://meta.fabricmc.net/v2/versions/yarn/" +  MinecraftVersion.create().getName();
-    private static final Path VERSION_FILE = VillagerFix.DATA_PATH.resolve("yarn-version.txt");
+    private static final String YARN_API_ENTRYPOINT = "https://meta.fabricmc.net/v2/versions/yarn/" + VillagerFix.getMinecraftServer().getVersion();
+    private static final Path VERSION_FILE = MAPPINGS_PATH.resolve("yarn-version.txt");
     private static String versionMemCache = null;
-
 
     public static String getLatestBuildForCurrentVersion() throws IOException {
         if (versionMemCache == null) {
@@ -32,7 +32,7 @@ public class YarnVersion {
 
                 YarnVersion[] versions = new Gson().fromJson(new InputStreamReader((InputStream) request.getContent()), YarnVersion[].class);
                 String version = Arrays.stream(versions).max(Comparator.comparingInt(v -> v.build)).get().version;
-                VillagerFix.DATA_PATH.toFile().mkdirs();
+                Files.createDirectories(MAPPINGS_PATH);
                 Files.write(VERSION_FILE, version.getBytes());
                 versionMemCache = version;
             } else {

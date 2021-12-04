@@ -3,6 +3,7 @@ package me.drex.villagerfix.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import me.drex.villagerfix.VillagerFix;
 import me.drex.villagerfix.config.ConfigEntries;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
@@ -13,13 +14,13 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.util.Formatting;
 
-public class Commands {
+public class VillagerFixCommand {
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         LiteralArgumentBuilder<ServerCommandSource> main = LiteralArgumentBuilder.literal("villagerfix");
         LiteralArgumentBuilder<ServerCommandSource> alias = LiteralArgumentBuilder.literal("vf");
-        main.executes(Commands::execute).requires(src -> src.hasPermissionLevel(2));
-        alias.executes(Commands::execute).requires(src -> src.hasPermissionLevel(2));
+        main.executes(VillagerFixCommand::execute).requires(src -> src.hasPermissionLevel(2));
+        alias.executes(VillagerFixCommand::execute).requires(src -> src.hasPermissionLevel(2));
         then(main);
         then(alias);
         dispatcher.register(main);
@@ -39,7 +40,7 @@ public class Commands {
                 .append(new LiteralText("VillagerFix Version: " + meta.getVersion().getFriendlyString()).formatted(Formatting.WHITE, Formatting.BOLD)
                     .styled(style -> style
                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Click to copy config file location.").formatted(Formatting.AQUA)))
-                        .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, FabricLoader.getInstance().getConfigDir().resolve("villagerfix.json5").toFile().getAbsolutePath()))))
+                        .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, VillagerFix.DATA_PATH.resolve("villagerfix.json5").toFile().getAbsolutePath()))))
                 .append(new LiteralText("\n\nSettings: ").formatted(Formatting.WHITE, Formatting.BOLD))
                 .append(new LiteralText("\nDiscount (max): ").formatted(Formatting.AQUA))
                 .append(new LiteralText(features.maxDiscount + "%").formatted(Formatting.GRAY, Formatting.ITALIC)

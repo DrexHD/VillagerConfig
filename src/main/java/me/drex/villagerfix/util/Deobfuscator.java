@@ -6,7 +6,6 @@ import net.fabricmc.mapping.reader.v2.MappingGetter;
 import net.fabricmc.mapping.reader.v2.TinyMetadata;
 import net.fabricmc.mapping.reader.v2.TinyV2Factory;
 import net.fabricmc.mapping.reader.v2.TinyVisitor;
-import net.minecraft.MinecraftVersion;
 import org.apache.commons.io.FileUtils;
 
 import java.io.BufferedReader;
@@ -22,10 +21,12 @@ public final class Deobfuscator {
     private static final String MAPPINGS_JAR_LOCATION = "mappings/mappings.tiny";
     private static final String NAMESPACE_FROM = "intermediary";
     private static final String NAMESPACE_TO = "named";
-    private static final Path CACHED_MAPPINGS = VillagerFix.DATA_PATH
-            .resolve("mappings-" +  MinecraftVersion.create().getName() + ".tiny");
+    static final Path MAPPINGS_PATH = VillagerFix.DATA_PATH.resolve("mappings");
+    private static final Path CACHED_MAPPINGS = MAPPINGS_PATH
+            .resolve("mappings-" + VillagerFix.getMinecraftServer().getVersion() + ".tiny");
 
     private static Map<String, String> mappings = null;
+    private static Map<String, String> reverseMappings = null;
 
     public static void init() {
         VillagerFix.LOGGER.info("Initializing StacktraceDeobfuscator");
@@ -54,13 +55,13 @@ public final class Deobfuscator {
         String artifactUrl = "https://maven.fabricmc.net/net/fabricmc/yarn/" + encodedYarnVersion + "/yarn-" + encodedYarnVersion + "-v2.jar";
 
         try {
-            Files.createDirectories(VillagerFix.DATA_PATH);
+            Files.createDirectories(MAPPINGS_PATH);
         } catch (IOException e) {
             VillagerFix.LOGGER.error("Could not create data directory!", e);
             return;
         }
 
-        File jarFile = VillagerFix.DATA_PATH.resolve("yarn-mappings.jar").toFile();
+        File jarFile = MAPPINGS_PATH.resolve("yarn-mappings.jar").toFile();
         jarFile.deleteOnExit();
         try {
             FileUtils.copyURLToFile(new URL(artifactUrl), jarFile);
@@ -70,7 +71,7 @@ public final class Deobfuscator {
         }
 
         try (FileSystem jar = FileSystems.newFileSystem(jarFile.toPath(), (ClassLoader) null)) {
-            VillagerFix.DATA_PATH.toFile().mkdirs();
+            Files.createDirectories(MAPPINGS_PATH);
             Files.copy(jar.getPath(MAPPINGS_JAR_LOCATION), CACHED_MAPPINGS, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             VillagerFix.LOGGER.error("Failed to extract mappings!", e);
@@ -85,6 +86,7 @@ public final class Deobfuscator {
         }
 
         Map<String, String> mappings = new HashMap<>();
+        Map<String, String> reverseMappings = new HashMap<>();
 
         try (BufferedReader mappingReader = Files.newBufferedReader(CACHED_MAPPINGS)) {
             TinyV2Factory.visit(mappingReader, new TinyVisitor() {
@@ -93,6 +95,9 @@ public final class Deobfuscator {
                 private void addMappings(MappingGetter name) {
                     mappings.put(name.get(namespaceStringToColumn.get(NAMESPACE_FROM)).replace('/', '.'),
                             name.get(namespaceStringToColumn.get(NAMESPACE_TO)).replace('/', '.'));
+
+                    reverseMappings.put(name.get(namespaceStringToColumn.get(NAMESPACE_TO)).replace('/', '.'),
+                            name.get(namespaceStringToColumn.get(NAMESPACE_FROM)).replace('/', '.'));
                 }
 
                 @Override
@@ -122,6 +127,7 @@ public final class Deobfuscator {
         }
 
         Deobfuscator.mappings = mappings;
+        Deobfuscator.reverseMappings = reverseMappings;
     }
 
     public static String deobfuscate(String input) {
@@ -129,4 +135,15 @@ public final class Deobfuscator {
         String mapped = mappings.get(input);
         return mapped == null ? input : mapped;
     }
+
+    public static String obfuscate(String input) {
+        if (reverseMappings == null) loadMappings();
+        String mapped = reverseMappings.get(input);
+        return mapped == null ? input : mapped;
+    }
+
+    public static String deobfuscateTradeFactory(String input) {
+        return deobfuscate(input).replaceAll("(?:[\\w]+\\.)+[\\w]+[?:$|.]([\\w]+)", "$1");
+    }
+
 }

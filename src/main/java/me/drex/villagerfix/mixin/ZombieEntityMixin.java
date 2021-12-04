@@ -23,7 +23,7 @@ public abstract class ZombieEntityMixin {
     )
     public void calculateConversionChance(ServerWorld world, LivingEntity other, CallbackInfo ci) {
         double conversionChance = ConfigEntries.features.conversionChance;
-        if (conversionChance == -1) {
+        if (conversionChance < 0D) {
             difficulty = world.getDifficulty();
         } else {
             if (!Helper.chance(conversionChance)) {

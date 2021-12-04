@@ -13,10 +13,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class GoToWorkTaskMixin {
 
     @Inject(
-            method = "run",
+            method = "run(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/VillagerEntity;J)V",
             at = @At("RETURN")
     )
     private void lockProfession(ServerWorld serverWorld, VillagerEntity villagerEntity, long l, CallbackInfo ci) {
         if (villagerEntity.getExperience() == 0 && ConfigEntries.features.lock) villagerEntity.setExperience(1);
     }
+
 }

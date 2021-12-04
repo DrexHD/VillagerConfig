@@ -1,92 +1,78 @@
 package me.drex.villagerfix;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import me.drex.villagerfix.api.TradeFactoryStorage;
-import me.drex.villagerfix.api.VillagerFixAPI;
+import me.drex.villagerfix.commands.VillagerFixCommand;
 import me.drex.villagerfix.config.Config;
+import me.drex.villagerfix.factory.VF_EnchantBookFactory;
+import me.drex.villagerfix.factory.VF_LootTableFactory;
+import me.drex.villagerfix.factory.VF_TradeItemFactory;
+import me.drex.villagerfix.json.JsonFactory;
 import me.drex.villagerfix.util.Deobfuscator;
-import me.drex.villagerfix.villager.TradeOfferParser;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.DedicatedServerModInitializer;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.village.TradeOffers;
-import net.minecraft.village.VillagerProfession;
+import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
 
-public class VillagerFix {
+public class VillagerFix implements DedicatedServerModInitializer, ClientModInitializer, ModInitializer {
 
-    public static final Logger LOGGER = LogManager.getLogger();
-    public static final Path DATA_PATH = FabricLoader.getInstance().getConfigDir().resolve("VillagerData");
-    public static final TradeFactoryStorage data = new TradeFactoryStorage();
+    public static final Logger LOGGER = LogManager.getLogger("VillagerFix");
+    public static final Path DATA_PATH = FabricLoader.getInstance().getConfigDir().resolve("VillagerFix");
     private static boolean init = false;
+    private static MinecraftServer minecraftServer;
 
-    public static void initializeData() {
-        loadConfig();
-        Deobfuscator.init();
+    public static JsonFactory getJsonFactory() {
+        return jsonFactory;
     }
 
-    public static void onStarted() {
+    private static final JsonFactory jsonFactory = new JsonFactory();
+
+    public static void onStarted(MinecraftServer server) {
         if (init) return;
-        FabricLoader.getInstance().getEntrypointContainers("villagerfix", VillagerFixAPI.class).forEach(entrypoint -> {
-            VillagerFixAPI api = entrypoint.getEntrypoint();
-            api.onInitialize(data);
-        });
-        initializeVillagerData();
+        minecraftServer = server;
+        Deobfuscator.init();
+        jsonFactory.saveTradeData();
+        jsonFactory.loadTrades();
+        jsonFactory.addCustomTradeFactories(VF_EnchantBookFactory.class, VF_TradeItemFactory.class, VF_LootTableFactory.class);
         init = true;
     }
 
     public static void reload() {
         Config.load();
-        TradeOfferParser.cache.clear();
-    }
-
-    private static void initializeVillagerData() {
-        DATA_PATH.toFile().mkdirs();
-        for (Map.Entry<VillagerProfession, Int2ObjectMap<TradeOffers.Factory[]>> entry : TradeOffers.PROFESSION_TO_LEVELED_TRADE.entrySet()) {
-            saveDataToFile(entry.getKey().toString(), entry.getValue());
-        }
-        saveDataToFile("wandering_trader", TradeOffers.WANDERING_TRADER_TRADES);
-        saveDataToFile("nitwit", new Int2ObjectArrayMap<>());
-    }
-
-    private static void saveDataToFile(String fileName, Int2ObjectMap<TradeOffers.Factory[]> map) {
-        JSONArray jsonArr = new JSONArray();
-        for (int i = 1; i <= map.size(); i++) {
-            TradeOffers.Factory[] tradeOffers = map.get(i);
-            JSONArray jsonArray = new JSONArray();
-            for (TradeOffers.Factory factory : tradeOffers) {
-                JSONObject serialize = data.serialize(factory);
-                if (serialize != null) {
-                    jsonArray.put(serialize);
-                } else {
-                    JSONObject unknown = new JSONObject();
-                    unknown.put("type", "unknown");
-                    jsonArray.put(unknown);
-                }
-            }
-            jsonArr.put(jsonArray);
-        }
-        try {
-            Path path = DATA_PATH.resolve(fileName + ".json");
-            if (!path.toFile().exists()) {
-                VillagerFix.LOGGER.info("Saving trade data (" + fileName + ")");
-                Files.write(path, jsonArr.toString(4).getBytes());
-            }
-        } catch (Exception e) {
-            VillagerFix.LOGGER.error("Couldn't save " + fileName + ".json", e);
-        }
+        jsonFactory.loadTrades();
     }
 
     public static void loadConfig() {
-        if (!Config.isConfigLoaded) {
+        if (!Config.loaded) {
             Config.load();
         }
     }
 
+    public static MinecraftServer getMinecraftServer() {
+        return minecraftServer;
+    }
+
+    @Override
+    public void onInitializeClient() {
+        ClientTickEvents.START_WORLD_TICK.register(world -> VillagerFix.onStarted(world.getServer()));
+    }
+
+    @Override
+    public void onInitializeServer() {
+        ServerLifecycleEvents.SERVER_STARTING.register(VillagerFix::onStarted);
+    }
+
+    @Override
+    public void onInitialize() {
+        loadConfig();
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
+            VillagerFixCommand.register(dispatcher);
+        });
+    }
 }

@@ -6,7 +6,7 @@ import io.github.fablabsmc.fablabs.api.fiber.v1.exception.FiberException;
 import io.github.fablabsmc.fablabs.api.fiber.v1.serialization.FiberSerialization;
 import io.github.fablabsmc.fablabs.api.fiber.v1.serialization.JanksonValueSerializer;
 import io.github.fablabsmc.fablabs.api.fiber.v1.tree.ConfigTree;
-import net.fabricmc.loader.api.FabricLoader;
+import me.drex.villagerfix.VillagerFix;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,8 +14,8 @@ import java.nio.file.Path;
 
 public class Config {
 
-    public static boolean isConfigLoaded = false;
-    public static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("villagerfix.json5");
+    public static boolean loaded = false;
+    public static final Path CONFIG_PATH = VillagerFix.DATA_PATH.resolve("villagerfix.json5");
     private static final AnnotatedSettings ANNOTATED_SETTINGS = AnnotatedSettings.builder()
             .useNamingConvention(SettingNamingConvention.SNAKE_CASE)
             .build();
@@ -23,29 +23,30 @@ public class Config {
     public static final ConfigTree TREE = ConfigTree.builder()
             .applyFromPojo(CONFIG, ANNOTATED_SETTINGS)
             .build();
-    private static JanksonValueSerializer serializer = new JanksonValueSerializer(false);
+    private static final JanksonValueSerializer serializer = new JanksonValueSerializer(false);
 
     public static void load() {
         if (Files.exists(CONFIG_PATH)) {
             try {
                 ANNOTATED_SETTINGS.applyToNode(TREE, CONFIG);
                 FiberSerialization.deserialize(TREE, Files.newInputStream(CONFIG_PATH), serializer);
-                isConfigLoaded = true;
+                loaded = true;
             } catch (IOException | FiberException e) {
-                e.printStackTrace();
+                VillagerFix.LOGGER.error("Failed to load config file!", e);
             }
         } else {
             saveModConfig();
-            isConfigLoaded = true;
+            loaded = true;
         }
     }
 
     public static void saveModConfig() {
         try {
             ANNOTATED_SETTINGS.applyToNode(TREE, CONFIG);
+            VillagerFix.DATA_PATH.toFile().mkdirs();
             FiberSerialization.serialize(TREE, Files.newOutputStream(CONFIG_PATH), serializer);
         } catch (IOException | FiberException e) {
-            e.printStackTrace();
+            VillagerFix.LOGGER.error("Failed to save config file!", e);
         }
     }
 

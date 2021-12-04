@@ -22,6 +22,4 @@
   "config.villagerfix.lockchance.tooltip": "The chance of a trade locking itself (1.12 default: 20)",
   "config.villagerfix.unlockchance": "Unlock Chance",
   "config.villagerfix.unlockchance.tooltip": "The chance of a trade unlocking all other trades (1.12 default: 20)"
-
-
 }
