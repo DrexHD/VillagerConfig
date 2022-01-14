@@ -43,8 +43,9 @@ public class Config {
     public static void saveModConfig() {
         try {
             ANNOTATED_SETTINGS.applyToNode(TREE, CONFIG);
-            VillagerFix.DATA_PATH.toFile().mkdirs();
-            FiberSerialization.serialize(TREE, Files.newOutputStream(CONFIG_PATH), serializer);
+            if (VillagerFix.DATA_PATH.toFile().mkdirs()) {
+                FiberSerialization.serialize(TREE, Files.newOutputStream(CONFIG_PATH), serializer);
+            }
         } catch (IOException | FiberException e) {
             VillagerFix.LOGGER.error("Failed to save config file!", e);
         }

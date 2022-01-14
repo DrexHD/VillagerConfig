@@ -14,7 +14,6 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,7 +24,6 @@ public class VillagerFix implements DedicatedServerModInitializer, ClientModInit
     public static final Logger LOGGER = LogManager.getLogger("VillagerFix");
     public static final Path DATA_PATH = FabricLoader.getInstance().getConfigDir().resolve("VillagerFix");
     private static boolean init = false;
-    private static MinecraftServer minecraftServer;
 
     public static JsonFactory getJsonFactory() {
         return jsonFactory;
@@ -33,13 +31,12 @@ public class VillagerFix implements DedicatedServerModInitializer, ClientModInit
 
     private static final JsonFactory jsonFactory = new JsonFactory();
 
-    public static void onStarted(MinecraftServer server) {
+    public static void onStarted() {
         if (init) return;
-        minecraftServer = server;
         Deobfuscator.init();
         jsonFactory.saveTradeData();
-        jsonFactory.loadTrades();
         jsonFactory.addCustomTradeFactories(VF_EnchantBookFactory.class, VF_TradeItemFactory.class, VF_LootTableFactory.class);
+        jsonFactory.loadTrades();
         init = true;
     }
 
@@ -54,18 +51,14 @@ public class VillagerFix implements DedicatedServerModInitializer, ClientModInit
         }
     }
 
-    public static MinecraftServer getMinecraftServer() {
-        return minecraftServer;
-    }
-
     @Override
     public void onInitializeClient() {
-        ClientTickEvents.START_WORLD_TICK.register(world -> VillagerFix.onStarted(world.getServer()));
+        ClientTickEvents.START_WORLD_TICK.register(world -> VillagerFix.onStarted());
     }
 
     @Override
     public void onInitializeServer() {
-        ServerLifecycleEvents.SERVER_STARTING.register(VillagerFix::onStarted);
+        ServerLifecycleEvents.SERVER_STARTING.register(server -> VillagerFix.onStarted());
     }
 
     @Override

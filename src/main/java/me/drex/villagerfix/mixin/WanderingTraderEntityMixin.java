@@ -15,7 +15,8 @@ public abstract class WanderingTraderEntityMixin {
             method = "fillRecipes",
             at = @At(
                     value = "INVOKE",
-                    target = "Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;get(I)Ljava/lang/Object;"
+                    target = "Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;get(I)Ljava/lang/Object;",
+                    remap = false
             )
     )
     @SuppressWarnings("unchecked")

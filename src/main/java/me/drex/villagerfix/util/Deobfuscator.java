@@ -6,6 +6,7 @@ import net.fabricmc.mapping.reader.v2.MappingGetter;
 import net.fabricmc.mapping.reader.v2.TinyMetadata;
 import net.fabricmc.mapping.reader.v2.TinyV2Factory;
 import net.fabricmc.mapping.reader.v2.TinyVisitor;
+import net.minecraft.SharedConstants;
 import org.apache.commons.io.FileUtils;
 
 import java.io.BufferedReader;
@@ -23,10 +24,9 @@ public final class Deobfuscator {
     private static final String NAMESPACE_TO = "named";
     static final Path MAPPINGS_PATH = VillagerFix.DATA_PATH.resolve("mappings");
     private static final Path CACHED_MAPPINGS = MAPPINGS_PATH
-            .resolve("mappings-" + VillagerFix.getMinecraftServer().getVersion() + ".tiny");
+            .resolve("mappings-" + SharedConstants.getGameVersion().getName() + ".tiny");
 
     private static Map<String, String> mappings = null;
-    private static Map<String, String> reverseMappings = null;
 
     public static void init() {
         VillagerFix.LOGGER.info("Initializing StacktraceDeobfuscator");
@@ -86,7 +86,6 @@ public final class Deobfuscator {
         }
 
         Map<String, String> mappings = new HashMap<>();
-        Map<String, String> reverseMappings = new HashMap<>();
 
         try (BufferedReader mappingReader = Files.newBufferedReader(CACHED_MAPPINGS)) {
             TinyV2Factory.visit(mappingReader, new TinyVisitor() {
@@ -96,8 +95,6 @@ public final class Deobfuscator {
                     mappings.put(name.get(namespaceStringToColumn.get(NAMESPACE_FROM)).replace('/', '.'),
                             name.get(namespaceStringToColumn.get(NAMESPACE_TO)).replace('/', '.'));
 
-                    reverseMappings.put(name.get(namespaceStringToColumn.get(NAMESPACE_TO)).replace('/', '.'),
-                            name.get(namespaceStringToColumn.get(NAMESPACE_FROM)).replace('/', '.'));
                 }
 
                 @Override
@@ -127,23 +124,12 @@ public final class Deobfuscator {
         }
 
         Deobfuscator.mappings = mappings;
-        Deobfuscator.reverseMappings = reverseMappings;
     }
 
     public static String deobfuscate(String input) {
         if (mappings == null) loadMappings();
         String mapped = mappings.get(input);
         return mapped == null ? input : mapped;
-    }
-
-    public static String obfuscate(String input) {
-        if (reverseMappings == null) loadMappings();
-        String mapped = reverseMappings.get(input);
-        return mapped == null ? input : mapped;
-    }
-
-    public static String deobfuscateTradeFactory(String input) {
-        return deobfuscate(input).replaceAll("(?:[\\w]+\\.)+[\\w]+[?:$|.]([\\w]+)", "$1");
     }
 
 }

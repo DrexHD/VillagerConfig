@@ -1,7 +1,7 @@
 package me.drex.villagerfix.util;
 
 import com.google.gson.Gson;
-import me.drex.villagerfix.VillagerFix;
+import net.minecraft.SharedConstants;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +19,7 @@ public class YarnVersion {
     public int build;
     public String version;
 
-    private static final String YARN_API_ENTRYPOINT = "https://meta.fabricmc.net/v2/versions/yarn/" + VillagerFix.getMinecraftServer().getVersion();
+    private static final String YARN_API_ENTRYPOINT = "https://meta.fabricmc.net/v2/versions/yarn/" + SharedConstants.getGameVersion().getName();
     private static final Path VERSION_FILE = MAPPINGS_PATH.resolve("yarn-version.txt");
     private static String versionMemCache = null;
 

@@ -47,7 +47,9 @@ public class JsonFactory {
 
     private final Gson gson;
     public final Map<String, Int2ObjectMap<TradeOffers.Factory[]>> TRADES = new HashMap<>();
-    private final Map<String, Class<?>> FACTORYNAME_TO_CLASS = new HashMap<>();
+    private static final Map<String, Class<? extends TradeOffers.Factory>> FACTORYNAME_TO_CLASS = new HashMap<>();
+    private static final Path TRADES_PATH = VillagerFix.DATA_PATH.resolve("trades");
+    private static final String WANDERING_TRADER_ID = "wandering_trader";
 
     public JsonFactory() {
         final GsonBuilder gsonBuilder = new GsonBuilder().setPrettyPrinting();
@@ -75,14 +77,23 @@ public class JsonFactory {
     }
 
     public void saveTradeData() {
-        VillagerFix.DATA_PATH.toFile().mkdirs();
+        try {
+            Files.createDirectories(TRADES_PATH);
+        } catch (IOException e) {
+            VillagerFix.LOGGER.error("Could not trades directory!", e);
+            return;
+        }
+
+        // Save all villager trades
         for (VillagerProfession villagerProfession : Registry.VILLAGER_PROFESSION) {
             this.saveTradeData(toFileName(villagerProfession), TradeOffers.PROFESSION_TO_LEVELED_TRADE.getOrDefault(villagerProfession, new Int2ObjectArrayMap<>()));
         }
-        this.saveTradeData("wandering_trader", TradeOffers.WANDERING_TRADER_TRADES);
+
+        // Save wandering trader trades
+        this.saveTradeData(WANDERING_TRADER_ID, TradeOffers.WANDERING_TRADER_TRADES);
     }
 
-    private String toFileName(VillagerProfession profession) {
+    public static String toFileName(VillagerProfession profession) {
         return URLEncoder.encode(profession.toString(), StandardCharsets.UTF_8);
     }
 
@@ -105,10 +116,10 @@ public class JsonFactory {
         try {
             JsonArray jsonArray = serializeData(trades);
             try {
-                Path path = VillagerFix.DATA_PATH.resolve(name + ".json");
-                if (!path.toFile().exists()) {
+                final Path jsonPath = TRADES_PATH.resolve(name + ".json");
+                if (!jsonPath.toFile().exists()) {
                     VillagerFix.LOGGER.info("Saving trade offer data for " + name);
-                    Files.write(path, gson.toJson(jsonArray).getBytes());
+                    Files.write(jsonPath, gson.toJson(jsonArray).getBytes());
                 }
             } catch (IOException e) {
                 VillagerFix.LOGGER.error("Couldn't save \"" + name + "\"", e);
@@ -141,7 +152,7 @@ public class JsonFactory {
     }
 
     public Int2ObjectMap<TradeOffers.Factory[]> getWanderingTraderOffers(Int2ObjectMap<TradeOffers.Factory[]> fallback) {
-        return TRADES.getOrDefault("wandering_trader", fallback);
+        return TRADES.getOrDefault(WANDERING_TRADER_ID, fallback);
     }
 
     public Int2ObjectMap<TradeOffers.Factory[]> getTradeOffers(VillagerProfession profession, Int2ObjectMap<TradeOffers.Factory[]> fallback) {
@@ -149,6 +160,7 @@ public class JsonFactory {
     }
 
     public void loadTrades() {
+        Map<String, Int2ObjectMap<TradeOffers.Factory[]>> trades = new HashMap<>(TRADES);
         TRADES.clear();
         for (VillagerProfession villagerProfession : Registry.VILLAGER_PROFESSION) {
             loadTrades(toFileName(villagerProfession));
@@ -167,7 +179,7 @@ public class JsonFactory {
 
     private Int2ObjectMap<TradeOffers.Factory[]> attemptLoadTrades(String name) throws IOException {
         Int2ObjectMap<TradeOffers.Factory[]> trades = new Int2ObjectArrayMap<>();
-        Path path = VillagerFix.DATA_PATH.resolve(name + ".json");
+        Path path = TRADES_PATH.resolve(name + ".json");
         if (path.toFile().exists()) {
             final JsonArray[] levels = gson.fromJson(new String(Files.readAllBytes(path)), JsonArray[].class);
             int level = 1;
@@ -190,7 +202,7 @@ public class JsonFactory {
     private TradeOffers.Factory parseTradeOffer(JsonElement factoryJson) {
         final JsonObject jsonObject = factoryJson.getAsJsonObject();
         final String type = jsonObject.get("type").getAsString();
-        final Class<?> clazz = FACTORYNAME_TO_CLASS.get(type);
+        final Class<? extends TradeOffers.Factory> clazz = FACTORYNAME_TO_CLASS.get(type);
         if (clazz == null) {
             throw new IllegalArgumentException("Unknown trade type \"" + type + "\"");
         }
@@ -202,6 +214,11 @@ public class JsonFactory {
             // This should never happen
             throw new UnknownError();
         }
+    }
+
+    private void printTradeOffer(JsonObject offer) {
+        VillagerFix.LOGGER.info("Suspected offer:");
+        VillagerFix.LOGGER.info(offer.toString());
     }
 
 }
