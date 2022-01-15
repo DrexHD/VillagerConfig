@@ -23,34 +23,35 @@ public class ConfigScreen {
         ConfigCategory features = builder.getOrCreateCategory(new TranslatableText("config.villagerfix.category.features"));
 
         features.addEntry(entryBuilder.startDoubleField(new TranslatableText("config.villagerfix.maxdiscount"), ConfigEntries.features.maxDiscount)
-        .setDefaultValue(100)
-        .setMin(0.0)
-        .setMax(100.0)
-            .setSaveConsumer(value -> ConfigEntries.features.maxDiscount = value)
-        .setTooltip(new TranslatableText("config.villagerfix.maxdiscount.tooltip"))
-        .build());
+                .setDefaultValue(100)
+                .setMin(0.0)
+                .setMax(100.0)
+                .setSaveConsumer(value -> ConfigEntries.features.maxDiscount = value)
+                .setTooltip(new TranslatableText("config.villagerfix.maxdiscount.tooltip"))
+                .build());
 
         features.addEntry(entryBuilder.startDoubleField(new TranslatableText("config.villagerfix.maxraise"), ConfigEntries.features.maxRaise)
-        .setDefaultValue(100)
-        .setMin(0.0)
-        .setMax(100.0)
-            .setSaveConsumer(value -> ConfigEntries.features.maxRaise = value)
-        .setTooltip(new TranslatableText("config.villagerfix.maxraise.tooltip"))
-        .build());
+                .setDefaultValue(100)
+                .setMin(0.0)
+                .setMax(100.0)
+                .setSaveConsumer(value -> ConfigEntries.features.maxRaise = value)
+                .setTooltip(new TranslatableText("config.villagerfix.maxraise.tooltip"))
+                .build());
 
         features.addEntry(entryBuilder.startDoubleField(new TranslatableText("config.villagerfix.conversionchance"), ConfigEntries.features.conversionChance)
-        .setDefaultValue(-1)
-        .setMin(-1.0)
-        .setMax(100.0)
-            .setSaveConsumer(value -> ConfigEntries.features.conversionChance = value)
-        .setTooltip(new TranslatableText("config.villagerfix.conversionchance.tooltip"))
-        .build());
+                .setDefaultValue(-1)
+                .setMin(-1.0)
+                .setMax(100.0)
+                .setSaveConsumer(value -> ConfigEntries.features.conversionChance = value)
+                .setTooltip(new TranslatableText("config.villagerfix.conversionchance.tooltip"))
+                .build());
 
-        features.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.villagerfix.lock"), ConfigEntries.features.lock)
-        .setDefaultValue(false)
-            .setSaveConsumer(value -> ConfigEntries.features.lock = value)
-        .setTooltip(new TranslatableText("config.villagerfix.lock.tooltip"))
-        .build());
+
+        features.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.villagerfix.tradecycling"), ConfigEntries.features.tradeCycling)
+                .setDefaultValue(true)
+                .setSaveConsumer(value -> ConfigEntries.features.tradeCycling = value)
+                .setTooltip(new TranslatableText("config.villagerfix.tradecycling.tooltip"))
+                .build());
 
         ConfigCategory oldTrades = builder.getOrCreateCategory(new TranslatableText("config.villagerfix.category.old_trades"))
                 .setCategoryBackground(new Identifier("minecraft:textures/block/emerald_block.png"));
@@ -90,7 +91,6 @@ public class ConfigScreen {
                 .setSaveConsumer(value -> ConfigEntries.oldTrades.unlockChance = value)
                 .setTooltip(new TranslatableText("config.villagerfix.unlockchance.tooltip"))
                 .build());
-
 
 
         builder.setSavingRunnable(Config::saveModConfig);

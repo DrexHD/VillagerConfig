@@ -2,7 +2,7 @@ package me.drex.villagerfix.mixin;
 
 import me.drex.villagerfix.util.OldTradeOffer;
 import me.drex.villagerfix.config.ConfigEntries;
-import me.drex.villagerfix.util.Helper;
+import me.drex.villagerfix.util.Math;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.TradeOutputSlot;
@@ -29,7 +29,7 @@ public abstract class TradeOutputSlotMixin {
     )
     public void onTrade(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
         if (ConfigEntries.oldTrades.enabled) {
-            if (Helper.chance(ConfigEntries.oldTrades.unlockChance)) {
+            if (Math.chance(ConfigEntries.oldTrades.unlockChance)) {
                 this.merchant.getOffers().forEach(tradeOffer -> {
                     ((OldTradeOffer) tradeOffer).enable();
                 });

@@ -8,10 +8,7 @@ import me.drex.villagerfix.config.ConfigEntries;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.MutableText;
+import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
 public class VillagerFixCommand {
@@ -28,12 +25,12 @@ public class VillagerFixCommand {
     }
 
     private static void then(LiteralArgumentBuilder<ServerCommandSource> literal) {
+        GenerateCommand.register(literal);
         ReloadCommand.register(literal);
     }
 
     private static int execute(CommandContext<ServerCommandSource> context) {
         ModMetadata meta = FabricLoader.getInstance().getModContainer("villagerfix").get().getMetadata();
-        boolean lock = ConfigEntries.features.lock;
         ConfigEntries.OldTradesGroup oldTrades = ConfigEntries.oldTrades;
         ConfigEntries.FeaturesGroup features = ConfigEntries.features;
         MutableText text = new LiteralText("")
@@ -61,8 +58,8 @@ public class VillagerFixCommand {
                                 .append(new LiteralText("\nEasy / Peaceful: ").formatted(Formatting.GREEN))
                                 .append(new LiteralText("0%").formatted(Formatting.GRAY))
                         ))))
-                .append(new LiteralText("\nLock Villagers: ").formatted(Formatting.AQUA))
-                .append(new LiteralText(String.valueOf(lock)).formatted(Formatting.GRAY, Formatting.ITALIC)
+                .append(new LiteralText("\nTrade Cycling: ").formatted(Formatting.AQUA))
+                .append(new LiteralText(String.valueOf(ConfigEntries.features.tradeCycling)).formatted(Formatting.GRAY, Formatting.ITALIC)
                     .styled(style -> style
                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Vanilla: ").formatted(Formatting.AQUA).append(new LiteralText("false").formatted(Formatting.GRAY))))))
                 .append(new LiteralText("\nOld Trade Mechanics: ").formatted(Formatting.AQUA))

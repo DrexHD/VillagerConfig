@@ -2,7 +2,7 @@ package me.drex.villagerfix.mixin;
 
 import me.drex.villagerfix.util.OldTradeOffer;
 import me.drex.villagerfix.config.ConfigEntries;
-import me.drex.villagerfix.util.Helper;
+import me.drex.villagerfix.util.Math;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
@@ -75,7 +75,7 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
     public void onUse(CallbackInfo ci) {
         if (ConfigEntries.oldTrades.enabled) {
             if (this.uses > ConfigEntries.oldTrades.minUses) {
-                if (Helper.chance(ConfigEntries.oldTrades.lockChance)) {
+                if (Math.chance(ConfigEntries.oldTrades.lockChance)) {
                     this.disable();
                 }
             }

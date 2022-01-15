@@ -1,7 +1,7 @@
 package me.drex.villagerfix.mixin;
 
 import me.drex.villagerfix.config.ConfigEntries;
-import me.drex.villagerfix.util.Helper;
+import me.drex.villagerfix.util.Math;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -26,7 +26,7 @@ public abstract class ZombieEntityMixin {
         if (conversionChance < 0D) {
             difficulty = world.getDifficulty();
         } else {
-            if (!Helper.chance(conversionChance)) {
+            if (!Math.chance(conversionChance)) {
                 difficulty = Difficulty.EASY;
             } else {
                 difficulty = Difficulty.HARD;

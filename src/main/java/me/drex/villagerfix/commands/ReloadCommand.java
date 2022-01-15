@@ -3,6 +3,7 @@ package me.drex.villagerfix.commands;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import me.drex.villagerfix.VillagerFix;
+import me.drex.villagerfix.config.Config;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Formatting;
@@ -16,9 +17,10 @@ public class ReloadCommand {
     }
 
     private static int execute(CommandContext<ServerCommandSource> context) {
-        VillagerFix.reload();
-        VillagerFix.LOGGER.info("VillagerFix reloaded!");
-        context.getSource().sendFeedback(new LiteralText("VillagerFix reloaded!").formatted(Formatting.GREEN), false);
+        Config.load();
+
+        VillagerFix.LOGGER.info("VillagerFix config reloaded!");
+        context.getSource().sendFeedback(new LiteralText("VillagerFix config reloaded.").formatted(Formatting.GREEN), false);
         return 1;
     }
 
