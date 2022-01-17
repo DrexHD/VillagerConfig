@@ -6,6 +6,7 @@ import me.drex.villagerfix.util.TradeManager;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.village.VillagerData;
@@ -18,7 +19,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Map;
-import java.util.Objects;
 
 @Mixin(VillagerEntity.class)
 public abstract class VillagerEntityMixin extends MerchantEntity {
@@ -40,10 +40,13 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     )
     @SuppressWarnings("unchecked")
     public <V> V putCustomRecipes(Map<Integer, V> map, Object key) {
-        TradeManager tradeManager = ((IMinecraftServer) Objects.requireNonNull(this.getServer())).getTradeManager();
-        Identifier identifier = Registry.VILLAGER_PROFESSION.getId(this.getVillagerData().getProfession());
-        V trade = (V) tradeManager.getTrade(identifier);
-        return trade != null ? trade : map.get(key);
+        if (this.world instanceof ServerWorld serverWorld) {
+            TradeManager tradeManager = ((IMinecraftServer) serverWorld.getServer()).getTradeManager();
+            Identifier identifier = Registry.VILLAGER_PROFESSION.getId(this.getVillagerData().getProfession());
+            V trade = (V) tradeManager.getTrade(identifier);
+            return trade != null ? trade : map.get(key);
+        }
+        return map.get(key);
     }
 
     @Inject(
