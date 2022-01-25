@@ -32,6 +32,7 @@ public final class Deobfuscator {
         VillagerFix.LOGGER.info("Initializing StacktraceDeobfuscator");
         try {
             if (!Files.exists(CACHED_MAPPINGS)) downloadAndCacheMappings();
+            loadMappings();
         } catch (Exception e) {
             VillagerFix.LOGGER.error("Failed to load mappings!", e);
         }
@@ -127,7 +128,7 @@ public final class Deobfuscator {
     }
 
     public static String deobfuscate(String input) {
-        if (mappings == null) loadMappings();
+        if (mappings == null) return input;
         String mapped = mappings.get(input);
         return mapped == null ? input : mapped;
     }

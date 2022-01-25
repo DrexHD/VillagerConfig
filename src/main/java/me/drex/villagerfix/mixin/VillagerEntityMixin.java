@@ -1,6 +1,7 @@
 package me.drex.villagerfix.mixin;
 
 import me.drex.villagerfix.config.ConfigEntries;
+import me.drex.villagerfix.json.behavior.TradeTable;
 import me.drex.villagerfix.util.IMinecraftServer;
 import me.drex.villagerfix.util.TradeManager;
 import net.minecraft.entity.EntityType;
@@ -9,6 +10,7 @@ import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerData;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,9 +18,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Map;
 
 @Mixin(VillagerEntity.class)
 public abstract class VillagerEntityMixin extends MerchantEntity {
@@ -30,25 +31,6 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         super(entityType, world);
     }
 
-    @Redirect(
-            method = "fillRecipes",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;",
-                    remap = false
-            )
-    )
-    @SuppressWarnings("unchecked")
-    public <V> V putCustomRecipes(Map<Integer, V> map, Object key) {
-        if (this.world instanceof ServerWorld serverWorld) {
-            TradeManager tradeManager = ((IMinecraftServer) serverWorld.getServer()).getTradeManager();
-            Identifier identifier = Registry.VILLAGER_PROFESSION.getId(this.getVillagerData().getProfession());
-            V trade = (V) tradeManager.getTrade(identifier);
-            return trade != null ? trade : map.get(key);
-        }
-        return map.get(key);
-    }
-
     @Inject(
             method = "canRefreshTrades",
             at = @At("RETURN"),
@@ -56,6 +38,75 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     )
     public void removeRefreshTradesInfo(CallbackInfoReturnable<Boolean> cir) {
         if (ConfigEntries.oldTrades.enabled) cir.setReturnValue(false);
+    }
+
+    @Inject(
+            method = "fillRecipes",
+            at = @At(
+                    value = "HEAD"
+            ),
+            cancellable = true
+    )
+    public void putCustomTrades(CallbackInfo ci) {
+        TradeTable tradeTable = getTradeTable();
+        if (tradeTable != null) {
+            VillagerData villagerData = this.getVillagerData();
+            int level = villagerData.getLevel();
+            TradeOffers.Factory[] customOffers = tradeTable.getTradeOffers(level, this.random);
+            this.fillRecipesFromPool(getOffers(), customOffers, customOffers.length);
+            ci.cancel();
+        }
+    }
+
+    @Redirect(
+            method = "canLevelUp",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/village/VillagerData;canLevelUp(I)Z"
+            )
+    )
+    public boolean adjustMaxLevel(int level) {
+        // TODO: Client side mixin (MerchantScreen)
+        return customCanLevelUp(level);
+    }
+
+    @Redirect(
+            method = "canLevelUp",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/village/VillagerData;getUpperLevelExperience(I)I"
+            )
+    )
+    public int adjustUpperLevelExperience(int level) {
+        return customUpperLevelExperience(level);
+    }
+
+    private int customUpperLevelExperience(int level) {
+        if (customCanLevelUp(level)) {
+            TradeTable tradeTable = getTradeTable();
+            if (tradeTable != null) {
+                return tradeTable.getRequiredExperience(level);
+            }
+        }
+        return VillagerData.getUpperLevelExperience(level);
+    }
+
+    private boolean customCanLevelUp(int level) {
+        TradeTable tradeTable = getTradeTable();
+        if (tradeTable != null) {
+            int maxLevel = tradeTable.getMaxLevel();
+            return level >= 1 && level < maxLevel;
+        }
+        return VillagerData.canLevelUp(level);
+    }
+
+    private TradeTable getTradeTable() {
+        if (this.world instanceof ServerWorld serverWorld) {
+            TradeManager tradeManager = ((IMinecraftServer) serverWorld.getServer()).getTradeManager();
+            Identifier identifier = Registry.VILLAGER_PROFESSION.getId(this.getVillagerData().getProfession());
+            return tradeManager.getTrade(identifier);
+        }
+        return null;
     }
 
 }

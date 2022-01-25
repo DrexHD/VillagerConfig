@@ -4,11 +4,13 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class ItemConvertibleTypeAdapter extends TypeAdapter<ItemConvertible> {
 
@@ -17,8 +19,12 @@ public class ItemConvertibleTypeAdapter extends TypeAdapter<ItemConvertible> {
             reader.nextNull();
             return null;
         }
+
         String id = reader.nextString();
-        return Registry.ITEM.get(new Identifier(id));
+        Identifier identifier = new Identifier(id);
+        Optional<Item> optional = Registry.ITEM.getOrEmpty(identifier);
+        if (optional.isEmpty()) throw new IllegalArgumentException("Unknown identifier: " + identifier);
+        return optional.get();
     }
 
     public void write(JsonWriter out, ItemConvertible src) throws IOException {
@@ -26,7 +32,8 @@ public class ItemConvertibleTypeAdapter extends TypeAdapter<ItemConvertible> {
             out.nullValue();
             return;
         }
-        out.value(Registry.ITEM.getId(src.asItem()).toString());
+        Identifier identifier = Registry.ITEM.getId(src.asItem());
+        out.value(identifier.toString());
     }
 
 }

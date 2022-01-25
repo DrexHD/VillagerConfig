@@ -1,12 +1,16 @@
 package me.drex.villagerfix.util;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.IntUnaryOperator;
 import me.drex.villagerfix.VillagerFix;
 import me.drex.villagerfix.json.TradeGsons;
+import me.drex.villagerfix.json.behavior.TradeGroup;
+import me.drex.villagerfix.json.behavior.TradeTable;
+import me.drex.villagerfix.json.behavior.TradeTier;
+import me.drex.villagerfix.mixin.VillagerDataAccessor;
 import net.minecraft.data.DataCache;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -18,15 +22,20 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+
+import static me.drex.villagerfix.util.TradeProvider.OfferCountType.VILLAGER;
+import static me.drex.villagerfix.util.TradeProvider.OfferCountType.WANDERING_TRADER;
 
 public class TradeProvider implements DataProvider {
 
     private static final Logger LOGGER = VillagerFix.LOGGER;
     private static final Gson GSON = TradeGsons.getTradeGsonBuilder().create();
-    private static final Map<String, Class<? extends TradeOffers.Factory>> FACTORYNAME_TO_CLASS = new HashMap<>();
     public static final Identifier WANDERING_TRADER_ID = new Identifier("wanderingtrader");
+    private static final IntUnaryOperator WANDERING_TRADER_COUNT = i -> switch (i) {
+        case 1 -> 5;
+        case 2 -> 1;
+        default -> 0;
+    };
 
     private final DataGenerator root;
 
@@ -38,17 +47,17 @@ public class TradeProvider implements DataProvider {
     public void run(DataCache cache) {
         // Save all villager trades
         for (VillagerProfession villagerProfession : Registry.VILLAGER_PROFESSION) {
-            this.saveMerchantTrades(cache, Registry.VILLAGER_PROFESSION.getId(villagerProfession), TradeOffers.PROFESSION_TO_LEVELED_TRADE.getOrDefault(villagerProfession, new Int2ObjectArrayMap<>()));
+            this.saveMerchantTrades(cache, Registry.VILLAGER_PROFESSION.getId(villagerProfession), TradeOffers.PROFESSION_TO_LEVELED_TRADE.getOrDefault(villagerProfession, new Int2ObjectArrayMap<>()), VILLAGER);
         }
         // Save wandering trader trades
-        this.saveMerchantTrades(cache, WANDERING_TRADER_ID, TradeOffers.WANDERING_TRADER_TRADES);
+        this.saveMerchantTrades(cache, WANDERING_TRADER_ID, TradeOffers.WANDERING_TRADER_TRADES, WANDERING_TRADER);
     }
 
-    private void saveMerchantTrades(DataCache cache, Identifier merchantId, Int2ObjectMap<TradeOffers.Factory[]> trades) {
+    private void saveMerchantTrades(DataCache cache, Identifier merchantId, Int2ObjectMap<TradeOffers.Factory[]> trades, OfferCountType offerCountType) {
         Path path = getOutput(this.root.getOutput(), merchantId);
-        JsonArray jsonElements;
+        JsonElement jsonElements;
         try {
-            jsonElements = serializeData(trades);
+            jsonElements = serializeData(trades, offerCountType);
         } catch (Exception e) {
             LOGGER.error("Couldn't serialize trade data {}", path, e);
             return;
@@ -69,33 +78,31 @@ public class TradeProvider implements DataProvider {
         return rootOutput.resolve("data/" + merchantId.getNamespace() + "/trades/" + merchantId.getPath() + ".json");
     }
 
-    private String deobfuscateFactory(Class<? extends TradeOffers.Factory> clazz) {
-        final String className = clazz.getName();
-        final String deobfuscated = Deobfuscator.deobfuscate(className);
-        boolean isObfuscated = !deobfuscated.equals(className);
-        if (isObfuscated) {
-            final String humanReadable = deobfuscated.replaceAll("(?:[\\w]+\\.)+[\\w]+[?:$|.]([\\w]+)", "$1");
-            FACTORYNAME_TO_CLASS.put(humanReadable, clazz);
-            return humanReadable;
-        } else {
-            FACTORYNAME_TO_CLASS.put(clazz.getSimpleName(), clazz);
-            return clazz.getSimpleName();
-        }
+    private JsonElement serializeData(Int2ObjectMap<TradeOffers.Factory[]> trades, OfferCountType offerCountType) {
+        int levels = trades.size();
+        final TradeTier[] tiers = new TradeTier[levels];
+        trades.forEach((level, factoryArr) -> {
+            TradeGroup tradeGroup = new TradeGroup(offerCountType.getOfferCount(level), factoryArr);
+            tiers[level - 1] = new TradeTier((VillagerDataAccessor.getLevelBaseExperience()[level - 1]), new TradeGroup[]{tradeGroup}, null);
+        });
+        TradeTable tradeTable = new TradeTable(tiers);
+        return GSON.toJsonTree(tradeTable);
     }
 
-    private JsonArray serializeData(Int2ObjectMap<TradeOffers.Factory[]> trades) {
-        JsonArray levels = new JsonArray();
-        trades.forEach((i, factories) -> {
-            JsonArray level = new JsonArray();
-            for (final TradeOffers.Factory factory : factories) {
-                final String factoryName = deobfuscateFactory(factory.getClass());
-                final JsonObject jsonObject = GSON.toJsonTree(factory).getAsJsonObject();
-                jsonObject.addProperty("type", factoryName);
-                level.add(jsonObject);
-            }
-            levels.add(level);
-        });
-        return levels;
+
+    public enum OfferCountType {
+        VILLAGER(i -> 2), WANDERING_TRADER(WANDERING_TRADER_COUNT);
+
+        private IntUnaryOperator operator;
+
+        OfferCountType(IntUnaryOperator operator) {
+            this.operator = operator;
+        }
+
+        public int getOfferCount(int level) {
+            return operator.apply(level);
+        }
+
     }
 
 }

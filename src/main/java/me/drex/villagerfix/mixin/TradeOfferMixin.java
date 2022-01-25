@@ -38,7 +38,7 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
     )
     public void adjustSpecialPrice(TradeOffer tradeOffer, int increment) {
         int maxDiscount = (int) ((this.firstBuyItem.getCount()) * -(ConfigEntries.features.maxDiscount / 100));
-        int maxRaise = (int) ((this.firstBuyItem.getCount()) * +(ConfigEntries.features.maxRaise / 100));
+        int maxRaise = (int) ((this.firstBuyItem.getCount()) * (ConfigEntries.features.maxRaise / 100));
         tradeOffer.setSpecialPrice(MathHelper.clamp(tradeOffer.getSpecialPrice() + increment, maxDiscount, maxRaise));
     }
 

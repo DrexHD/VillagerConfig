@@ -12,29 +12,32 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class ItemStackTypeAdapter extends TypeAdapter<ItemStack> {
 
-    public ItemStack read(JsonReader reader) throws IOException {
-        if (reader.peek() == JsonToken.NULL) {
-            reader.nextNull();
+    public ItemStack read(JsonReader in) throws IOException {
+        if (in.peek() == JsonToken.NULL) {
+            in.nextNull();
             return null;
         }
-        reader.beginObject();
+        in.beginObject();
         String id = "";
         int count = 1;
         String tag = null;
-        while (reader.hasNext()) {
-            final String name = reader.nextName();
+        while (in.hasNext()) {
+            final String name = in.nextName();
             switch (name) {
-                case "id" -> id = reader.nextString();
-                case "count" -> count = reader.nextInt();
-                case "tag" -> tag = reader.nextString();
+                case "id" -> id = in.nextString();
+                case "count" -> count = in.nextInt();
+                case "tag" -> tag = in.nextString();
                 default -> throw new IllegalArgumentException("Unknown value \"" + name + "\" for ItemStack");
             }
         }
-        final Item item = Registry.ITEM.get(new Identifier(id));
-        final ItemStack itemStack = new ItemStack(item, count);
+        Identifier identifier = new Identifier(id);
+        final Optional<Item> optional = Registry.ITEM.getOrEmpty(identifier);
+        if (optional.isEmpty()) throw new IllegalArgumentException("Unknown item: " + identifier);
+        final ItemStack itemStack = new ItemStack(optional.get(), count);
         if (tag != null) {
             try {
                 itemStack.setNbt(StringNbtReader.parse(tag));
@@ -42,7 +45,7 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack> {
                 throw new IllegalArgumentException("Couldn't read item tag \"" + tag + "\"", e);
             }
         }
-        reader.endObject();
+        in.endObject();
         return itemStack;
     }
 

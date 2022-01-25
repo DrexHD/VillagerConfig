@@ -19,7 +19,10 @@ public abstract class ServerResourceManagerMixin implements IServerResourceManag
     @Shadow @Final private ReloadableResourceManager resourceManager;
     private final TradeManager tradeManager = new TradeManager();
 
-    @Inject(method = "<init>", at = @At("TAIL"))
+    @Inject(
+            method = "<init>",
+            at = @At("TAIL")
+    )
     public void addTradeManager(DynamicRegistryManager registryManager, CommandManager.RegistrationEnvironment commandEnvironment, int functionPermissionLevel, CallbackInfo ci) {
         this.resourceManager.registerReloader(this.tradeManager);
     }

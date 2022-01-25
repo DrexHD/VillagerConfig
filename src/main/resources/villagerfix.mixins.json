@@ -9,6 +9,7 @@
     "ServerResourceManagerMixin",
     "TradeOfferMixin",
     "TradeOutputSlotMixin",
+    "VillagerDataAccessor",
     "VillagerEntityMixin",
     "WanderingTraderEntityMixin",
     "ZombieEntityMixin"

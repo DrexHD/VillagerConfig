@@ -68,54 +68,6 @@ public final class VF_EnchantBookFactory implements TradeOffers.Factory {
         }
     }
 
-    public int maxUses() {
-        return maxUses;
-    }
-
-    public int experience() {
-        return experience;
-    }
-
-    public float priceMultiplier() {
-        return priceMultiplier;
-    }
-
-    public boolean hasTreasure() {
-        return hasTreasure;
-    }
-
-    public List<Enchantment> blackListedEnchantments() {
-        return blackListedEnchantments;
-    }
-
-    public int treasureMultiplier() {
-        return treasureMultiplier;
-    }
-
-    public int basePrice() {
-        return basePrice;
-    }
-
-    public int levelPrice() {
-        return levelPrice;
-    }
-
-    public int randomBasePrice() {
-        return randomBasePrice;
-    }
-
-    public int randomLevelPrice() {
-        return randomLevelPrice;
-    }
-
-    public Item firstBuyItem() {
-        return firstBuyItem;
-    }
-
-    public ItemStack secondBuyItem() {
-        return secondBuyItem;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
