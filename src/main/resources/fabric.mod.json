@@ -1,32 +1,32 @@
 {
   "schemaVersion": 1,
-  "id": "villagerfix",
+  "id": "villagerconfig",
   "version": "${version}",
 
-  "name": "Villager Fix",
-  "description": "Aims to fix / tweak overpowered villager mechanics introduced in 1.14",
+  "name": "VillagerConfig",
+  "description": "A mod to completely customize villagers.",
   "authors": [
     "Drex"
   ],
   "contact": {
-    "homepage": "https://github.com/DrexHD/VillagerFix",
-    "sources": "https://github.com/DrexHD/VillagerFix"
+    "homepage": "https://github.com/DrexHD/VillagerConfig",
+    "sources": "https://github.com/DrexHD/VillagerConfig"
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/villagerfix/icon.png",
+  "icon": "assets/villagerconfig/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "me.drex.villagerfix.VillagerFix"
+      "me.drex.villagerconfig.VillagerConfig"
     ],
     "modmenu": [
-      "me.drex.villagerfix.config.modmenu.VillagerFixModMenuEntry"
+      "me.drex.villagerconfig.config.modmenu.VillagerConfigModMenuEntry"
     ]
   },
   "mixins": [
-    "villagerfix.mixins.json"
+    "villagerconfig.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.10.0",
