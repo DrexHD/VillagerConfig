@@ -53,6 +53,12 @@ public class ConfigScreen {
                 .setTooltip(new TranslatableText("config.villagerconfig.tradecycling.tooltip"))
                 .build());
 
+        features.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.villagerconfig.infiniteTrades"), ConfigEntries.features.infiniteTrades)
+                .setDefaultValue(false)
+                .setSaveConsumer(value -> ConfigEntries.features.infiniteTrades = value)
+                .setTooltip(new TranslatableText("config.villagerconfig.infiniteTrades.tooltip"))
+                .build());
+
         ConfigCategory oldTrades = builder.getOrCreateCategory(new TranslatableText("config.villagerconfig.category.old_trades"))
                 .setCategoryBackground(new Identifier("minecraft:textures/block/emerald_block.png"));
 

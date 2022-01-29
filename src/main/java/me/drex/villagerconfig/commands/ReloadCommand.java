@@ -18,7 +18,6 @@ public class ReloadCommand {
 
     private static int execute(CommandContext<ServerCommandSource> context) {
         Config.load();
-
         VillagerConfig.LOGGER.info("VillagerConfig config reloaded!");
         context.getSource().sendFeedback(new LiteralText("VillagerConfig config reloaded.").formatted(Formatting.GREEN), false);
         return 1;

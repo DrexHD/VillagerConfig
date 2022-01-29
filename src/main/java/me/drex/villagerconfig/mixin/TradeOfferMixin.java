@@ -49,7 +49,7 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
     public void readCustomTags(NbtCompound nbt, CallbackInfo ci) {
         if (ConfigEntries.oldTrades.enabled) {
             if (nbt.contains("villagerconfig_disabled", 1)) {
-                this.disabled = nbt.getBoolean("disabled");
+                this.disabled = nbt.getBoolean("villagerconfig_disabled");
             }
         }
     }
@@ -91,7 +91,26 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
             cancellable = true
     )
     public void addOldTradeMechanics(CallbackInfoReturnable<Boolean> cir) {
+        if (ConfigEntries.features.infiniteTrades) cir.setReturnValue(false);
         if (ConfigEntries.oldTrades.enabled) cir.setReturnValue(this.disabled);
+    }
+
+    @Inject(
+            method = "getMaxUses",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void infiniteUses(CallbackInfoReturnable<Integer> cir) {
+        if (ConfigEntries.features.infiniteTrades) cir.setReturnValue(Integer.MAX_VALUE);
+    }
+
+    @Inject(
+            method = "updateDemandBonus",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void noDemand(CallbackInfo ci) {
+        if (ConfigEntries.features.infiniteTrades) ci.cancel();
     }
 
     public void enable() {

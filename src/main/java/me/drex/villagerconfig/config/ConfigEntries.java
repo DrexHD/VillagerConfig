@@ -23,6 +23,9 @@ public class ConfigEntries {
 
         @Setting(comment = "Whether or not villagers trades will change, when their workstation is replaced (true = vanilla)")
         public boolean tradeCycling = true;
+
+        @Setting(comment = "Whether or not villagers need to restock their trades (false = vanilla)")
+        public boolean infiniteTrades = false;
     }
 
     @Group
