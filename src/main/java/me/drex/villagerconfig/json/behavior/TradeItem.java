@@ -4,26 +4,29 @@ import me.drex.villagerconfig.util.TradeTableReporter;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.loot.function.LootFunction;
 import net.minecraft.loot.function.LootFunctionTypes;
+import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
+import net.minecraft.loot.provider.number.LootNumberProvider;
 import net.minecraft.server.world.ServerWorld;
 
 import java.util.Arrays;
 import java.util.Random;
 import java.util.function.BiFunction;
 
-public class TradeItem {
+public class TradeItem implements IValidate {
 
-    final Item item;
+    Item item;
     final TradeItem[] choice;
-    Integer quantity;
-    Float price_multiplier;
+    LootNumberProvider quantity;
+    public LootNumberProvider price_multiplier;
     final LootFunction[] functions;
 
-    public TradeItem(Item item, TradeItem[] choice, Integer quantity, Float price_multiplier, LootFunction[] functions) {
+    public TradeItem(Item item, TradeItem[] choice, LootNumberProvider quantity, LootNumberProvider price_multiplier, LootFunction[] functions) {
         this.item = item;
         this.choice = choice;
         this.quantity = quantity;
@@ -31,22 +34,23 @@ public class TradeItem {
         this.functions = functions;
     }
 
-    protected ItemStack generateItem(Entity entity, Random random) {
+    public ItemStack generateItem(Entity entity, Random random) {
         if (choice != null) {
             TradeItem item = choice[random.nextInt(choice.length)];
             return item.generateItem(entity, random);
         } else {
-            ItemStack itemStack = new ItemStack(item, quantity);
+            LootContext.Builder builder = new LootContext.Builder((ServerWorld) entity.world).random(random).parameter(LootContextParameters.THIS_ENTITY, entity);
+            LootContext lootContext = builder.build(LootContextTypes.BARTER);
+            ItemStack itemStack = new ItemStack(item, quantity.nextInt(lootContext));
             if (functions != null) {
                 BiFunction<ItemStack, LootContext, ItemStack> combinedFunction = LootFunctionTypes.join(functions);
-                LootContext.Builder builder = new LootContext.Builder((ServerWorld) entity.world).random(random).parameter(LootContextParameters.THIS_ENTITY, entity);
-                return combinedFunction.apply(itemStack, builder.build(LootContextTypes.BARTER));
+                return combinedFunction.apply(itemStack, lootContext);
             }
             return itemStack;
         }
     }
 
-    protected void validate(TradeTableReporter reporter) {
+    public void validate(TradeTableReporter reporter) {
         if (choice != null) {
             if (choice.length == 0) {
                 reporter.error("choice[] is empty");
@@ -66,8 +70,9 @@ public class TradeItem {
             }
         } else {
             // Default values
-            this.quantity = this.quantity != null ? this.quantity : 1;
-            this.price_multiplier = this.price_multiplier != null ? this.price_multiplier : 0.20F;
+            this.quantity = this.quantity != null ? this.quantity : ConstantLootNumberProvider.create(1);
+            this.price_multiplier = this.price_multiplier != null ? this.price_multiplier : ConstantLootNumberProvider.create(0.20F);
+            this.item = this.item != null ? this.item : Items.AIR;
         }
     }
 

@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 
-public class TradeGroup {
+public class TradeGroup implements IValidate {
 
     Integer num_to_select;
     final TradeOffers.Factory[] trades;
@@ -36,7 +36,7 @@ public class TradeGroup {
         return factories;
     }
 
-    protected void validate(TradeTableReporter reporter) {
+    public void validate(TradeTableReporter reporter) {
         if (trades == null) {
             reporter.error("Missing trades[]");
         } else {
@@ -45,8 +45,8 @@ public class TradeGroup {
             }
             for (int i = 0; i < trades.length; i++) {
                 TradeOffers.Factory tradeFactory = trades[i];
-                if (tradeFactory instanceof BehaviorTrade behaviorTrade) {
-                    behaviorTrade.validate(reporter.makeChild(".trades[" + i + "]"));
+                if (tradeFactory instanceof IValidate validate) {
+                    validate.validate(reporter.makeChild(".trades[" + i + "]"));
                 }
             }
             this.num_to_select = this.num_to_select != null ? this.num_to_select : 2;

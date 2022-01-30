@@ -50,8 +50,8 @@ public class TradeTier {
         if (trades != null) {
             for (int i = 0; i < trades.length; i++) {
                 TradeOffers.Factory tradeFactory = trades[i];
-                if (tradeFactory instanceof BehaviorTrade behaviorTrade) {
-                    behaviorTrade.validate(reporter.makeChild(".trades[" + i + "]"));
+                if (tradeFactory instanceof IValidate validate) {
+                    validate.validate(reporter.makeChild(".trades[" + i + "]"));
                 }
             }
         }

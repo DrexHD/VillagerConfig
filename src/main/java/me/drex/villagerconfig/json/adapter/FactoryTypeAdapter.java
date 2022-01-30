@@ -2,7 +2,7 @@ package me.drex.villagerconfig.json.adapter;
 
 import com.google.gson.*;
 import me.drex.villagerconfig.VillagerConfig;
-import me.drex.villagerconfig.factory.VF_EnchantBookFactory;
+import me.drex.villagerconfig.json.behavior.VC_EnchantBookFactory;
 import me.drex.villagerconfig.json.behavior.BehaviorTrade;
 import me.drex.villagerconfig.util.Deobfuscator;
 import net.minecraft.village.TradeOffers;
@@ -33,7 +33,7 @@ public class FactoryTypeAdapter implements JsonDeserializer<TradeOffers.Factory>
         TradeOffers.WANDERING_TRADER_TRADES.values().forEach(factories -> Arrays.stream(factories)
                 .map(TradeOffers.Factory::getClass).forEach(FactoryTypeAdapter::loadTradeFactory));
         // Custom trade factories
-        addCustomTradeFactories(VF_EnchantBookFactory.class);
+        addCustomTradeFactories(VC_EnchantBookFactory.class);
     }
 
     public static void addCustomTradeFactories(Class<? extends TradeOffers.Factory> clazz) {
