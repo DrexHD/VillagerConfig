@@ -2,6 +2,7 @@ package me.drex.villagerconfig.mixin;
 
 import me.drex.villagerconfig.config.ConfigEntries;
 import me.drex.villagerconfig.json.behavior.TradeTable;
+import me.drex.villagerconfig.util.IMerchantEntity;
 import me.drex.villagerconfig.util.IMinecraftServer;
 import me.drex.villagerconfig.util.TradeManager;
 import net.minecraft.entity.EntityType;
@@ -79,6 +80,14 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     )
     public int adjustUpperLevelExperience(int level) {
         return customUpperLevelExperience(level);
+    }
+
+    @Inject(
+            method = "levelUp",
+            at = @At("TAIL")
+    )
+    public void onLevelUp(CallbackInfo ci) {
+        if (ConfigEntries.oldTrades.enabled) ((IMerchantEntity) this).enableTrades();
     }
 
     private int customUpperLevelExperience(int level) {

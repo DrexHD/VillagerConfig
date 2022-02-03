@@ -1,14 +1,18 @@
 package me.drex.villagerconfig.mixin;
 
-import me.drex.villagerconfig.util.OldTradeOffer;
 import me.drex.villagerconfig.config.ConfigEntries;
+import me.drex.villagerconfig.util.IMerchantEntity;
 import me.drex.villagerconfig.util.Math;
+import me.drex.villagerconfig.util.OldTradeOffer;
+import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.village.TradeOffer;
 import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -20,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public abstract class TradeOfferMixin implements OldTradeOffer {
 
     public boolean disabled = false;
+    private MerchantEntity merchantEntity = null;
 
     @Shadow
     @Final
@@ -27,6 +32,15 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
 
     @Shadow
     private int uses;
+
+    @Shadow
+    public abstract void use();
+
+    @Override
+    public void use(MerchantEntity merchant) {
+        this.use();
+        this.merchantEntity = merchant;
+    }
 
     @Redirect(
             method = "increaseSpecialPrice",
@@ -119,6 +133,7 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
     }
 
     public void disable() {
+        if (merchantEntity != null) ((IMerchantEntity) merchantEntity).updateCustomOffers();
         this.disabled = true;
     }
 
