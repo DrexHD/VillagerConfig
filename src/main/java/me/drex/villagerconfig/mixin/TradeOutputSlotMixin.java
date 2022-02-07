@@ -30,7 +30,9 @@ public abstract class TradeOutputSlotMixin {
     public void onTrade(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
         if (ConfigEntries.oldTrades.enabled) {
             if (Math.chance(ConfigEntries.oldTrades.unlockChance)) {
-                ((IMerchantEntity)this.merchant).enableTrades();
+                if (this.merchant instanceof IMerchantEntity merchantEntity) {
+                    merchantEntity.enableTrades();
+                }
             }
         }
     }
