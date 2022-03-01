@@ -4,9 +4,9 @@
   "package": "me.drex.villagerconfig.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "DataPackContentsMixin",
     "MerchantEntityMixin",
     "MinecraftServerMixin",
-    "ServerResourceManagerMixin",
     "TradeOfferMixin",
     "TradeOutputSlotMixin",
     "VillagerDataAccessor",

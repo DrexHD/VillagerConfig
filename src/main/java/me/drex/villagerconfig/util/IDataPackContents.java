@@ -1,6 +1,6 @@
 package me.drex.villagerconfig.util;
 
-public interface IServerResourceManager {
+public interface IDataPackContents {
 
     TradeManager getTradeManager();
 

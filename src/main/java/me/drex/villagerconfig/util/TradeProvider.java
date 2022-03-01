@@ -29,7 +29,7 @@ import static me.drex.villagerconfig.util.TradeProvider.OfferCountType.WANDERING
 public class TradeProvider implements DataProvider {
 
     private static final Logger LOGGER = VillagerConfig.LOGGER;
-    private static final Gson GSON = TradeGsons.getTradeGsonBuilder().create();
+    private static final Gson GSON = TradeGsons.getTradeGsonBuilder().setPrettyPrinting().create();
     public static final Identifier WANDERING_TRADER_ID = new Identifier("wanderingtrader");
     private static final IntUnaryOperator WANDERING_TRADER_COUNT = i -> switch (i) {
         case 1 -> 5;

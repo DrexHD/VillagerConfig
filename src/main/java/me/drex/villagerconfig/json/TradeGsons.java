@@ -31,7 +31,7 @@ import net.minecraft.world.gen.feature.StructureFeature;
 public class TradeGsons {
 
     public static GsonBuilder getTradeGsonBuilder() {
-        final GsonBuilder gsonBuilder = new GsonBuilder().setPrettyPrinting();
+        final GsonBuilder gsonBuilder = new GsonBuilder();
         customTypeAdapters(gsonBuilder);
         return gsonBuilder;
     }

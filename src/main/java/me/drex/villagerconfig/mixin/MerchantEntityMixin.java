@@ -32,9 +32,6 @@ import java.util.Random;
 public abstract class MerchantEntityMixin extends PassiveEntity implements IMerchantEntity, Merchant {
 
     @Shadow
-    public abstract @Nullable PlayerEntity getCurrentCustomer();
-
-    @Shadow
     public abstract TradeOfferList getOffers();
 
     @Shadow
@@ -42,6 +39,9 @@ public abstract class MerchantEntityMixin extends PassiveEntity implements IMerc
 
     @Shadow
     public abstract boolean isLeveledMerchant();
+
+    @Shadow
+    public abstract @Nullable PlayerEntity getCustomer();
 
     // A random instance, that uses the same seed to ensure trades don't change
     private Random semiRandom;
@@ -98,7 +98,7 @@ public abstract class MerchantEntityMixin extends PassiveEntity implements IMerc
         if ((Object) this instanceof VillagerEntity villagerEntity) {
             levelProgress = villagerEntity.getVillagerData().getLevel();
         }
-        if (this.getCurrentCustomer() instanceof ServerPlayerEntity serverPlayerEntity) {
+        if (this.getCustomer() instanceof ServerPlayerEntity serverPlayerEntity) {
             if (serverPlayerEntity.currentScreenHandler instanceof MerchantScreenHandler merchantScreenHandler) {
                 serverPlayerEntity.sendTradeOffers(merchantScreenHandler.syncId, this.getOffers(), levelProgress, this.getExperience(), this.isLeveledMerchant(), this.canRefreshTrades());
             }

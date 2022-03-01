@@ -1,0 +1,3 @@
+accessWidener v1 named
+accessible    class    net/minecraft/server/MinecraftServer$ResourceManagerHolder
+accessible    field    net/minecraft/server/MinecraftServer$ResourceManagerHolder    dataPackContents    Lnet/minecraft/server/DataPackContents;
