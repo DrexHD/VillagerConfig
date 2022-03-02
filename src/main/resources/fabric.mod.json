@@ -1,51 +1,41 @@
 {
   "schemaVersion": 1,
-  "id": "villagerfix",
+  "id": "villagerconfig",
   "version": "${version}",
 
-  "name": "Villager Fix",
-  "description": "Aims to fix / tweak overpowered villager mechanics introduced in 1.14",
+  "name": "VillagerConfig",
+  "description": "A mod to completely customize villagers.",
   "authors": [
     "Drex"
   ],
   "contact": {
-    "homepage": "https://github.com/DrexHD/VillagerFix",
-
-    "sources": "https://github.com/DrexHD/VillagerFix"
+    "homepage": "https://github.com/DrexHD/VillagerConfig",
+    "sources": "https://github.com/DrexHD/VillagerConfig"
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/villagerfix/icon.png",
+  "icon": "assets/villagerconfig/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "me.drex.villagerfix.Mod"
-    ],
-    "client": [
-      "me.drex.villagerfix.entry.ClientEntry"
-    ],
-    "server": [
-      "me.drex.villagerfix.entry.ServerEntry"
+      "me.drex.villagerconfig.VillagerConfig"
     ],
     "modmenu": [
-      "me.drex.villagerfix.config.modmenu.VillagerFixModMenuEntry"
-    ],
-    "villagerfix": [
-      "me.drex.villagerfix.vanilla.VanillaTradeInitializer"
+      "me.drex.villagerconfig.config.modmenu.VillagerConfigModMenuEntry"
     ]
   },
   "mixins": [
-    "villagerfix.mixins.json",
-    "villagerfix.accessor.mixins.json"
+    "villagerconfig.mixins.json"
   ],
-  "accessWidener" : "villagerfix.accesswidener",
+  "accessWidener": "villagerconfig.accesswidener",
   "depends": {
-    "fabricloader": ">=0.9.0",
+    "fabricloader": ">=0.10.0",
     "fabric-api-base": "*",
     "fabric-command-api-v1": "*",
     "fabric-lifecycle-events-v1": "*",
+    "java": ">=17",
     "fiber": ">=0.23.0-",
-    "minecraft": ">=1.17"
+    "minecraft": ">=1.18"
   }
 }

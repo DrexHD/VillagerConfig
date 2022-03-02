@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.drex.villagerconfig.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "DataPackContentsMixin",
+    "MerchantEntityMixin",
+    "MinecraftServerMixin",
+    "TradeOfferMixin",
+    "TradeOutputSlotMixin",
+    "VillagerDataAccessor",
+    "VillagerEntityMixin",
+    "WanderingTraderEntityMixin",
+    "ZombieEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
