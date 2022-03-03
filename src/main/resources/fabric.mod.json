@@ -12,10 +12,8 @@
     "homepage": "https://github.com/DrexHD/VillagerConfig",
     "sources": "https://github.com/DrexHD/VillagerConfig"
   },
-
-  "license": "CC0-1.0",
+  "license": "LGPLv3",
   "icon": "assets/villagerconfig/icon.png",
-
   "environment": "*",
   "entrypoints": {
     "main": [
