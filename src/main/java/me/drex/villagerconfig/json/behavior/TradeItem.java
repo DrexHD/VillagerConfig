@@ -1,5 +1,6 @@
 package me.drex.villagerconfig.json.behavior;
 
+import me.drex.villagerconfig.VillagerConfig;
 import me.drex.villagerconfig.util.TradeTableReporter;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -7,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.loot.function.LootFunction;
 import net.minecraft.loot.function.LootFunctionTypes;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
@@ -39,8 +39,8 @@ public class TradeItem implements IValidate {
             TradeItem item = choice[random.nextInt(choice.length)];
             return item.generateItem(entity, random);
         } else {
-            LootContext.Builder builder = new LootContext.Builder((ServerWorld) entity.world).random(random).parameter(LootContextParameters.THIS_ENTITY, entity);
-            LootContext lootContext = builder.build(LootContextTypes.BARTER);
+            LootContext.Builder builder = new LootContext.Builder((ServerWorld) entity.world).random(random).parameter(LootContextParameters.THIS_ENTITY, entity).parameter(LootContextParameters.ORIGIN, entity.getPos());
+            LootContext lootContext = builder.build(VillagerConfig.VILLAGER_LOOT_CONTEXT);
             ItemStack itemStack = new ItemStack(item, quantity.nextInt(lootContext));
             if (functions != null) {
                 BiFunction<ItemStack, LootContext, ItemStack> combinedFunction = LootFunctionTypes.join(functions);

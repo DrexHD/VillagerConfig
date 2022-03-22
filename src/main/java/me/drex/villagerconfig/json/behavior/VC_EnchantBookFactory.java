@@ -9,7 +9,6 @@ import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
@@ -54,8 +53,8 @@ public class VC_EnchantBookFactory implements TradeOffers.Factory, IValidate {
         TradeItem first = wants[0];
         ItemStack firstBuyItem = first.generateItem(entity, random);
         ItemStack secondBuyItem = ItemStack.EMPTY;
-        LootContext.Builder builder = new LootContext.Builder((ServerWorld) entity.world).random(random).parameter(LootContextParameters.THIS_ENTITY, entity);
-        LootContext lootContext = builder.build(LootContextTypes.BARTER);
+        LootContext.Builder builder = new LootContext.Builder((ServerWorld) entity.world).random(random);
+        LootContext lootContext = builder.build(LootContextTypes.EMPTY);
         float priceMultiplier = first.price_multiplier.nextFloat(lootContext);
         if (wants.length > 1) {
             TradeItem second = wants[1];
