@@ -73,16 +73,11 @@ final class TagKeyAdapter<K> extends TypeAdapter<TagKey<K>> {
     private boolean isFittingRegistry(Registry<K> registry, @Nullable Type expectedArgument) {
         if (expectedArgument == null) return false;
         for (K registryEntry : registry) {
-            TypeToken<?> registryType = TypeToken.get(registryEntry.getClass());
-            String expected;
-            String actual = registryType.getType().getTypeName();
             if (expectedArgument instanceof ParameterizedType parameterized) {
                 // If the type is parametrized, strip the parameters
-                expected = parameterized.getRawType().getTypeName();
-            } else {
-                expected = expectedArgument.getTypeName();
+                expectedArgument = parameterized.getRawType();
             }
-            if (expected.equals(actual)) {
+            if (((Class<?>)expectedArgument).isInstance(registryEntry)) {
                 return true;
             }
             break; // All entries in a registry should have the same type
