@@ -5,8 +5,10 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "DataPackContentsMixin",
+    "LootContextTypesAccessor",
     "MerchantEntityMixin",
     "MinecraftServerMixin",
+    "RegistryKeyAccessor",
     "TradeOfferMixin",
     "TradeOutputSlotMixin",
     "VillagerDataAccessor",

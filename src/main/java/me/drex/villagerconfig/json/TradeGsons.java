@@ -26,7 +26,6 @@ import net.minecraft.loot.provider.score.LootScoreProviderTypes;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerType;
-import net.minecraft.world.gen.feature.StructureFeature;
 
 public class TradeGsons {
 
@@ -43,12 +42,12 @@ public class TradeGsons {
         gsonBuilder.registerTypeAdapter(ItemStack.class, new ItemStackTypeAdapter());
         gsonBuilder.registerTypeHierarchyAdapter(ItemConvertible.class, new ItemConvertibleTypeAdapter());
         // Registry type adapters
-        gsonBuilder.registerTypeHierarchyAdapter(StructureFeature.class, new RegistryTypeAdapter<>(Registry.STRUCTURE_FEATURE));
         gsonBuilder.registerTypeHierarchyAdapter(StatusEffect.class, new RegistryTypeAdapter<>(Registry.STATUS_EFFECT));
         gsonBuilder.registerTypeHierarchyAdapter(Enchantment.class, new RegistryTypeAdapter<>(Registry.ENCHANTMENT));
         gsonBuilder.registerTypeHierarchyAdapter(VillagerType.class, new RegistryTypeAdapter<>(Registry.VILLAGER_TYPE));
         // Custom Factories
         gsonBuilder.registerTypeAdapterFactory(new EnumTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new TagKeyTypeAdapterFactory());
         gsonBuilder.registerTypeAdapter(TradeOffers.Factory.class, new FactoryTypeAdapter());
         // Loot table adapters
         gsonBuilder.registerTypeAdapter(BoundedIntUnaryOperator.class, new BoundedIntUnaryOperator.Serializer()).registerTypeHierarchyAdapter(LootNumberProvider.class, LootNumberProviderTypes.createGsonSerializer()).registerTypeHierarchyAdapter(LootCondition.class, LootConditionTypes.createGsonSerializer()).registerTypeHierarchyAdapter(LootScoreProvider.class, LootScoreProviderTypes.createGsonSerializer()).registerTypeHierarchyAdapter(LootContext.EntityTarget.class, new LootContext.EntityTarget.Serializer());

@@ -11,6 +11,7 @@ import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
+import net.minecraft.util.registry.DynamicRegistryManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,9 +22,16 @@ public class TradeManager extends JsonDataLoader {
     private static final Logger LOGGER = VillagerConfig.LOGGER;
     private static final Gson GSON = TradeGsons.getTradeGsonBuilder().create();
     private Map<Identifier, TradeTable> trades = ImmutableMap.of();
+    // Not the cleanest solution, but it works...
+    private static DynamicRegistryManager registryManager;
 
-    public TradeManager() {
+    public TradeManager(DynamicRegistryManager registryManager) {
         super(GSON, "trades");
+        TradeManager.registryManager = registryManager;
+    }
+
+    public static DynamicRegistryManager getRegistryManager() {
+        return registryManager;
     }
 
     @Nullable
