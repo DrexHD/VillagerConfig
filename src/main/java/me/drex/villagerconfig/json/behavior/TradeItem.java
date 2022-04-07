@@ -13,9 +13,9 @@ import net.minecraft.loot.function.LootFunctionTypes;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.loot.provider.number.LootNumberProvider;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.gen.random.AbstractRandom;
 
 import java.util.Arrays;
-import java.util.Random;
 import java.util.function.BiFunction;
 
 public class TradeItem implements IValidate {
@@ -34,7 +34,7 @@ public class TradeItem implements IValidate {
         this.functions = functions;
     }
 
-    public ItemStack generateItem(Entity entity, Random random) {
+    public ItemStack generateItem(Entity entity, AbstractRandom random) {
         if (choice != null) {
             TradeItem item = choice[random.nextInt(choice.length)];
             return item.generateItem(entity, random);

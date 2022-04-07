@@ -2,12 +2,12 @@ package me.drex.villagerconfig.json.behavior;
 
 import me.drex.villagerconfig.util.TradeTableReporter;
 import net.minecraft.village.TradeOffers;
+import net.minecraft.world.gen.random.AbstractRandom;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 public class TradeTier {
 
@@ -23,7 +23,7 @@ public class TradeTier {
         this.trades = trades;
     }
 
-    protected TradeOffers.Factory[] getTradeOffers(Random random) {
+    protected TradeOffers.Factory[] getTradeOffers(AbstractRandom random) {
         List<TradeOffers.Factory> trades = new LinkedList<>();
         if (this.groups != null) {
             for (TradeGroup group : this.groups) {

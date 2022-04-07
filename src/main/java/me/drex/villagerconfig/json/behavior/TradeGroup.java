@@ -3,10 +3,10 @@ package me.drex.villagerconfig.json.behavior;
 import com.google.common.collect.Sets;
 import me.drex.villagerconfig.util.TradeTableReporter;
 import net.minecraft.village.TradeOffers;
+import net.minecraft.world.gen.random.AbstractRandom;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Random;
 
 public class TradeGroup implements IValidate {
 
@@ -18,7 +18,7 @@ public class TradeGroup implements IValidate {
         this.trades = trades;
     }
 
-    public TradeOffers.Factory[] getTrades(Random random) {
+    public TradeOffers.Factory[] getTrades(AbstractRandom random) {
         HashSet<Integer> set = Sets.newHashSet();
         if (trades.length > num_to_select) {
             while (set.size() < num_to_select) {
@@ -53,7 +53,7 @@ public class TradeGroup implements IValidate {
         }
     }
 
-        @Override
+    @Override
     public String toString() {
         return "TradeGroup{" +
                 "num_to_select=" + num_to_select +

@@ -17,6 +17,7 @@ import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOfferList;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.random.AbstractRandom;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,8 +26,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Random;
 
 @Mixin(MerchantEntity.class)
 public abstract class MerchantEntityMixin extends PassiveEntity implements IMerchantEntity, Merchant {
@@ -44,7 +43,7 @@ public abstract class MerchantEntityMixin extends PassiveEntity implements IMerc
     public abstract @Nullable PlayerEntity getCustomer();
 
     // A random instance, that uses the same seed to ensure trades don't change
-    private Random semiRandom;
+    private AbstractRandom semiRandom;
 
     protected MerchantEntityMixin(EntityType<? extends PassiveEntity> entityType, World world) {
         super(entityType, world);
@@ -62,7 +61,7 @@ public abstract class MerchantEntityMixin extends PassiveEntity implements IMerc
             int level = villager.getVillagerData().getLevel();
             seed += level;
         }
-        semiRandom = new Random(seed);
+        semiRandom = AbstractRandom.method_43049(seed);
     }
 
     @Redirect(
@@ -70,10 +69,10 @@ public abstract class MerchantEntityMixin extends PassiveEntity implements IMerc
             at = @At(
                     value = "FIELD",
                     opcode = Opcodes.GETFIELD,
-                    target = "Lnet/minecraft/entity/passive/MerchantEntity;random:Ljava/util/Random;"
+                    target = "Lnet/minecraft/entity/passive/MerchantEntity;random:Lnet/minecraft/world/gen/random/AbstractRandom;"
             )
     )
-    public Random replaceRandom(MerchantEntity instance) {
+    public AbstractRandom replaceRandom(MerchantEntity instance) {
         return ConfigEntries.features.tradeCycling ? instance.getRandom() : this.semiRandom;
     }
 

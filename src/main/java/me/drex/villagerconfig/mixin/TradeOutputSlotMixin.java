@@ -18,7 +18,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class TradeOutputSlotMixin {
 
 
-    @Shadow @Final private Merchant merchant;
+    @Shadow
+    @Final
+    private Merchant merchant;
 
     @Inject(
             method = "onTakeItem",

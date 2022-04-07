@@ -77,7 +77,7 @@ final class TagKeyAdapter<K> extends TypeAdapter<TagKey<K>> {
                 // If the type is parametrized, strip the parameters
                 expectedArgument = parameterized.getRawType();
             }
-            if (((Class<?>)expectedArgument).isInstance(registryEntry)) {
+            if (((Class<?>) expectedArgument).isInstance(registryEntry)) {
                 return true;
             }
             break; // All entries in a registry should have the same type

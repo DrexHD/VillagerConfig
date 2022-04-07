@@ -2,8 +2,8 @@ package me.drex.villagerconfig.json.adapter;
 
 import com.google.gson.*;
 import me.drex.villagerconfig.VillagerConfig;
-import me.drex.villagerconfig.json.behavior.VC_EnchantBookFactory;
 import me.drex.villagerconfig.json.behavior.BehaviorTrade;
+import me.drex.villagerconfig.json.behavior.VC_EnchantBookFactory;
 import me.drex.villagerconfig.util.Deobfuscator;
 import net.minecraft.village.TradeOffers;
 

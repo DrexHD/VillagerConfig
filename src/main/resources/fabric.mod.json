@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "villagerconfig",
   "version": "${version}",
-
   "name": "VillagerConfig",
   "description": "A mod to completely customize villagers.",
   "authors": [

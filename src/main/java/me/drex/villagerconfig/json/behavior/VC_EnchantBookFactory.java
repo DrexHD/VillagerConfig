@@ -15,11 +15,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
+import net.minecraft.world.gen.random.AbstractRandom;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class VC_EnchantBookFactory implements TradeOffers.Factory, IValidate {
 
@@ -49,7 +49,7 @@ public class VC_EnchantBookFactory implements TradeOffers.Factory, IValidate {
     }
 
     @Override
-    public @NotNull TradeOffer create(Entity entity, Random random) {
+    public @NotNull TradeOffer create(Entity entity, AbstractRandom random) {
         TradeItem first = wants[0];
         ItemStack firstBuyItem = first.generateItem(entity, random);
         ItemStack secondBuyItem = ItemStack.EMPTY;

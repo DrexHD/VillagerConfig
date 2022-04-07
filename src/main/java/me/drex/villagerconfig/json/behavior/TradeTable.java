@@ -3,10 +3,10 @@ package me.drex.villagerconfig.json.behavior;
 import me.drex.villagerconfig.VillagerConfig;
 import me.drex.villagerconfig.util.TradeTableReporter;
 import net.minecraft.village.TradeOffers;
+import net.minecraft.world.gen.random.AbstractRandom;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
-import java.util.Random;
 
 public class TradeTable {
 
@@ -25,7 +25,7 @@ public class TradeTable {
         return TradeTier.EMPTY;
     }
 
-    public TradeOffers.Factory[] getTradeOffers(int level, Random random) {
+    public TradeOffers.Factory[] getTradeOffers(int level, AbstractRandom random) {
         if (random == null) throw new IllegalArgumentException("Random must not be null");
         TradeTier tradeTier = getTradeTier(level);
         return tradeTier.getTradeOffers(random);
