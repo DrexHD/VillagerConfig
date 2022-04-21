@@ -4,9 +4,10 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import me.drex.villagerconfig.VillagerConfig;
 import me.drex.villagerconfig.util.TradeProvider;
+import net.minecraft.SharedConstants;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.io.IOException;
@@ -24,14 +25,14 @@ public class GenerateCommand {
     }
 
     private static int execute(CommandContext<ServerCommandSource> context) {
-        DataGenerator dataGenerator = new DataGenerator(GENERATED, Collections.emptyList());
-        dataGenerator.addProvider(new TradeProvider(dataGenerator));
+        DataGenerator dataGenerator = new DataGenerator(GENERATED, Collections.emptyList(), SharedConstants.getGameVersion(), true);
+        dataGenerator.addProvider(true, new TradeProvider(dataGenerator));
         try {
             dataGenerator.run();
-            context.getSource().sendFeedback(new LiteralText("Successfully generated trade data to " + GENERATED).formatted(Formatting.GREEN), false);
+            context.getSource().sendFeedback(Text.literal("Successfully generated trade data to " + GENERATED).formatted(Formatting.GREEN), false);
             return 1;
         } catch (IOException e) {
-            context.getSource().sendFeedback(new LiteralText("An error occurred, please look into the console for more information.").formatted(Formatting.RED), false);
+            context.getSource().sendFeedback(Text.literal("An error occurred, please look into the console for more information.").formatted(Formatting.RED), false);
             VillagerConfig.LOGGER.error("An error occurred, while generating trade data", e);
             return 0;
         }

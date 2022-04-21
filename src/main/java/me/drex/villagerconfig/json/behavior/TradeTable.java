@@ -2,8 +2,8 @@ package me.drex.villagerconfig.json.behavior;
 
 import me.drex.villagerconfig.VillagerConfig;
 import me.drex.villagerconfig.util.TradeTableReporter;
+import net.minecraft.util.math.random.AbstractRandom;
 import net.minecraft.village.TradeOffers;
-import net.minecraft.world.gen.random.AbstractRandom;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;

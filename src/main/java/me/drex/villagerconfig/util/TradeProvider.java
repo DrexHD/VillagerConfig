@@ -11,9 +11,9 @@ import me.drex.villagerconfig.json.behavior.TradeGroup;
 import me.drex.villagerconfig.json.behavior.TradeTable;
 import me.drex.villagerconfig.json.behavior.TradeTier;
 import me.drex.villagerconfig.mixin.VillagerDataAccessor;
-import net.minecraft.data.DataCache;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.DataWriter;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffers;
@@ -44,7 +44,7 @@ public class TradeProvider implements DataProvider {
     }
 
     @Override
-    public void run(DataCache cache) {
+    public void run(DataWriter cache) {
         // Save all villager trades
         for (VillagerProfession villagerProfession : Registry.VILLAGER_PROFESSION) {
             this.saveMerchantTrades(cache, Registry.VILLAGER_PROFESSION.getId(villagerProfession), TradeOffers.PROFESSION_TO_LEVELED_TRADE.getOrDefault(villagerProfession, new Int2ObjectArrayMap<>()), VILLAGER);
@@ -53,7 +53,7 @@ public class TradeProvider implements DataProvider {
         this.saveMerchantTrades(cache, WANDERING_TRADER_ID, TradeOffers.WANDERING_TRADER_TRADES, WANDERING_TRADER);
     }
 
-    private void saveMerchantTrades(DataCache cache, Identifier merchantId, Int2ObjectMap<TradeOffers.Factory[]> trades, OfferCountType offerCountType) {
+    private void saveMerchantTrades(DataWriter cache, Identifier merchantId, Int2ObjectMap<TradeOffers.Factory[]> trades, OfferCountType offerCountType) {
         Path path = getOutput(this.root.getOutput(), merchantId);
         JsonElement jsonElements;
         try {

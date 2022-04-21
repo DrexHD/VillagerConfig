@@ -12,12 +12,12 @@ import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.MerchantScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.math.random.AbstractRandom;
 import net.minecraft.village.Merchant;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOfferList;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.random.AbstractRandom;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -61,7 +61,7 @@ public abstract class MerchantEntityMixin extends PassiveEntity implements IMerc
             int level = villager.getVillagerData().getLevel();
             seed += level;
         }
-        semiRandom = AbstractRandom.method_43049(seed);
+        semiRandom = AbstractRandom.createAtomic(seed);
     }
 
     @Redirect(
@@ -69,7 +69,7 @@ public abstract class MerchantEntityMixin extends PassiveEntity implements IMerc
             at = @At(
                     value = "FIELD",
                     opcode = Opcodes.GETFIELD,
-                    target = "Lnet/minecraft/entity/passive/MerchantEntity;random:Lnet/minecraft/world/gen/random/AbstractRandom;"
+                    target = "Lnet/minecraft/entity/passive/MerchantEntity;random:Lnet/minecraft/util/math/random/AbstractRandom;"
             )
     )
     public AbstractRandom replaceRandom(MerchantEntity instance) {
