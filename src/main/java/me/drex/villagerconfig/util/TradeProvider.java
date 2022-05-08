@@ -63,7 +63,7 @@ public class TradeProvider implements DataProvider {
             return;
         }
         try {
-            DataProvider.writeToPath(GSON, cache, jsonElements, path);
+            DataProvider.writeToPath(cache, jsonElements, path);
         } catch (IOException e) {
             LOGGER.error("Couldn't save trade data {}", path, e);
         }
