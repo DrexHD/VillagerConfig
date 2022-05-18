@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = ZombieEntity.class, priority = 500)
 public abstract class ZombieEntityMixin {
@@ -21,7 +21,7 @@ public abstract class ZombieEntityMixin {
             method = "onKilledOther",
             at = @At("HEAD")
     )
-    public void calculateConversionChance(ServerWorld world, LivingEntity other, CallbackInfo ci) {
+    public void calculateConversionChance(ServerWorld world, LivingEntity other, CallbackInfoReturnable<Boolean> cir) {
         double conversionChance = ConfigEntries.features.conversionChance;
         if (conversionChance < 0D) {
             difficulty = world.getDifficulty();
