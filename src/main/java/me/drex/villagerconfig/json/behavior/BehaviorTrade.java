@@ -8,7 +8,7 @@ import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.loot.provider.number.LootNumberProvider;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.random.AbstractRandom;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +33,7 @@ public class BehaviorTrade implements TradeOffers.Factory, IValidate {
 
     @Nullable
     @Override
-    public TradeOffer create(Entity entity, AbstractRandom random) {
+    public TradeOffer create(Entity entity, Random random) {
         TradeItem first = wants[0];
         ItemStack firstBuyItem = first.generateItem(entity, random);
         ItemStack secondBuyItem = ItemStack.EMPTY;

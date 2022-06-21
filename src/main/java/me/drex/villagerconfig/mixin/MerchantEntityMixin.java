@@ -12,7 +12,7 @@ import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.MerchantScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.random.AbstractRandom;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.village.Merchant;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOfferList;
@@ -43,7 +43,7 @@ public abstract class MerchantEntityMixin extends PassiveEntity implements IMerc
     public abstract @Nullable PlayerEntity getCustomer();
 
     // A random instance, that uses the same seed to ensure trades don't change
-    private AbstractRandom semiRandom;
+    private Random semiRandom;
 
     protected MerchantEntityMixin(EntityType<? extends PassiveEntity> entityType, World world) {
         super(entityType, world);
@@ -61,7 +61,7 @@ public abstract class MerchantEntityMixin extends PassiveEntity implements IMerc
             int level = villager.getVillagerData().getLevel();
             seed += level;
         }
-        semiRandom = AbstractRandom.createAtomic(seed);
+        semiRandom = Random.create(seed);
     }
 
     @Redirect(
@@ -69,10 +69,10 @@ public abstract class MerchantEntityMixin extends PassiveEntity implements IMerc
             at = @At(
                     value = "FIELD",
                     opcode = Opcodes.GETFIELD,
-                    target = "Lnet/minecraft/entity/passive/MerchantEntity;random:Lnet/minecraft/util/math/random/AbstractRandom;"
+                    target = "Lnet/minecraft/entity/passive/MerchantEntity;random:Lnet/minecraft/util/math/random/Random;"
             )
     )
-    public AbstractRandom replaceRandom(MerchantEntity instance) {
+    public Random replaceRandom(MerchantEntity instance) {
         return ConfigEntries.features.tradeCycling ? instance.getRandom() : this.semiRandom;
     }
 

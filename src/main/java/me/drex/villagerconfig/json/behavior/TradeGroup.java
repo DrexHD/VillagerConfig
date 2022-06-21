@@ -2,7 +2,7 @@ package me.drex.villagerconfig.json.behavior;
 
 import com.google.common.collect.Sets;
 import me.drex.villagerconfig.util.TradeTableReporter;
-import net.minecraft.util.math.random.AbstractRandom;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffers;
 
 import java.util.Arrays;
@@ -18,7 +18,7 @@ public class TradeGroup implements IValidate {
         this.trades = trades;
     }
 
-    public TradeOffers.Factory[] getTrades(AbstractRandom random) {
+    public TradeOffers.Factory[] getTrades(Random random) {
         HashSet<Integer> set = Sets.newHashSet();
         if (trades.length > num_to_select) {
             while (set.size() < num_to_select) {

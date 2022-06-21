@@ -12,7 +12,7 @@ import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.random.AbstractRandom;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
@@ -49,7 +49,7 @@ public class VC_EnchantBookFactory implements TradeOffers.Factory, IValidate {
     }
 
     @Override
-    public @NotNull TradeOffer create(Entity entity, AbstractRandom random) {
+    public @NotNull TradeOffer create(Entity entity, Random random) {
         TradeItem first = wants[0];
         ItemStack firstBuyItem = first.generateItem(entity, random);
         ItemStack secondBuyItem = ItemStack.EMPTY;

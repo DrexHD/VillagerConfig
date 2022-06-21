@@ -1,7 +1,7 @@
 package me.drex.villagerconfig.json.behavior;
 
 import me.drex.villagerconfig.util.TradeTableReporter;
-import net.minecraft.util.math.random.AbstractRandom;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffers;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +23,7 @@ public class TradeTier {
         this.trades = trades;
     }
 
-    protected TradeOffers.Factory[] getTradeOffers(AbstractRandom random) {
+    protected TradeOffers.Factory[] getTradeOffers(Random random) {
         List<TradeOffers.Factory> trades = new LinkedList<>();
         if (this.groups != null) {
             for (TradeGroup group : this.groups) {

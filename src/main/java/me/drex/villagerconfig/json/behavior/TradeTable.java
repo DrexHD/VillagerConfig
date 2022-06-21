@@ -2,7 +2,7 @@ package me.drex.villagerconfig.json.behavior;
 
 import me.drex.villagerconfig.VillagerConfig;
 import me.drex.villagerconfig.util.TradeTableReporter;
-import net.minecraft.util.math.random.AbstractRandom;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffers;
 import org.apache.logging.log4j.Logger;
 
@@ -25,7 +25,7 @@ public class TradeTable {
         return TradeTier.EMPTY;
     }
 
-    public TradeOffers.Factory[] getTradeOffers(int level, AbstractRandom random) {
+    public TradeOffers.Factory[] getTradeOffers(int level, Random random) {
         if (random == null) throw new IllegalArgumentException("Random must not be null");
         TradeTier tradeTier = getTradeTier(level);
         return tradeTier.getTradeOffers(random);

@@ -5,7 +5,7 @@ import me.drex.villagerconfig.config.Config;
 import me.drex.villagerconfig.mixin.LootContextTypesAccessor;
 import me.drex.villagerconfig.util.Deobfuscator;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.context.LootContextType;
@@ -24,7 +24,7 @@ public class VillagerConfig implements ModInitializer {
     public void onInitialize() {
         Config.load();
         Deobfuscator.init();
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             VillagerConfigCommand.register(dispatcher);
         });
     }
