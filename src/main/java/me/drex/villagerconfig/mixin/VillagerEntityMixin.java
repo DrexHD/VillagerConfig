@@ -94,7 +94,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         if (customCanLevelUp(level)) {
             TradeTable tradeTable = getTradeTable();
             if (tradeTable != null) {
-                return tradeTable.getRequiredExperience(level);
+                return tradeTable.getRequiredExperience(level + 1);
             }
         }
         return VillagerData.getUpperLevelExperience(level);

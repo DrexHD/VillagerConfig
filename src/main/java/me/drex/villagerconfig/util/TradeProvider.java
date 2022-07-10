@@ -93,7 +93,7 @@ public class TradeProvider implements DataProvider {
     public enum OfferCountType {
         VILLAGER(i -> 2), WANDERING_TRADER(WANDERING_TRADER_COUNT);
 
-        private IntUnaryOperator operator;
+        private final IntUnaryOperator operator;
 
         OfferCountType(IntUnaryOperator operator) {
             this.operator = operator;
