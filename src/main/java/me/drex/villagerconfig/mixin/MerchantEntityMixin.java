@@ -76,18 +76,16 @@ public abstract class MerchantEntityMixin extends PassiveEntity implements IMerc
         return ConfigEntries.features.tradeCycling ? instance.getRandom() : this.semiRandom;
     }
 
-    @Redirect(
+    @Inject(
             method = "trade",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/village/TradeOffer;use()V"
             )
     )
-    public void useTradeOffer(TradeOffer offer) {
+    public void useTradeOffer(TradeOffer offer, CallbackInfo ci) {
         if (ConfigEntries.oldTrades.enabled) {
-            ((OldTradeOffer) offer).use((MerchantEntity) (Object) this);
-        } else {
-            offer.use();
+            ((OldTradeOffer) offer).onUse((MerchantEntity) (Object) this);
         }
     }
 

@@ -33,12 +33,8 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
     @Shadow
     private int uses;
 
-    @Shadow
-    public abstract void use();
-
     @Override
-    public void use(MerchantEntity merchant) {
-        this.use();
+    public void onUse(MerchantEntity merchant) {
         this.merchantEntity = merchant;
     }
 
