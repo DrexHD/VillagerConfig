@@ -8,6 +8,6 @@ public interface OldTradeOffer {
 
     void disable();
 
-    void use(MerchantEntity merchant);
+    void onUse(MerchantEntity merchant);
 
 }
