@@ -10,6 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextTypes;
+import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
+import net.minecraft.loot.provider.number.LootNumberProvider;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
@@ -25,17 +27,17 @@ public class VC_EnchantBookFactory implements TradeOffers.Factory, IValidate {
 
     private Enchantments enchantments;
     private TradeItem[] wants;
-    private float treasure_multiplier;
-    private int base_price;
-    private int level_price;
-    private int random_base_price;
-    private int random_level_price;
-    final int trader_exp;
-    final int max_uses;
+    private LootNumberProvider treasure_multiplier;
+    private LootNumberProvider base_price;
+    private LootNumberProvider level_price;
+    private LootNumberProvider random_base_price;
+    private LootNumberProvider random_level_price;
+    LootNumberProvider trader_exp;
+    LootNumberProvider max_uses;
     final boolean reward_exp;
 
-    public VC_EnchantBookFactory(Enchantments enchantments, int treasure_multiplier, int base_price, int level_price, int random_base_price,
-                                 int random_level_price, int trader_exp, int max_uses, boolean reward_exp, TradeItem[] wants) {
+    public VC_EnchantBookFactory(Enchantments enchantments, LootNumberProvider treasure_multiplier, LootNumberProvider base_price, LootNumberProvider level_price, LootNumberProvider random_base_price,
+                                 LootNumberProvider random_level_price, LootNumberProvider trader_exp, LootNumberProvider max_uses, boolean reward_exp, TradeItem[] wants) {
         this.enchantments = enchantments;
         this.treasure_multiplier = treasure_multiplier;
         this.base_price = base_price;
@@ -75,17 +77,18 @@ public class VC_EnchantBookFactory implements TradeOffers.Factory, IValidate {
             sell = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(enchantment, level));
             isTreasure = enchantment.isTreasure();
         }
-        int priceCount = this.base_price + random.nextInt(this.random_base_price + level * this.random_level_price) + this.level_price * level;
+        int bound = this.random_base_price.nextInt(lootContext) + (level * this.random_level_price.nextInt(lootContext));
+        int priceCount = this.base_price.nextInt(lootContext) + (bound > 0 ? random.nextInt(bound) : 0) + this.level_price.nextInt(lootContext) * level;
         if (isTreasure) {
-            priceCount *= this.treasure_multiplier;
+            priceCount *= this.treasure_multiplier.nextFloat(lootContext);
         }
         firstBuyItem.setCount(Math.min(priceCount, firstBuyItem.getMaxCount()));
-        return new TradeOffer(firstBuyItem, secondBuyItem, sell, this.max_uses, this.trader_exp, priceMultiplier);
+        return new TradeOffer(firstBuyItem, secondBuyItem, sell, this.max_uses.nextInt(lootContext), this.trader_exp.nextInt(lootContext), priceMultiplier);
     }
 
     public static class Enchantments {
 
-        private boolean treasure;
+        private Boolean treasure;
         private Enchantment[] blacklist;
         private Enchantment.Rarity[] rarities;
 
@@ -139,6 +142,14 @@ public class VC_EnchantBookFactory implements TradeOffers.Factory, IValidate {
             if (wants.length > 2) {
                 reporter.warn("wants[] contains more than two entries");
             }
+            this.treasure_multiplier = this.treasure_multiplier != null ? this.treasure_multiplier : ConstantLootNumberProvider.create(2);
+            this.base_price = this.base_price != null ? this.base_price : ConstantLootNumberProvider.create(2);
+            this.level_price = this.level_price != null ? this.level_price : ConstantLootNumberProvider.create(3);
+            this.random_base_price = this.random_base_price != null ? this.random_base_price : ConstantLootNumberProvider.create(5);
+            this.random_level_price = this.random_level_price != null ? this.random_level_price : ConstantLootNumberProvider.create(10);
+            this.trader_exp = this.trader_exp != null ? this.trader_exp : ConstantLootNumberProvider.create(1);
+            this.max_uses = this.max_uses != null ? this.max_uses : ConstantLootNumberProvider.create(12);
+            this.enchantments.treasure = this.enchantments.treasure != null ? this.enchantments.treasure : true;
             for (int i = 0; i < wants.length; i++) {
                 wants[i].validate(reporter.makeChild(".wants[" + i + "]"));
             }
