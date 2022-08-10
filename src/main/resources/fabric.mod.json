@@ -22,6 +22,12 @@
       "me.drex.villagerconfig.config.modmenu.VillagerConfigModMenuEntry"
     ]
   },
+  "custom": {
+    "modmanager": {
+      "curseforge": 400741,
+      "modrinth": "OClpEDe3"
+    }
+  },
   "mixins": [
     "villagerconfig.mixins.json"
   ],
