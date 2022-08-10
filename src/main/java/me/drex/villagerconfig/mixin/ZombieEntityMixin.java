@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = ZombieEntity.class, priority = 500)
+@Mixin(ZombieEntity.class)
 public abstract class ZombieEntityMixin {
 
     private Difficulty difficulty = Difficulty.PEACEFUL;
@@ -39,7 +39,8 @@ public abstract class ZombieEntityMixin {
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/server/world/ServerWorld;getDifficulty()Lnet/minecraft/world/Difficulty;"
-            )
+            ),
+            require = 0
     )
     public Difficulty shouldConvert(ServerWorld world) {
         return difficulty;
