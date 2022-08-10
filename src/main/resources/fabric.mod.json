@@ -27,6 +27,9 @@
     "modmanager": {
       "curseforge": 400741,
       "modrinth": "OClpEDe3"
+    },
+    "mc-publish": {
+      "quilt": true
     }
   },
   "mixins": [
