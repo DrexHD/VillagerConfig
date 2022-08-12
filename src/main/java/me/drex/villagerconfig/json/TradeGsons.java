@@ -23,19 +23,20 @@ import net.minecraft.loot.provider.number.LootNumberProvider;
 import net.minecraft.loot.provider.number.LootNumberProviderTypes;
 import net.minecraft.loot.provider.score.LootScoreProvider;
 import net.minecraft.loot.provider.score.LootScoreProviderTypes;
+import net.minecraft.util.registry.DynamicRegistryManager;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerType;
 
 public class TradeGsons {
 
-    public static GsonBuilder getTradeGsonBuilder() {
+    public static GsonBuilder getTradeGsonBuilder(DynamicRegistryManager registryManager) {
         final GsonBuilder gsonBuilder = new GsonBuilder();
-        customTypeAdapters(gsonBuilder);
+        customTypeAdapters(gsonBuilder, registryManager);
         return gsonBuilder;
     }
 
-    private static void customTypeAdapters(GsonBuilder gsonBuilder) {
+    private static void customTypeAdapters(GsonBuilder gsonBuilder, DynamicRegistryManager registryManager) {
         // Field name conversion
         gsonBuilder.setFieldNamingStrategy(f -> Deobfuscator.deobfuscate(f.getName()));
         // Custom type adapters
@@ -47,7 +48,7 @@ public class TradeGsons {
         gsonBuilder.registerTypeHierarchyAdapter(VillagerType.class, new RegistryTypeAdapter<>(Registry.VILLAGER_TYPE));
         // Custom Factories
         gsonBuilder.registerTypeAdapterFactory(new EnumTypeAdapterFactory());
-        gsonBuilder.registerTypeAdapterFactory(new TagKeyTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new TagKeyTypeAdapterFactory(registryManager));
         gsonBuilder.registerTypeAdapter(TradeOffers.Factory.class, new FactoryTypeAdapter());
         // Loot table adapters
         gsonBuilder.registerTypeAdapter(BoundedIntUnaryOperator.class, new BoundedIntUnaryOperator.Serializer()).registerTypeHierarchyAdapter(LootNumberProvider.class, LootNumberProviderTypes.createGsonSerializer()).registerTypeHierarchyAdapter(LootCondition.class, LootConditionTypes.createGsonSerializer()).registerTypeHierarchyAdapter(LootScoreProvider.class, LootScoreProviderTypes.createGsonSerializer()).registerTypeHierarchyAdapter(LootContext.EntityTarget.class, new LootContext.EntityTarget.Serializer());

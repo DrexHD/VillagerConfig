@@ -8,9 +8,9 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import me.drex.villagerconfig.mixin.RegistryKeyAccessor;
-import me.drex.villagerconfig.util.TradeManager;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.DynamicRegistryManager;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
@@ -23,6 +23,12 @@ import java.util.Optional;
 
 public class TagKeyTypeAdapterFactory implements TypeAdapterFactory {
 
+    private final DynamicRegistryManager registryManager;
+
+    public TagKeyTypeAdapterFactory(DynamicRegistryManager registryManager) {
+        this.registryManager = registryManager;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public <K> TypeAdapter<K> create(Gson gson, TypeToken<K> typeToken) {
@@ -30,7 +36,7 @@ public class TagKeyTypeAdapterFactory implements TypeAdapterFactory {
         if (!TagKey.class.isAssignableFrom(rawType)) {
             return null;
         }
-        return (TypeAdapter<K>) new TagKeyAdapter<>(typeToken);
+        return (TypeAdapter<K>) new TagKeyAdapter<>(typeToken, registryManager);
     }
 }
 
@@ -40,12 +46,13 @@ final class TagKeyAdapter<K> extends TypeAdapter<TagKey<K>> {
 
     @SuppressWarnings("unchecked")
     // Hacky solution to deserialize TagKey<K> dynamically
-    public TagKeyAdapter(TypeToken<K> typeToken) {
+    public TagKeyAdapter(TypeToken<K> typeToken, DynamicRegistryManager registryManager) {
         // Retrieve all known RegistryKeys
         Map<String, RegistryKey<?>> registryKeyMap = RegistryKeyAccessor.getInstances();
         for (Map.Entry<String, RegistryKey<?>> entry : registryKeyMap.entrySet()) {
             RegistryKey<?> registryKey = entry.getValue();
-            Optional<Registry<K>> optional = (Optional<Registry<K>>) TradeManager.getRegistryManager().getOptional((RegistryKey<? extends Registry<K>>) registryKey);
+
+            Optional<Registry<K>> optional = (Optional<Registry<K>>)registryManager.getOptional((RegistryKey<? extends Registry<K>>) registryKey);
             if (optional.isPresent()) {
                 Registry<K> registry = optional.get();
                 if (isFittingRegistry(registry, getExpectedType(typeToken))) {

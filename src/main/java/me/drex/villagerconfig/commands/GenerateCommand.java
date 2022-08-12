@@ -26,7 +26,7 @@ public class GenerateCommand {
 
     private static int execute(CommandContext<ServerCommandSource> context) {
         DataGenerator dataGenerator = new DataGenerator(GENERATED, Collections.emptyList(), SharedConstants.getGameVersion(), true);
-        dataGenerator.addProvider(true, new TradeProvider(dataGenerator));
+        dataGenerator.addProvider(true, new TradeProvider(context.getSource().getServer().getRegistryManager(), dataGenerator));
         try {
             dataGenerator.run();
             context.getSource().sendFeedback(Text.literal("Successfully generated trade data to " + GENERATED).formatted(Formatting.GREEN), false);

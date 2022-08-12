@@ -1,7 +1,7 @@
 package me.drex.villagerconfig.mixin;
 
+import me.drex.villagerconfig.VillagerConfig;
 import me.drex.villagerconfig.json.behavior.TradeTable;
-import me.drex.villagerconfig.util.IMinecraftServer;
 import me.drex.villagerconfig.util.TradeManager;
 import me.drex.villagerconfig.util.TradeProvider;
 import net.minecraft.entity.EntityType;
@@ -59,8 +59,8 @@ public abstract class WanderingTraderEntityMixin extends MerchantEntity {
     }
 
     private TradeTable getTradeTable() {
-        if (this.world instanceof ServerWorld serverWorld) {
-            TradeManager tradeManager = ((IMinecraftServer) serverWorld.getServer()).getTradeManager();
+        if (this.world instanceof ServerWorld) {
+            TradeManager tradeManager = VillagerConfig.TRADE_MANAGER;
             return tradeManager.getTrade(TradeProvider.WANDERING_TRADER_ID);
         }
         return null;

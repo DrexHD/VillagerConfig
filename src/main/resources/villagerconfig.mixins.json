@@ -7,7 +7,6 @@
     "DataPackContentsMixin",
     "LootContextTypesAccessor",
     "MerchantEntityMixin",
-    "MinecraftServerMixin",
     "RegistryKeyAccessor",
     "TradeOfferMixin",
     "TradeOutputSlotMixin",

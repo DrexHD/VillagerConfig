@@ -5,33 +5,26 @@ import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import me.drex.villagerconfig.VillagerConfig;
-import me.drex.villagerconfig.json.TradeGsons;
 import me.drex.villagerconfig.json.behavior.TradeTable;
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
-import net.minecraft.util.registry.DynamicRegistryManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class TradeManager extends JsonDataLoader {
+public class TradeManager extends JsonDataLoader implements IdentifiableResourceReloadListener {
 
     private static final Logger LOGGER = VillagerConfig.LOGGER;
-    private static final Gson GSON = TradeGsons.getTradeGsonBuilder().create();
+    private final Gson gson;
     private Map<Identifier, TradeTable> trades = ImmutableMap.of();
-    // Not the cleanest solution, but it works...
-    private static DynamicRegistryManager registryManager;
 
-    public TradeManager(DynamicRegistryManager registryManager) {
-        super(GSON, "trades");
-        TradeManager.registryManager = registryManager;
-    }
-
-    public static DynamicRegistryManager getRegistryManager() {
-        return registryManager;
+    public TradeManager(Gson gson) {
+        super(gson, "trades");
+        this.gson = gson;
     }
 
     @Nullable
@@ -55,7 +48,7 @@ public class TradeManager extends JsonDataLoader {
         TradeTableReporter root = new TradeTableReporter();
         prepared.forEach((identifier, jsonElement) -> {
             try {
-                TradeTable table = GSON.fromJson(jsonElement, TradeTable.class);
+                TradeTable table = gson.fromJson(jsonElement, TradeTable.class);
                 TradeTableReporter tradeTableReporter = root.withTable("{" + identifier + "}");
                 table.validate(tradeTableReporter);
                 Multimap<String, String> errors = tradeTableReporter.getErrors();
@@ -79,4 +72,8 @@ public class TradeManager extends JsonDataLoader {
         LOGGER.info("Loaded {} trades", trades.size());
     }
 
+    @Override
+    public Identifier getFabricId() {
+        return new Identifier(VillagerConfig.MOD_ID, "trades");
+    }
 }

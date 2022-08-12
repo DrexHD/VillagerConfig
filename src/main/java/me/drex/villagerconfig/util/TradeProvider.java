@@ -15,6 +15,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.DataWriter;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.DynamicRegistryManager;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
@@ -29,7 +30,7 @@ import static me.drex.villagerconfig.util.TradeProvider.OfferCountType.WANDERING
 public class TradeProvider implements DataProvider {
 
     private static final Logger LOGGER = VillagerConfig.LOGGER;
-    private static final Gson GSON = TradeGsons.getTradeGsonBuilder().setPrettyPrinting().create();
+    private final Gson gson;
     public static final Identifier WANDERING_TRADER_ID = new Identifier("wanderingtrader");
     private static final IntUnaryOperator WANDERING_TRADER_COUNT = i -> switch (i) {
         case 1 -> 5;
@@ -39,8 +40,9 @@ public class TradeProvider implements DataProvider {
 
     private final DataGenerator root;
 
-    public TradeProvider(DataGenerator root) {
+    public TradeProvider(DynamicRegistryManager registryManager, DataGenerator root) {
         this.root = root;
+        this.gson = TradeGsons.getTradeGsonBuilder(registryManager).setPrettyPrinting().create();
     }
 
     @Override
@@ -86,7 +88,7 @@ public class TradeProvider implements DataProvider {
             tiers[level - 1] = new TradeTier((VillagerDataAccessor.getLevelBaseExperience()[level - 1]), new TradeGroup[]{tradeGroup}, null);
         });
         TradeTable tradeTable = new TradeTable(tiers);
-        return GSON.toJsonTree(tradeTable);
+        return gson.toJsonTree(tradeTable);
     }
 
 
