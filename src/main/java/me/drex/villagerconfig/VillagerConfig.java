@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.context.LootContextType;
+import net.minecraft.loot.function.LootFunctionType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,6 +22,7 @@ public class VillagerConfig implements ModInitializer {
     public static final Path DATA_PATH = FabricLoader.getInstance().getConfigDir().resolve("VillagerConfig");
     public static final String MOD_ID = "villagerconfig";
     public static final LootContextType VILLAGER_LOOT_CONTEXT = LootContextTypesAccessor.invokeRegister("villager", builder -> builder.require(LootContextParameters.THIS_ENTITY).require(LootContextParameters.ORIGIN));
+    public static LootFunctionType SET_DYE;
     public static TradeManager TRADE_MANAGER;
 
     @Override

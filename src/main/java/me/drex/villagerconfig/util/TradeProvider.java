@@ -18,6 +18,7 @@ import net.minecraft.data.DataWriter;
 import net.minecraft.item.Items;
 import net.minecraft.loot.condition.EntityPropertiesLootCondition;
 import net.minecraft.loot.condition.LootCondition;
+import net.minecraft.loot.condition.RandomChanceLootCondition;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.function.*;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
@@ -101,9 +102,8 @@ public class TradeProvider implements DataProvider {
         int levels = trades.size();
         final TradeTier[] tiers = new TradeTier[levels];
         trades.forEach((level, factoryArr) -> {
-
             TradeGroup tradeGroup = new TradeGroup(offerCountType.getOfferCount(level), Arrays.stream(factoryArr).map(this::convert).toList().toArray(new TradeOffers.Factory[]{}));
-            tiers[level - 1] = new TradeTier((VillagerDataAccessor.getLevelBaseExperience()[level - 1]), new TradeGroup[]{tradeGroup}, null, true);
+            tiers[level - 1] = new TradeTier((VillagerDataAccessor.getLevelBaseExperience()[level - 1]), new TradeGroup[]{tradeGroup}, null);
         });
         TradeTable tradeTable = new TradeTable(tiers);
         return gson.toJsonTree(tradeTable);
@@ -240,8 +240,7 @@ public class TradeProvider implements DataProvider {
                     true
             );
         }
-        // TODO:
-        /*else if (original instanceof TradeOffers.SellDyedArmorFactory factory) {
+        else if (original instanceof TradeOffers.SellDyedArmorFactory factory) {
             return new BehaviorTrade(
                     new WantItem[]{
                             new WantItem(Items.EMERALD, null, ConstantLootNumberProvider.create(factory.price), ConstantLootNumberProvider.create(0.2F), null),
@@ -249,13 +248,20 @@ public class TradeProvider implements DataProvider {
                     },
                     new TradeItem[]{
                             new TradeItem(factory.sell, null, ConstantLootNumberProvider.create(1), new LootFunction[]{
+                                    new SetDyeFunction(new LootCondition[]{}, SetDyeFunction.Dye.random(), true),
+                                    new SetDyeFunction(new LootCondition[]{
+                                            RandomChanceLootCondition.builder(30).build()
+                                    }, SetDyeFunction.Dye.random(), true),
+                                    new SetDyeFunction(new LootCondition[]{
+                                            RandomChanceLootCondition.builder(20).build()
+                                    }, SetDyeFunction.Dye.random(), true),
                             })
                     },
                     ConstantLootNumberProvider.create(factory.experience),
                     ConstantLootNumberProvider.create(factory.maxUses),
                     true
             );
-        }*/
+        }
         return original;
     }
 
