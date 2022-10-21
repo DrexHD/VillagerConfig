@@ -12,7 +12,6 @@ import net.minecraft.util.Formatting;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Collections;
 
 public class GenerateCommand {
 
@@ -25,7 +24,7 @@ public class GenerateCommand {
     }
 
     private static int execute(CommandContext<ServerCommandSource> context) {
-        DataGenerator dataGenerator = new DataGenerator(GENERATED, Collections.emptyList(), SharedConstants.getGameVersion(), true);
+        DataGenerator dataGenerator = new DataGenerator(GENERATED, SharedConstants.getGameVersion(), true);
         dataGenerator.addProvider(true, new TradeProvider(context.getSource().getServer().getRegistryManager(), dataGenerator));
         try {
             dataGenerator.run();

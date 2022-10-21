@@ -56,7 +56,7 @@ public class TradeProvider implements DataProvider {
     }
 
     private void saveMerchantTrades(DataWriter cache, Identifier merchantId, Int2ObjectMap<TradeOffers.Factory[]> trades, OfferCountType offerCountType) {
-        Path path = getOutput(this.root.getOutput(), merchantId);
+        Path path = getOutput(this.root.getOutput().getPath(), merchantId);
         JsonElement jsonElements;
         try {
             jsonElements = serializeData(trades, offerCountType);
