@@ -24,6 +24,7 @@ import net.minecraft.loot.provider.number.LootNumberProviderTypes;
 import net.minecraft.loot.provider.score.LootScoreProvider;
 import net.minecraft.loot.provider.score.LootScoreProviderTypes;
 import net.minecraft.util.registry.DynamicRegistryManager;
+import net.minecraft.util.registry.Registries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerType;
@@ -43,9 +44,9 @@ public class TradeGsons {
         gsonBuilder.registerTypeAdapter(ItemStack.class, new ItemStackTypeAdapter());
         gsonBuilder.registerTypeHierarchyAdapter(ItemConvertible.class, new ItemConvertibleTypeAdapter());
         // Registry type adapters
-        gsonBuilder.registerTypeHierarchyAdapter(StatusEffect.class, new RegistryTypeAdapter<>(Registry.STATUS_EFFECT));
-        gsonBuilder.registerTypeHierarchyAdapter(Enchantment.class, new RegistryTypeAdapter<>(Registry.ENCHANTMENT));
-        gsonBuilder.registerTypeHierarchyAdapter(VillagerType.class, new RegistryTypeAdapter<>(Registry.VILLAGER_TYPE));
+        gsonBuilder.registerTypeHierarchyAdapter(StatusEffect.class, new RegistryTypeAdapter<>(Registries.STATUS_EFFECT));
+        gsonBuilder.registerTypeHierarchyAdapter(Enchantment.class, new RegistryTypeAdapter<>(Registries.ENCHANTMENT));
+        gsonBuilder.registerTypeHierarchyAdapter(VillagerType.class, new RegistryTypeAdapter<>(Registries.VILLAGER_TYPE));
         // Custom Factories
         gsonBuilder.registerTypeAdapterFactory(new EnumTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new TagKeyTypeAdapterFactory(registryManager));

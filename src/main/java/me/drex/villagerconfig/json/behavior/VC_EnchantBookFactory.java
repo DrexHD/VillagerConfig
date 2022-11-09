@@ -15,6 +15,7 @@ import net.minecraft.loot.provider.number.LootNumberProvider;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.util.registry.Registries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
@@ -99,7 +100,7 @@ public class VC_EnchantBookFactory implements TradeOffers.Factory, IValidate {
         }
 
         private List<Enchantment> getAvailableEnchantments() {
-            return Registry.ENCHANTMENT.stream()
+            return Registries.ENCHANTMENT.stream()
                     .filter(Enchantment::isAvailableForEnchantedBookOffer)
                     .filter(enchantment -> (this.treasure || !enchantment.isTreasure()))
                     .filter(enchantment -> !isBlacklisted(enchantment))

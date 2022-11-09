@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registries;
 import net.minecraft.util.registry.Registry;
 
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack> {
             }
         }
         Identifier identifier = new Identifier(id);
-        final Optional<Item> optional = Registry.ITEM.getOrEmpty(identifier);
+        final Optional<Item> optional = Registries.ITEM.getOrEmpty(identifier);
         if (optional.isEmpty()) throw new IllegalArgumentException("Unknown item: " + identifier);
         final ItemStack itemStack = new ItemStack(optional.get(), count);
         if (tag != null) {
@@ -56,7 +57,7 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack> {
         }
         out.beginObject();
         out.name("id");
-        out.value(Registry.ITEM.getId(src.getItem()).toString());
+        out.value(Registries.ITEM.getId(src.getItem()).toString());
         out.name("count");
         out.value(src.getCount());
         if (src.getNbt() != null) {

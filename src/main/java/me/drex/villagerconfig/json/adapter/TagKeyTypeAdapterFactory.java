@@ -20,6 +20,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentMap;
 
 public class TagKeyTypeAdapterFactory implements TypeAdapterFactory {
 
@@ -48,8 +49,8 @@ final class TagKeyAdapter<K> extends TypeAdapter<TagKey<K>> {
     // Hacky solution to deserialize TagKey<K> dynamically
     public TagKeyAdapter(TypeToken<K> typeToken, DynamicRegistryManager registryManager) {
         // Retrieve all known RegistryKeys
-        Map<String, RegistryKey<?>> registryKeyMap = RegistryKeyAccessor.getInstances();
-        for (Map.Entry<String, RegistryKey<?>> entry : registryKeyMap.entrySet()) {
+        ConcurrentMap<RegistryKey.class_7892, RegistryKey<?>> registryKeyMap = RegistryKeyAccessor.getInstances();
+        for (Map.Entry<RegistryKey.class_7892, RegistryKey<?>> entry : registryKeyMap.entrySet()) {
             RegistryKey<?> registryKey = entry.getValue();
 
             Optional<Registry<K>> optional = (Optional<Registry<K>>)registryManager.getOptional((RegistryKey<? extends Registry<K>>) registryKey);

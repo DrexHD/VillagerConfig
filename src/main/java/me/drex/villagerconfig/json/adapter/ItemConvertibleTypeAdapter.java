@@ -7,6 +7,7 @@ import com.google.gson.stream.JsonWriter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registries;
 import net.minecraft.util.registry.Registry;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class ItemConvertibleTypeAdapter extends TypeAdapter<ItemConvertible> {
 
         String id = reader.nextString();
         Identifier identifier = new Identifier(id);
-        Optional<Item> optional = Registry.ITEM.getOrEmpty(identifier);
+        Optional<Item> optional = Registries.ITEM.getOrEmpty(identifier);
         if (optional.isEmpty()) throw new IllegalArgumentException("Unknown identifier: " + identifier);
         return optional.get();
     }
@@ -32,7 +33,7 @@ public class ItemConvertibleTypeAdapter extends TypeAdapter<ItemConvertible> {
             out.nullValue();
             return;
         }
-        Identifier identifier = Registry.ITEM.getId(src.asItem());
+        Identifier identifier = Registries.ITEM.getId(src.asItem());
         out.value(identifier.toString());
     }
 

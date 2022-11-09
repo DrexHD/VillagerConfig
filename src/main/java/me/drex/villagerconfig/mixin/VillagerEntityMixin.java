@@ -10,6 +10,7 @@ import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerData;
@@ -112,7 +113,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     private TradeTable getTradeTable() {
         if (this.world instanceof ServerWorld) {
             TradeManager tradeManager = VillagerConfig.TRADE_MANAGER;
-            Identifier identifier = Registry.VILLAGER_PROFESSION.getId(this.getVillagerData().getProfession());
+            Identifier identifier = Registries.VILLAGER_PROFESSION.getId(this.getVillagerData().getProfession());
             return tradeManager.getTrade(identifier);
         }
         return null;

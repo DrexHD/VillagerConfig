@@ -1,3 +1,5 @@
 accessWidener v1 named
+accessible    class    net/minecraft/util/registry/RegistryKey$class_7892
 accessible    class    net/minecraft/server/MinecraftServer$ResourceManagerHolder
 accessible    field    net/minecraft/server/MinecraftServer$ResourceManagerHolder    dataPackContents    Lnet/minecraft/server/DataPackContents;
+accessible    method    net/minecraft/data/DataGenerator$Pack    <init>    (Lnet/minecraft/data/DataGenerator;ZLjava/lang/String;Lnet/minecraft/data/DataOutput;)V
