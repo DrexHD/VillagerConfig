@@ -8,9 +8,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.StringNbtReader;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registries;
-import net.minecraft.util.registry.Registry;
 
 import java.io.IOException;
 import java.util.Optional;

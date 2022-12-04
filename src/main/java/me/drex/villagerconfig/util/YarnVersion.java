@@ -19,7 +19,7 @@ public class YarnVersion {
     public int build;
     public String version;
 
-    private static final String YARN_API_ENTRYPOINT = "https://meta.fabricmc.net/v2/versions/yarn/" + SharedConstants.getGameVersion().getName();
+    private static final String YARN_API_ENTRYPOINT = "https://meta.fabricmc.net/v2/versions/yarn/" + SharedConstants.getGameVersion().getId();
     private static final Path VERSION_FILE = MAPPINGS_PATH.resolve("yarn-version.txt");
     private static String versionMemCache = null;
 

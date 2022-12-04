@@ -8,11 +8,11 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import me.drex.villagerconfig.mixin.RegistryKeyAccessor;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.DynamicRegistryManager;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -49,11 +49,11 @@ final class TagKeyAdapter<K> extends TypeAdapter<TagKey<K>> {
     // Hacky solution to deserialize TagKey<K> dynamically
     public TagKeyAdapter(TypeToken<K> typeToken, DynamicRegistryManager registryManager) {
         // Retrieve all known RegistryKeys
-        ConcurrentMap<RegistryKey.class_7892, RegistryKey<?>> registryKeyMap = RegistryKeyAccessor.getInstances();
-        for (Map.Entry<RegistryKey.class_7892, RegistryKey<?>> entry : registryKeyMap.entrySet()) {
+        ConcurrentMap<RegistryKey.RegistryIdPair, RegistryKey<?>> registryKeyMap = RegistryKeyAccessor.getInstances();
+        for (Map.Entry<RegistryKey.RegistryIdPair, RegistryKey<?>> entry : registryKeyMap.entrySet()) {
             RegistryKey<?> registryKey = entry.getValue();
 
-            Optional<Registry<K>> optional = (Optional<Registry<K>>)registryManager.getOptional((RegistryKey<? extends Registry<K>>) registryKey);
+            Optional<Registry<K>> optional = registryManager.getOptional((RegistryKey<? extends Registry<K>>) registryKey);
             if (optional.isPresent()) {
                 Registry<K> registry = optional.get();
                 if (isFittingRegistry(registry, getExpectedType(typeToken))) {

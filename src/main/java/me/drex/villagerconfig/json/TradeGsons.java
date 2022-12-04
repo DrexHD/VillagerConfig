@@ -23,9 +23,8 @@ import net.minecraft.loot.provider.number.LootNumberProvider;
 import net.minecraft.loot.provider.number.LootNumberProviderTypes;
 import net.minecraft.loot.provider.score.LootScoreProvider;
 import net.minecraft.loot.provider.score.LootScoreProviderTypes;
-import net.minecraft.util.registry.DynamicRegistryManager;
-import net.minecraft.util.registry.Registries;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registries;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerType;
 
