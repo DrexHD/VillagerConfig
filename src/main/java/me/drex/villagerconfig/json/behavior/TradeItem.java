@@ -61,19 +61,19 @@ public class TradeItem implements IValidate {
                 if (this.quantity != null) {
                     reporter.warn("choice[] detected, ignoring quantity");
                 }
-                if (this.price_multiplier != null) {
-                    reporter.warn("choice[] detected, ignoring price_multiplier");
-                }
                 if (this.functions != null) {
                     reporter.warn("choice[] detected, ignoring functions");
                 }
             }
+            for (int i = 0; i < this.choice.length; i++) {
+                this.choice[i].validate(reporter.makeChild(".choice[" + i + "]"));
+            }
         } else {
             // Default values
             this.quantity = this.quantity != null ? this.quantity : ConstantLootNumberProvider.create(1);
-            this.price_multiplier = this.price_multiplier != null ? this.price_multiplier : ConstantLootNumberProvider.create(0.20F);
             this.item = this.item != null ? this.item : Items.AIR;
         }
+        this.price_multiplier = this.price_multiplier != null ? this.price_multiplier : ConstantLootNumberProvider.create(0.20F);
     }
 
     @Override

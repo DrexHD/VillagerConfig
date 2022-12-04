@@ -35,7 +35,7 @@ public class TradeTableReporter {
     }
 
     public void warn(String message) {
-        this.errors.put(this.getName(), message);
+        this.warnings.put(this.getName(), message);
     }
 
     public Multimap<String, String> getErrors() {
