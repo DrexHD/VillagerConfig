@@ -1,5 +1,7 @@
 package me.drex.villagerconfig.json.behavior;
 
+import me.drex.villagerconfig.json.behavior.item.TradeItem;
+import me.drex.villagerconfig.json.behavior.item.WantItem;
 import me.drex.villagerconfig.util.TradeTableReporter;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -17,13 +19,13 @@ import java.util.Arrays;
 
 public class BehaviorTrade implements TradeOffers.Factory, IValidate {
 
-    final TradeItem[] wants;
+    final WantItem[] wants;
     final TradeItem[] gives;
     LootNumberProvider trader_exp;
     LootNumberProvider max_uses;
     final boolean reward_exp;
 
-    public BehaviorTrade(TradeItem[] wants, TradeItem[] gives, LootNumberProvider trader_exp, LootNumberProvider max_uses, boolean reward_exp) {
+    public BehaviorTrade(WantItem[] wants, TradeItem[] gives, LootNumberProvider trader_exp, LootNumberProvider max_uses, boolean reward_exp) {
         this.wants = wants;
         this.gives = gives;
         this.trader_exp = trader_exp;
@@ -34,12 +36,12 @@ public class BehaviorTrade implements TradeOffers.Factory, IValidate {
     @Nullable
     @Override
     public TradeOffer create(Entity entity, Random random) {
-        TradeItem first = wants[0];
+        WantItem first = wants[0];
         ItemStack firstBuyItem = first.generateItem(entity, random);
         ItemStack secondBuyItem = ItemStack.EMPTY;
         LootContext.Builder builder = new LootContext.Builder((ServerWorld) entity.world).random(random);
         LootContext lootContext = builder.build(LootContextTypes.EMPTY);
-        float priceMultiplier = first.price_multiplier.nextFloat(lootContext);
+        float priceMultiplier = first.getPriceMultiplier().nextFloat(lootContext);
         if (wants.length > 1) {
             TradeItem second = wants[1];
             secondBuyItem = second.generateItem(entity, random);

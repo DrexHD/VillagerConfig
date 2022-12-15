@@ -31,11 +31,11 @@ public class TradeTable {
         return tradeTier.getTradeOffers(random);
     }
 
-    public int getRequiredExperience(int level) {
-        return getTradeTier(level).getRequiredExperience();
+    public int requiredExperience(int level) {
+        return getTradeTier(level).requiredExperience();
     }
 
-    public int getMaxLevel() {
+    public int maxLevel() {
         return tiers.length;
     }
 

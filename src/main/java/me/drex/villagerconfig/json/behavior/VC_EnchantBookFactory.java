@@ -1,6 +1,8 @@
 package me.drex.villagerconfig.json.behavior;
 
 import me.drex.villagerconfig.VillagerConfig;
+import me.drex.villagerconfig.json.behavior.item.TradeItem;
+import me.drex.villagerconfig.json.behavior.item.WantItem;
 import me.drex.villagerconfig.util.TradeTableReporter;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
@@ -26,7 +28,7 @@ import java.util.List;
 public class VC_EnchantBookFactory implements TradeOffers.Factory, IValidate {
 
     private Enchantments enchantments;
-    private TradeItem[] wants;
+    private WantItem[] wants;
     private LootNumberProvider treasure_multiplier;
     private LootNumberProvider base_price;
     private LootNumberProvider level_price;
@@ -37,7 +39,7 @@ public class VC_EnchantBookFactory implements TradeOffers.Factory, IValidate {
     final boolean reward_exp;
 
     public VC_EnchantBookFactory(Enchantments enchantments, LootNumberProvider treasure_multiplier, LootNumberProvider base_price, LootNumberProvider level_price, LootNumberProvider random_base_price,
-                                 LootNumberProvider random_level_price, LootNumberProvider trader_exp, LootNumberProvider max_uses, boolean reward_exp, TradeItem[] wants) {
+                                 LootNumberProvider random_level_price, LootNumberProvider trader_exp, LootNumberProvider max_uses, boolean reward_exp, WantItem[] wants) {
         this.enchantments = enchantments;
         this.treasure_multiplier = treasure_multiplier;
         this.base_price = base_price;
@@ -52,12 +54,12 @@ public class VC_EnchantBookFactory implements TradeOffers.Factory, IValidate {
 
     @Override
     public @NotNull TradeOffer create(Entity entity, Random random) {
-        TradeItem first = wants[0];
+        WantItem first = wants[0];
         ItemStack firstBuyItem = first.generateItem(entity, random);
         ItemStack secondBuyItem = ItemStack.EMPTY;
         LootContext.Builder builder = new LootContext.Builder((ServerWorld) entity.world).random(random);
         LootContext lootContext = builder.build(LootContextTypes.EMPTY);
-        float priceMultiplier = first.price_multiplier.nextFloat(lootContext);
+        float priceMultiplier = first.getPriceMultiplier().nextFloat(lootContext);
         if (wants.length > 1) {
             TradeItem second = wants[1];
             secondBuyItem = second.generateItem(entity, random);

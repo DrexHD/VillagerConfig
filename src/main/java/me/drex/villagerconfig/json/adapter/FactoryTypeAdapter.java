@@ -72,7 +72,7 @@ public class FactoryTypeAdapter implements JsonDeserializer<TradeOffers.Factory>
         if (type != null) {
             jsonObject.addProperty("type", type);
         } else {
-            VillagerConfig.LOGGER.info("Unknown trade factory class {}", src.getClass());
+            // TODO: Don't serialize non vanilla / behaviour trades
         }
         return jsonObject;
     }

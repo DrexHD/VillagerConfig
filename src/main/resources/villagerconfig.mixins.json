@@ -6,6 +6,7 @@
   "mixins": [
     "DataPackContentsMixin",
     "LootContextTypesAccessor",
+    "LootFunctionTypesMixin",
     "MerchantEntityMixin",
     "RegistryKeyAccessor",
     "TradeOfferMixin",
