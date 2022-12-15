@@ -11,9 +11,9 @@ import java.util.List;
 
 public class TradeTier {
 
+    final int total_exp_required;
     final TradeGroup[] groups;
     final TradeOffers.Factory[] trades;
-    final int total_exp_required;
 
     protected static final TradeTier EMPTY = new TradeTier(Integer.MAX_VALUE, null, null);
 
@@ -36,7 +36,7 @@ public class TradeTier {
         return trades.toArray(new TradeOffers.Factory[]{});
     }
 
-    protected int getRequiredExperience() {
+    protected int requiredExperience() {
         return this.total_exp_required;
     }
 

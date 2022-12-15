@@ -1,11 +1,14 @@
-package me.drex.villagerconfig.json.behavior;
+package me.drex.villagerconfig.json.behavior.item;
 
 import me.drex.villagerconfig.VillagerConfig;
+import me.drex.villagerconfig.json.behavior.IValidate;
 import me.drex.villagerconfig.util.TradeTableReporter;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.condition.LootCondition;
+import net.minecraft.loot.condition.LootConditionTypes;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.function.LootFunction;
@@ -15,32 +18,46 @@ import net.minecraft.loot.provider.number.LootNumberProvider;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.random.Random;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 public class TradeItem implements IValidate {
 
     Item item;
-    final TradeItem[] choice;
+    final ChoiceItem[] choice;
     LootNumberProvider quantity;
-    public LootNumberProvider price_multiplier;
     final LootFunction[] functions;
 
-    public TradeItem(Item item, TradeItem[] choice, LootNumberProvider quantity, LootNumberProvider price_multiplier, LootFunction[] functions) {
+    public TradeItem(Item item) {
+        this(item, ConstantLootNumberProvider.create(1));
+    }
+
+    public TradeItem(Item item, LootNumberProvider quantity) {
+        this(item, null, quantity, null);
+    }
+
+    public TradeItem(Item item, ChoiceItem[] choice, LootNumberProvider quantity, @Nullable LootFunction[] functions) {
         this.item = item;
         this.choice = choice;
         this.quantity = quantity;
-        this.price_multiplier = price_multiplier;
         this.functions = functions;
     }
 
     public ItemStack generateItem(Entity entity, Random random) {
+        LootContext.Builder builder = new LootContext.Builder((ServerWorld) entity.world).random(random).parameter(LootContextParameters.THIS_ENTITY, entity).parameter(LootContextParameters.ORIGIN, entity.getPos());
+        LootContext lootContext = builder.build(VillagerConfig.VILLAGER_LOOT_CONTEXT);
         if (choice != null) {
-            TradeItem item = choice[random.nextInt(choice.length)];
-            return item.generateItem(entity, random);
+            List<ChoiceItem> list = Arrays.asList(choice);
+            // Shuffle
+            for (int i = list.size(); i > 1; i--)
+                Collections.swap(list, i - 1, random.nextInt(i));
+            Stream<ChoiceItem> stream = list.stream().dropWhile(choiceItem -> LootConditionTypes.joinAnd(choiceItem.conditions()).negate().test(lootContext));
+            return stream.findFirst().orElse(new ChoiceItem(Items.AIR)).generateItem(entity, random);
         } else {
-            LootContext.Builder builder = new LootContext.Builder((ServerWorld) entity.world).random(random).parameter(LootContextParameters.THIS_ENTITY, entity).parameter(LootContextParameters.ORIGIN, entity.getPos());
-            LootContext lootContext = builder.build(VillagerConfig.VILLAGER_LOOT_CONTEXT);
             ItemStack itemStack = new ItemStack(item, quantity.nextInt(lootContext));
             if (functions != null) {
                 BiFunction<ItemStack, LootContext, ItemStack> combinedFunction = LootFunctionTypes.join(functions);
@@ -82,7 +99,6 @@ public class TradeItem implements IValidate {
                 "item=" + item +
                 ", choice=" + Arrays.toString(choice) +
                 ", quantity=" + quantity +
-                ", price_multiplier=" + price_multiplier +
                 ", functions=" + Arrays.toString(functions) +
                 '}';
     }
