@@ -17,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(TradeOutputSlot.class)
 public abstract class TradeOutputSlotMixin {
 
-
     @Shadow
     @Final
     private Merchant merchant;

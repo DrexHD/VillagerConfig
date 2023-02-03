@@ -1,4 +1,4 @@
-package me.drex.villagerconfig.mixin;
+package me.drex.villagerconfig.mixin.loot;
 
 import net.minecraft.loot.context.LootContextType;
 import net.minecraft.loot.context.LootContextTypes;

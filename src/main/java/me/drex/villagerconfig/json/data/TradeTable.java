@@ -1,16 +1,14 @@
-package me.drex.villagerconfig.json.behavior;
+package me.drex.villagerconfig.json.data;
 
-import me.drex.villagerconfig.VillagerConfig;
-import me.drex.villagerconfig.util.TradeTableReporter;
+import com.google.gson.*;
+import net.minecraft.util.JsonHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffers;
-import org.apache.logging.log4j.Logger;
 
-import java.util.Arrays;
+import java.lang.reflect.Type;
 
 public class TradeTable {
 
-    private static final Logger LOGGER = VillagerConfig.LOGGER;
     final TradeTier[] tiers;
 
     public TradeTable(TradeTier[] tiers) {
@@ -39,17 +37,21 @@ public class TradeTable {
         return tiers.length;
     }
 
-    public void validate(TradeTableReporter reporter) {
-        for (int i = 0; i < tiers.length; i++) {
-            tiers[i].validate(reporter.makeChild(".tiers[" + i + "]"));
-        }
-    }
+    public static class Serializer implements JsonSerializer<TradeTable>, JsonDeserializer<TradeTable> {
 
-    @Override
-    public String toString() {
-        return "TradeTable{" +
-                "tiers=" + Arrays.toString(tiers) +
-                '}';
+        @Override
+        public TradeTable deserialize(JsonElement jsonElement, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            JsonObject jsonObject = JsonHelper.asObject(jsonElement, "trade table");
+            TradeTier[] tiers = JsonHelper.deserialize(jsonObject, "tiers", context, TradeTier[].class);
+            return new TradeTable(tiers);
+        }
+
+        @Override
+        public JsonElement serialize(TradeTable tradeTable, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.add("tiers", context.serialize(tradeTable.tiers));
+            return jsonObject;
+        }
     }
 
 }

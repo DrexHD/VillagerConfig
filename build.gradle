@@ -50,9 +50,6 @@ dependencies {
     modImplementation "me.zeroeightsix:fiber:${project.fiber_version}"
     include "me.zeroeightsix:fiber:${project.fiber_version}"
 
-    // Json
-    implementation "com.googlecode.json-simple:json-simple:${project.json_simple}"
-
 }
 
 processResources {

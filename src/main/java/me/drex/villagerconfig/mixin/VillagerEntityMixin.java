@@ -1,10 +1,8 @@
 package me.drex.villagerconfig.mixin;
 
-import me.drex.villagerconfig.VillagerConfig;
 import me.drex.villagerconfig.config.ConfigEntries;
-import me.drex.villagerconfig.json.behavior.TradeTable;
+import me.drex.villagerconfig.json.data.TradeTable;
 import me.drex.villagerconfig.util.IMerchantEntity;
-import me.drex.villagerconfig.util.TradeManager;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.passive.VillagerEntity;
@@ -21,6 +19,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import static me.drex.villagerconfig.VillagerConfig.TRADE_MANAGER;
 
 @Mixin(VillagerEntity.class)
 public abstract class VillagerEntityMixin extends MerchantEntity {
@@ -111,9 +111,8 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
 
     private TradeTable getTradeTable() {
         if (this.world instanceof ServerWorld) {
-            TradeManager tradeManager = VillagerConfig.TRADE_MANAGER;
             Identifier identifier = Registries.VILLAGER_PROFESSION.getId(this.getVillagerData().getProfession());
-            return tradeManager.getTrade(identifier);
+            return TRADE_MANAGER.getTrade(identifier);
         }
         return null;
     }

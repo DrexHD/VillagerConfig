@@ -4,17 +4,22 @@
   "package": "me.drex.villagerconfig.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "DataPackContentsMixin",
-    "LootContextTypesAccessor",
-    "LootFunctionTypesMixin",
     "MerchantEntityMixin",
     "RegistryKeyAccessor",
+    "TradeOfferAccessor",
     "TradeOfferMixin",
     "TradeOutputSlotMixin",
     "VillagerDataAccessor",
     "VillagerEntityMixin",
     "WanderingTraderEntityMixin",
-    "ZombieEntityMixin"
+    "ZombieEntityMixin",
+    "loot.LootContextParametersAccessor",
+    "loot.LootContextTypesAccessor",
+    "loot.LootContextTypesMixin",
+    "loot.LootFunctionTypesAccessor",
+    "loot.LootFunctionTypesMixin",
+    "loot.LootNumberProviderTypesAccessor",
+    "loot.LootNumberProviderTypesMixin"
   ],
   "injectors": {
     "defaultRequire": 1

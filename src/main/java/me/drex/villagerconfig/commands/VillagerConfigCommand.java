@@ -14,6 +14,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+// TODO: Use https://github.com/samolego/Config2Brigadier
 public class VillagerConfigCommand {
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {

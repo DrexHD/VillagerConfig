@@ -1,5 +1,6 @@
 accessWidener v1 named
 accessible    class    net/minecraft/registry/RegistryKey$RegistryIdPair
+accessible    method    net/minecraft/loot/provider/number/UniformLootNumberProvider    <init>    (Lnet/minecraft/loot/provider/number/LootNumberProvider;Lnet/minecraft/loot/provider/number/LootNumberProvider;)V
 
 #BuyForOneEmeraldFactory
 accessible    field    net/minecraft/village/TradeOffers$BuyForOneEmeraldFactory    buy    Lnet/minecraft/item/Item;
