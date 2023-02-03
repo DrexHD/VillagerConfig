@@ -8,12 +8,12 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import static net.minecraft.server.command.CommandManager.literal;
+
 public class ReloadCommand {
 
-    public static void register(LiteralArgumentBuilder<ServerCommandSource> command) {
-        LiteralArgumentBuilder<ServerCommandSource> reload = LiteralArgumentBuilder.literal("reload");
-        reload.executes(ReloadCommand::execute);
-        command.then(reload);
+    public static LiteralArgumentBuilder<ServerCommandSource> builder() {
+        return literal("reload").executes(ReloadCommand::execute);
     }
 
     private static int execute(CommandContext<ServerCommandSource> context) {

@@ -6,6 +6,7 @@ import me.drex.villagerconfig.VillagerConfig;
 import me.drex.villagerconfig.util.TradeProvider;
 import net.minecraft.SharedConstants;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -17,10 +18,8 @@ public class GenerateCommand {
 
     private static final Path GENERATED = VillagerConfig.DATA_PATH.resolve("generated");
 
-    public static void register(LiteralArgumentBuilder<ServerCommandSource> command) {
-        LiteralArgumentBuilder<ServerCommandSource> generate = LiteralArgumentBuilder.literal("generate");
-        generate.executes(GenerateCommand::execute);
-        command.then(generate);
+    public static LiteralArgumentBuilder<ServerCommandSource> builder() {
+        return CommandManager.literal("generate").executes(GenerateCommand::execute);
     }
 
     private static int execute(CommandContext<ServerCommandSource> context) {

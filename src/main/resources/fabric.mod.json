@@ -20,6 +20,9 @@
     ],
     "modmenu": [
       "me.drex.villagerconfig.config.modmenu.VillagerConfigModMenuEntry"
+    ],
+    "preLaunch": [
+      "com.llamalad7.mixinextras.MixinExtrasBootstrap::init"
     ]
   },
   "custom": {

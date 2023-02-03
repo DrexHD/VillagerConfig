@@ -1,8 +1,8 @@
 package me.drex.villagerconfig.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.drex.villagerconfig.VillagerConfig;
 import me.drex.villagerconfig.config.ConfigEntries;
 import net.fabricmc.loader.api.FabricLoader;
@@ -14,23 +14,20 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import static net.minecraft.server.command.CommandManager.literal;
+
 // TODO: Use https://github.com/samolego/Config2Brigadier
 public class VillagerConfigCommand {
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-        LiteralArgumentBuilder<ServerCommandSource> main = LiteralArgumentBuilder.literal("villagerconfig");
-        LiteralArgumentBuilder<ServerCommandSource> alias = LiteralArgumentBuilder.literal("vc");
-        main.executes(VillagerConfigCommand::execute).requires(src -> src.hasPermissionLevel(2));
-        alias.executes(VillagerConfigCommand::execute).requires(src -> src.hasPermissionLevel(2));
-        then(main);
-        then(alias);
-        dispatcher.register(main);
-        dispatcher.register(alias);
-    }
-
-    private static void then(LiteralArgumentBuilder<ServerCommandSource> literal) {
-        GenerateCommand.register(literal);
-        ReloadCommand.register(literal);
+        LiteralCommandNode<ServerCommandSource> root = dispatcher.register(
+                literal("villagerconfig")
+                        .requires(src -> src.hasPermissionLevel(2))
+                        .then(GenerateCommand.builder())
+                        .then(ReloadCommand.builder())
+                        .executes(VillagerConfigCommand::execute)
+        );
+        dispatcher.register(literal("vc").requires(src -> src.hasPermissionLevel(2)).executes(VillagerConfigCommand::execute).redirect(root));
     }
 
     private static int execute(CommandContext<ServerCommandSource> context) {

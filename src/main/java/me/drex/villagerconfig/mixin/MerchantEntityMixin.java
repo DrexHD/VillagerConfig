@@ -1,5 +1,7 @@
 package me.drex.villagerconfig.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import me.drex.villagerconfig.config.ConfigEntries;
 import me.drex.villagerconfig.util.IMerchantEntity;
 import me.drex.villagerconfig.util.OldTradeOffer;
@@ -64,7 +66,7 @@ public abstract class MerchantEntityMixin extends PassiveEntity implements IMerc
         semiRandom = Random.create(seed);
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "fillRecipesFromPool",
             at = @At(
                     value = "FIELD",
@@ -72,8 +74,8 @@ public abstract class MerchantEntityMixin extends PassiveEntity implements IMerc
                     target = "Lnet/minecraft/entity/passive/MerchantEntity;random:Lnet/minecraft/util/math/random/Random;"
             )
     )
-    public Random replaceRandom(MerchantEntity instance) {
-        return ConfigEntries.features.tradeCycling ? instance.getRandom() : this.semiRandom;
+    public Random replaceRandom(MerchantEntity merchantEntity, Operation<Random> original) {
+        return ConfigEntries.features.tradeCycling ? original.call(merchantEntity) : this.semiRandom;
     }
 
     @Inject(
