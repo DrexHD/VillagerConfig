@@ -30,8 +30,8 @@ public class GenerateCommand {
             dataGenerator.run();
             context.getSource().sendSuccess(Component.literal("Successfully generated trade data to " + GENERATED).withStyle(ChatFormatting.GREEN), false);
             return 1;
-        } catch (IOException e) {
-            context.getSource().sendSuccess(Component.literal("An error occurred, please look into the console for more information.").withStyle(ChatFormatting.RED), false);
+        } catch (Throwable e) {
+            context.getSource().sendFailure(Component.literal("An error occurred, please look into the console for more information."));
             VillagerConfig.LOGGER.error("An error occurred, while generating trade data", e);
             return 0;
         }
