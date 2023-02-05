@@ -1,14 +1,14 @@
 package me.drex.villagerconfig.mixin;
 
-import net.minecraft.village.VillagerData;
+import net.minecraft.world.entity.npc.VillagerData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(VillagerData.class)
 public interface VillagerDataAccessor {
 
-    @Accessor("LEVEL_BASE_EXPERIENCE")
-    static int[] getLevelBaseExperience() {
+    @Accessor("NEXT_LEVEL_XP_THRESHOLDS")
+    static int[] getNextLevelXpThresholds() {
         throw new AssertionError();
     }
 

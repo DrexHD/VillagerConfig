@@ -4,48 +4,49 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import me.drex.villagerconfig.util.loot.LootNumberProviderTypes;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.provider.number.LootNumberProvider;
-import net.minecraft.loot.provider.number.LootNumberProviderType;
-import net.minecraft.util.JsonHelper;
-import net.minecraft.util.JsonSerializer;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import org.jetbrains.annotations.NotNull;
 
-public class AddLootNumberProvider implements LootNumberProvider {
+public class AddLootNumberProvider implements NumberProvider {
 
-    private final LootNumberProvider[] addends;
+    private final NumberProvider[] addends;
 
-    AddLootNumberProvider(LootNumberProvider... addends) {
+    AddLootNumberProvider(NumberProvider... addends) {
         this.addends = addends;
     }
 
     @Override
-    public float nextFloat(LootContext context) {
+    public float getFloat(@NotNull LootContext context) {
         float result = 0;
-        for (LootNumberProvider addend : addends) {
-            result += addend.nextFloat(context);
+        for (NumberProvider addend : addends) {
+            result += addend.getFloat(context);
         }
         return result;
     }
 
     @Override
-    public LootNumberProviderType getType() {
+    public @NotNull LootNumberProviderType getType() {
         return LootNumberProviderTypes.ADD;
     }
 
-    public static AddLootNumberProvider create(LootNumberProvider... addends) {
+    public static AddLootNumberProvider create(NumberProvider... addends) {
         return new AddLootNumberProvider(addends);
     }
 
-    public static class Serializer implements JsonSerializer<AddLootNumberProvider> {
+    public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<AddLootNumberProvider> {
         public Serializer() {
         }
 
-        public void toJson(JsonObject jsonObject, AddLootNumberProvider addLootNumberProvider, JsonSerializationContext jsonSerializationContext) {
-            jsonObject.add("addends", jsonSerializationContext.serialize(addLootNumberProvider.addends));
+        @Override
+        public void serialize(JsonObject jsonObject, AddLootNumberProvider addLootNumberProvider, JsonSerializationContext context) {
+            jsonObject.add("addends", context.serialize(addLootNumberProvider.addends));
         }
 
-        public AddLootNumberProvider fromJson(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext) {
-            LootNumberProvider[] addends = JsonHelper.deserialize(jsonObject, "addends", jsonDeserializationContext, LootNumberProvider[].class);
+        public @NotNull AddLootNumberProvider deserialize(@NotNull JsonObject jsonObject, @NotNull JsonDeserializationContext context) {
+            NumberProvider[] addends = GsonHelper.getAsObject(jsonObject, "addends", context, NumberProvider[].class);
             return new AddLootNumberProvider(addends);
         }
     }

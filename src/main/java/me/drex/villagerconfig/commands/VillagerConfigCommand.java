@@ -3,74 +3,72 @@ package me.drex.villagerconfig.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import me.drex.villagerconfig.VillagerConfig;
-import me.drex.villagerconfig.config.ConfigEntries;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.commands.CommandSourceStack;
 
-import static net.minecraft.server.command.CommandManager.literal;
+import static me.drex.villagerconfig.config.ConfigManager.CONFIG;
+import static net.minecraft.commands.Commands.literal;
 
 // TODO: Use https://github.com/samolego/Config2Brigadier
 public class VillagerConfigCommand {
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-        LiteralCommandNode<ServerCommandSource> root = dispatcher.register(
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+        LiteralCommandNode<CommandSourceStack> config = literal("config").build();
+        CONFIG.generateCommand(config);
+        LiteralCommandNode<CommandSourceStack> root = dispatcher.register(
                 literal("villagerconfig")
-                        .requires(src -> src.hasPermissionLevel(2))
+                        .requires(src -> src.hasPermission(2))
                         .then(GenerateCommand.builder())
                         .then(ReloadCommand.builder())
+                        .then(
+                               config
+                        )
                         .executes(VillagerConfigCommand::execute)
         );
-        dispatcher.register(literal("vc").requires(src -> src.hasPermissionLevel(2)).executes(VillagerConfigCommand::execute).redirect(root));
+        dispatcher.register(literal("vc").requires(src -> src.hasPermission(2)).executes(VillagerConfigCommand::execute).redirect(root));
     }
 
-    private static int execute(CommandContext<ServerCommandSource> context) {
-        ModMetadata meta = FabricLoader.getInstance().getModContainer("villagerconfig").get().getMetadata();
-        ConfigEntries.OldTradesGroup oldTrades = ConfigEntries.oldTrades;
-        ConfigEntries.FeaturesGroup features = ConfigEntries.features;
-        MutableText text = Text.literal("")
-                .append(Text.literal("VillagerConfig Version: " + meta.getVersion().getFriendlyString()).formatted(Formatting.WHITE, Formatting.BOLD)
-                        .styled(style -> style
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Click to copy config file location.").formatted(Formatting.AQUA)))
+    private static int execute(CommandContext<CommandSourceStack> context) {
+
+        /*ModMetadata meta = FabricLoader.getInstance().getModContainer("villagerconfig").get().getMetadata();
+        Config.OldTradesGroup oldTrades = CONFIG.oldTrades;
+        Config.FeaturesGroup features = CONFIG.features;
+        MutableComponent text = Component.literal("")
+                .append(Component.literal("VillagerConfig Version: " + meta.getVersion().getFriendlyString()).withStyle(ChatFormatting.WHITE, ChatFormatting.BOLD)
+                        .withStyle(style -> style
+                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to copy config file location.").withStyle(ChatFormatting.AQUA)))
                                 .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, VillagerConfig.DATA_PATH.resolve("villagerconfig.json5").toFile().getAbsolutePath()))))
-                .append(Text.literal("\n\nSettings: ").formatted(Formatting.WHITE, Formatting.BOLD))
-                .append(Text.literal("\nDiscount (max): ").formatted(Formatting.AQUA))
-                .append(Text.literal(features.maxDiscount + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
-                        .styled(style -> style
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Vanilla: ").formatted(Formatting.AQUA).append(Text.literal("100%").formatted(Formatting.GRAY))))))
-                .append(Text.literal("\nRaise (max): ").formatted(Formatting.AQUA))
-                .append(Text.literal(features.maxRaise + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
-                        .styled(style -> style
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Vanilla: ").formatted(Formatting.AQUA).append(Text.literal("100%").formatted(Formatting.GRAY))))))
-                .append(Text.literal("\nConversion chance: ").formatted(Formatting.AQUA))
-                .append(Text.literal(features.conversionChance + "%").formatted(Formatting.GRAY, Formatting.ITALIC)
-                        .styled(style -> style
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Vanilla: ").formatted(Formatting.AQUA)
-                                        .append(Text.literal("\nHard: ").formatted(Formatting.RED))
-                                        .append(Text.literal("100%").formatted(Formatting.GRAY))
-                                        .append(Text.literal("\nNormal: ").formatted(Formatting.YELLOW))
-                                        .append(Text.literal("50%").formatted(Formatting.GRAY))
-                                        .append(Text.literal("\nEasy / Peaceful: ").formatted(Formatting.GREEN))
-                                        .append(Text.literal("0%").formatted(Formatting.GRAY))
+                .append(Component.literal("\n\nSettings: ").withStyle(ChatFormatting.WHITE, ChatFormatting.BOLD))
+                .append(Component.literal("\nDiscount (max): ").withStyle(ChatFormatting.AQUA))
+                .append(Component.literal(features.maxDiscount + "%").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)
+                        .withStyle(style -> style
+                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Vanilla: ").withStyle(ChatFormatting.AQUA).append(Component.literal("100%").withStyle(ChatFormatting.GRAY))))))
+                .append(Component.literal("\nRaise (max): ").withStyle(ChatFormatting.AQUA))
+                .append(Component.literal(features.maxRaise + "%").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)
+                        .withStyle(style -> style
+                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Vanilla: ").withStyle(ChatFormatting.AQUA).append(Component.literal("100%").withStyle(ChatFormatting.GRAY))))))
+                .append(Component.literal("\nConversion chance: ").withStyle(ChatFormatting.AQUA))
+                .append(Component.literal(features.conversionChance + "%").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)
+                        .withStyle(style -> style
+                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Vanilla: ").withStyle(ChatFormatting.AQUA)
+                                        .append(Component.literal("\nHard: ").withStyle(ChatFormatting.RED))
+                                        .append(Component.literal("100%").withStyle(ChatFormatting.GRAY))
+                                        .append(Component.literal("\nNormal: ").withStyle(ChatFormatting.YELLOW))
+                                        .append(Component.literal("50%").withStyle(ChatFormatting.GRAY))
+                                        .append(Component.literal("\nEasy / Peaceful: ").withStyle(ChatFormatting.GREEN))
+                                        .append(Component.literal("0%").withStyle(ChatFormatting.GRAY))
                                 ))))
-                .append(Text.literal("\nTrade Cycling: ").formatted(Formatting.AQUA))
-                .append(Text.literal(String.valueOf(ConfigEntries.features.tradeCycling)).formatted(Formatting.GRAY, Formatting.ITALIC)
-                        .styled(style -> style
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Vanilla: ").formatted(Formatting.AQUA).append(Text.literal("false").formatted(Formatting.GRAY))))))
-                .append(Text.literal("\nOld Trade Mechanics: ").formatted(Formatting.AQUA))
-                .append(Text.literal(String.valueOf(oldTrades.enabled)).formatted(Formatting.GRAY, Formatting.ITALIC)
-                        .styled(style -> style
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("uses (min): ").formatted(Formatting.AQUA).append(Text.literal(String.valueOf(oldTrades.minUses)).formatted(Formatting.GRAY))
-                                        .append(Text.literal("\nuses (max): ").formatted(Formatting.AQUA).append(Text.literal(String.valueOf(oldTrades.maxUses)).formatted(Formatting.GRAY))
-                                                .append(Text.literal("\nlockchance: ").formatted(Formatting.AQUA).append(Text.literal(String.valueOf(oldTrades.lockChance)).formatted(Formatting.GRAY))
-                                                        .append(Text.literal("\nunlockchance: ").formatted(Formatting.AQUA).append(Text.literal(String.valueOf(oldTrades.unlockChance)).formatted(Formatting.GRAY)))))))));
-        context.getSource().sendFeedback(text, false);
+                .append(Component.literal("\nTrade Cycling: ").withStyle(ChatFormatting.AQUA))
+                .append(Component.literal(String.valueOf(CONFIG.features.tradeCycling)).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)
+                        .withStyle(style -> style
+                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Vanilla: ").withStyle(ChatFormatting.AQUA).append(Component.literal("false").withStyle(ChatFormatting.GRAY))))))
+                .append(Component.literal("\nOld Trade Mechanics: ").withStyle(ChatFormatting.AQUA))
+                .append(Component.literal(String.valueOf(oldTrades.enabled)).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)
+                        .withStyle(style -> style
+                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("uses (min): ").withStyle(ChatFormatting.AQUA).append(Component.literal(String.valueOf(oldTrades.minUses)).withStyle(ChatFormatting.GRAY))
+                                        .append(Component.literal("\nuses (max): ").withStyle(ChatFormatting.AQUA).append(Component.literal(String.valueOf(oldTrades.maxUses)).withStyle(ChatFormatting.GRAY))
+                                                .append(Component.literal("\nlockchance: ").withStyle(ChatFormatting.AQUA).append(Component.literal(String.valueOf(oldTrades.lockChance)).withStyle(ChatFormatting.GRAY))
+                                                        .append(Component.literal("\nunlockchance: ").withStyle(ChatFormatting.AQUA).append(Component.literal(String.valueOf(oldTrades.unlockChance)).withStyle(ChatFormatting.GRAY)))))))));
+        context.getSource().sendSuccess(text, false);*/
         return 1;
     }
 

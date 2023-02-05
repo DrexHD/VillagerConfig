@@ -1,28 +1,29 @@
 package me.drex.villagerconfig.mixin;
 
-import me.drex.villagerconfig.config.ConfigEntries;
 import me.drex.villagerconfig.util.Math;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Zombie;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ZombieEntity.class)
-public abstract class ZombieEntityMixin {
+import static me.drex.villagerconfig.config.ConfigManager.CONFIG;
+
+@Mixin(Zombie.class)
+public abstract class ZombieMixin {
 
     private Difficulty difficulty = Difficulty.PEACEFUL;
 
     @Inject(
-            method = "onKilledOther",
+            method = "wasKilled",
             at = @At("HEAD")
     )
-    public void calculateConversionChance(ServerWorld world, LivingEntity other, CallbackInfoReturnable<Boolean> cir) {
-        double conversionChance = ConfigEntries.features.conversionChance;
+    public void calculateConversionChance(ServerLevel world, LivingEntity other, CallbackInfoReturnable<Boolean> cir) {
+        double conversionChance = CONFIG.features.conversionChance;
         if (conversionChance < 0D) {
             difficulty = world.getDifficulty();
         } else {
@@ -35,14 +36,14 @@ public abstract class ZombieEntityMixin {
     }
 
     @Redirect(
-            method = "onKilledOther",
+            method = "wasKilled",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/server/world/ServerWorld;getDifficulty()Lnet/minecraft/world/Difficulty;"
+                    target = "Lnet/minecraft/server/level/ServerLevel;getDifficulty()Lnet/minecraft/world/Difficulty;"
             ),
             require = 0
     )
-    public Difficulty shouldConvert(ServerWorld world) {
+    public Difficulty shouldConvert(ServerLevel world) {
         return difficulty;
     }
 

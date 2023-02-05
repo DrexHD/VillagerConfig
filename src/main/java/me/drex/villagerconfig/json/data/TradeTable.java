@@ -1,9 +1,9 @@
 package me.drex.villagerconfig.json.data;
 
 import com.google.gson.*;
-import net.minecraft.util.JsonHelper;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.village.TradeOffers;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.npc.VillagerTrades;
 
 import java.lang.reflect.Type;
 
@@ -23,7 +23,7 @@ public class TradeTable {
         return TradeTier.EMPTY;
     }
 
-    public TradeOffers.Factory[] getTradeOffers(int level, Random random) {
+    public VillagerTrades.ItemListing[] getTradeOffers(int level, RandomSource random) {
         if (random == null) throw new IllegalArgumentException("Random must not be null");
         TradeTier tradeTier = getTradeTier(level);
         return tradeTier.getTradeOffers(random);
@@ -41,8 +41,8 @@ public class TradeTable {
 
         @Override
         public TradeTable deserialize(JsonElement jsonElement, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject jsonObject = JsonHelper.asObject(jsonElement, "trade table");
-            TradeTier[] tiers = JsonHelper.deserialize(jsonObject, "tiers", context, TradeTier[].class);
+            JsonObject jsonObject = GsonHelper.convertToJsonObject(jsonElement, "trade table");
+            TradeTier[] tiers = GsonHelper.getAsObject(jsonObject, "tiers", context, TradeTier[].class);
             return new TradeTable(tiers);
         }
 

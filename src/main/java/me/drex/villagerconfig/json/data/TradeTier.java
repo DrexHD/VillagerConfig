@@ -1,9 +1,9 @@
 package me.drex.villagerconfig.json.data;
 
 import com.google.gson.*;
-import net.minecraft.util.JsonHelper;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.village.TradeOffers;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.npc.VillagerTrades;
 
 import java.lang.reflect.Type;
 import java.util.LinkedList;
@@ -21,14 +21,14 @@ public class TradeTier {
         this.groups = groups;
     }
 
-    protected TradeOffers.Factory[] getTradeOffers(Random random) {
-        List<TradeOffers.Factory> trades = new LinkedList<>();
+    protected VillagerTrades.ItemListing[] getTradeOffers(RandomSource random) {
+        List<VillagerTrades.ItemListing> trades = new LinkedList<>();
         if (this.groups != null) {
             for (TradeGroup group : this.groups) {
                 trades.addAll(List.of(group.getTrades(random)));
             }
         }
-        return trades.toArray(new TradeOffers.Factory[]{});
+        return trades.toArray(new VillagerTrades.ItemListing[]{});
     }
 
     protected int requiredExperience() {
@@ -39,9 +39,9 @@ public class TradeTier {
 
         @Override
         public TradeTier deserialize(JsonElement jsonElement, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject jsonObject = JsonHelper.asObject(jsonElement, "trade tier");
-            TradeGroup[] groups = JsonHelper.deserialize(jsonObject, "groups", context, TradeGroup[].class);
-            int totalExpRequired = JsonHelper.getInt(jsonObject, "total_exp_required");
+            JsonObject jsonObject = GsonHelper.convertToJsonObject(jsonElement, "trade tier");
+            TradeGroup[] groups = GsonHelper.getAsObject(jsonObject, "groups", context, TradeGroup[].class);
+            int totalExpRequired = GsonHelper.getAsInt(jsonObject, "total_exp_required");
             return new TradeTier(totalExpRequired, groups);
         }
 

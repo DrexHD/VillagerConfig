@@ -3,103 +3,105 @@ package me.drex.villagerconfig.config;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+
+import static me.drex.villagerconfig.config.ConfigManager.CONFIG;
 
 public class ConfigScreen {
 
     public static Screen getConfigScreen(Screen parentScreen) {
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parentScreen)
-                .setDefaultBackgroundTexture(new Identifier("minecraft:textures/block/emerald_block.png"))
-                .setTitle(Text.translatable("config.villagerconfig.title"));
+                .setDefaultBackgroundTexture(new ResourceLocation("minecraft:textures/block/emerald_block.png"))
+                .setTitle(Component.translatable("config.villagerconfig.title"));
 
         builder.setGlobalized(true);
         builder.setGlobalizedExpanded(false);
 
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
-        ConfigCategory features = builder.getOrCreateCategory(Text.translatable("config.villagerconfig.category.features"));
+        ConfigCategory features = builder.getOrCreateCategory(Component.translatable("config.villagerconfig.category.features"));
 
-        features.addEntry(entryBuilder.startDoubleField(Text.translatable("config.villagerconfig.maxdiscount"), ConfigEntries.features.maxDiscount)
+        features.addEntry(entryBuilder.startDoubleField(Component.translatable("config.villagerconfig.maxdiscount"), CONFIG.features.maxDiscount)
                 .setDefaultValue(100)
                 .setMin(0.0)
                 .setMax(100.0)
-                .setSaveConsumer(value -> ConfigEntries.features.maxDiscount = value)
-                .setTooltip(Text.translatable("config.villagerconfig.maxdiscount.tooltip"))
+                .setSaveConsumer(value -> CONFIG.features.maxDiscount = value)
+                .setTooltip(Component.translatable("config.villagerconfig.maxdiscount.tooltip"))
                 .build());
 
-        features.addEntry(entryBuilder.startDoubleField(Text.translatable("config.villagerconfig.maxraise"), ConfigEntries.features.maxRaise)
+        features.addEntry(entryBuilder.startDoubleField(Component.translatable("config.villagerconfig.maxraise"), CONFIG.features.maxRaise)
                 .setDefaultValue(100)
                 .setMin(0.0)
                 .setMax(100.0)
-                .setSaveConsumer(value -> ConfigEntries.features.maxRaise = value)
-                .setTooltip(Text.translatable("config.villagerconfig.maxraise.tooltip"))
+                .setSaveConsumer(value -> CONFIG.features.maxRaise = value)
+                .setTooltip(Component.translatable("config.villagerconfig.maxraise.tooltip"))
                 .build());
 
-        features.addEntry(entryBuilder.startDoubleField(Text.translatable("config.villagerconfig.conversionchance"), ConfigEntries.features.conversionChance)
+        features.addEntry(entryBuilder.startDoubleField(Component.translatable("config.villagerconfig.conversionchance"), CONFIG.features.conversionChance)
                 .setDefaultValue(-1)
                 .setMin(-1.0)
                 .setMax(100.0)
-                .setSaveConsumer(value -> ConfigEntries.features.conversionChance = value)
-                .setTooltip(Text.translatable("config.villagerconfig.conversionchance.tooltip"))
+                .setSaveConsumer(value -> CONFIG.features.conversionChance = value)
+                .setTooltip(Component.translatable("config.villagerconfig.conversionchance.tooltip"))
                 .build());
 
 
-        features.addEntry(entryBuilder.startBooleanToggle(Text.translatable("config.villagerconfig.tradecycling"), ConfigEntries.features.tradeCycling)
+        features.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.villagerconfig.tradecycling"), CONFIG.features.tradeCycling)
                 .setDefaultValue(true)
-                .setSaveConsumer(value -> ConfigEntries.features.tradeCycling = value)
-                .setTooltip(Text.translatable("config.villagerconfig.tradecycling.tooltip"))
+                .setSaveConsumer(value -> CONFIG.features.tradeCycling = value)
+                .setTooltip(Component.translatable("config.villagerconfig.tradecycling.tooltip"))
                 .build());
 
-        features.addEntry(entryBuilder.startBooleanToggle(Text.translatable("config.villagerconfig.infiniteTrades"), ConfigEntries.features.infiniteTrades)
+        features.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.villagerconfig.infiniteTrades"), CONFIG.features.infiniteTrades)
                 .setDefaultValue(false)
-                .setSaveConsumer(value -> ConfigEntries.features.infiniteTrades = value)
-                .setTooltip(Text.translatable("config.villagerconfig.infiniteTrades.tooltip"))
+                .setSaveConsumer(value -> CONFIG.features.infiniteTrades = value)
+                .setTooltip(Component.translatable("config.villagerconfig.infiniteTrades.tooltip"))
                 .build());
 
-        ConfigCategory oldTrades = builder.getOrCreateCategory(Text.translatable("config.villagerconfig.category.old_trades"))
-                .setCategoryBackground(new Identifier("minecraft:textures/block/emerald_block.png"));
+        ConfigCategory oldTrades = builder.getOrCreateCategory(Component.translatable("config.villagerconfig.category.old_trades"))
+                .setCategoryBackground(new ResourceLocation("minecraft:textures/block/emerald_block.png"));
 
-        oldTrades.addEntry(entryBuilder.startBooleanToggle(Text.translatable("config.villagerconfig.enabled"), ConfigEntries.oldTrades.enabled)
+        oldTrades.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.villagerconfig.enabled"), CONFIG.oldTrades.enabled)
                 .setDefaultValue(false)
-                .setSaveConsumer(value -> ConfigEntries.oldTrades.enabled = value)
-                .setTooltip(Text.translatable("config.villagerconfig.enabled.tooltip"))
+                .setSaveConsumer(value -> CONFIG.oldTrades.enabled = value)
+                .setTooltip(Component.translatable("config.villagerconfig.enabled.tooltip"))
                 .build());
 
-        oldTrades.addEntry(entryBuilder.startIntField(Text.translatable("config.villagerconfig.minuses"), ConfigEntries.oldTrades.minUses)
+        oldTrades.addEntry(entryBuilder.startIntField(Component.translatable("config.villagerconfig.minuses"), CONFIG.oldTrades.minUses)
                 .setDefaultValue(2)
                 .setMin(0)
-                .setSaveConsumer(value -> ConfigEntries.oldTrades.minUses = value)
-                .setTooltip(Text.translatable("config.villagerconfig.minuses.tooltip"))
+                .setSaveConsumer(value -> CONFIG.oldTrades.minUses = value)
+                .setTooltip(Component.translatable("config.villagerconfig.minuses.tooltip"))
                 .build());
 
-        oldTrades.addEntry(entryBuilder.startIntField(Text.translatable("config.villagerconfig.maxuses2"), ConfigEntries.oldTrades.maxUses)
+        oldTrades.addEntry(entryBuilder.startIntField(Component.translatable("config.villagerconfig.maxuses2"), CONFIG.oldTrades.maxUses)
                 .setDefaultValue(12)
                 .setMin(0)
-                .setSaveConsumer(value -> ConfigEntries.oldTrades.maxUses = value)
-                .setTooltip(Text.translatable("config.villagerconfig.maxuses2.tooltip"))
+                .setSaveConsumer(value -> CONFIG.oldTrades.maxUses = value)
+                .setTooltip(Component.translatable("config.villagerconfig.maxuses2.tooltip"))
                 .build());
 
-        oldTrades.addEntry(entryBuilder.startDoubleField(Text.translatable("config.villagerconfig.lockchance"), ConfigEntries.oldTrades.lockChance)
+        oldTrades.addEntry(entryBuilder.startDoubleField(Component.translatable("config.villagerconfig.lockchance"), CONFIG.oldTrades.lockChance)
                 .setDefaultValue(20)
                 .setMin(0)
                 .setMax(100)
-                .setSaveConsumer(value -> ConfigEntries.oldTrades.lockChance = value)
-                .setTooltip(Text.translatable("config.villagerconfig.lockchance.tooltip"))
+                .setSaveConsumer(value -> CONFIG.oldTrades.lockChance = value)
+                .setTooltip(Component.translatable("config.villagerconfig.lockchance.tooltip"))
                 .build());
 
-        oldTrades.addEntry(entryBuilder.startDoubleField(Text.translatable("config.villagerconfig.unlockchance"), ConfigEntries.oldTrades.unlockChance)
+        oldTrades.addEntry(entryBuilder.startDoubleField(Component.translatable("config.villagerconfig.unlockchance"), CONFIG.oldTrades.unlockChance)
                 .setDefaultValue(20)
                 .setMin(0)
                 .setMax(100)
-                .setSaveConsumer(value -> ConfigEntries.oldTrades.unlockChance = value)
-                .setTooltip(Text.translatable("config.villagerconfig.unlockchance.tooltip"))
+                .setSaveConsumer(value -> CONFIG.oldTrades.unlockChance = value)
+                .setTooltip(Component.translatable("config.villagerconfig.unlockchance.tooltip"))
                 .build());
 
 
-        builder.setSavingRunnable(Config::saveModConfig);
+        builder.setSavingRunnable(ConfigManager::saveModConfig);
 
         return builder.build();
     }

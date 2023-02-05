@@ -3,15 +3,15 @@ package me.drex.villagerconfig.util.loot.number;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import me.drex.villagerconfig.util.loot.LootContextTypes;
+import me.drex.villagerconfig.util.loot.LootContextParams;
 import me.drex.villagerconfig.util.loot.LootNumberProviderTypes;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.provider.number.LootNumberProvider;
-import net.minecraft.loot.provider.number.LootNumberProviderType;
-import net.minecraft.util.JsonHelper;
-import net.minecraft.util.JsonSerializer;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import org.jetbrains.annotations.NotNull;
 
-public class ReferenceLootNumberProvider implements LootNumberProvider {
+public class ReferenceLootNumberProvider implements NumberProvider {
 
     private final String id;
 
@@ -20,15 +20,15 @@ public class ReferenceLootNumberProvider implements LootNumberProvider {
     }
 
     @Override
-    public float nextFloat(LootContext context) {
-        if (!context.hasParameter(LootContextTypes.NUMBER_REFERENCE)) {
+    public float getFloat(LootContext context) {
+        if (!context.hasParam(LootContextParams.NUMBER_REFERENCE)) {
             return 0f;
         }
-        return context.get(LootContextTypes.NUMBER_REFERENCE).getOrDefault(id, 0f);
+        return context.getParamOrNull(LootContextParams.NUMBER_REFERENCE).getOrDefault(id, 0f);
     }
 
     @Override
-    public LootNumberProviderType getType() {
+    public @NotNull LootNumberProviderType getType() {
         return LootNumberProviderTypes.REFERENCE;
     }
 
@@ -36,16 +36,18 @@ public class ReferenceLootNumberProvider implements LootNumberProvider {
         return new ReferenceLootNumberProvider(id);
     }
 
-    public static class Serializer implements JsonSerializer<ReferenceLootNumberProvider> {
+    public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<ReferenceLootNumberProvider> {
         public Serializer() {
         }
 
-        public void toJson(JsonObject jsonObject, ReferenceLootNumberProvider referenceLootNumberProvider, JsonSerializationContext jsonSerializationContext) {
+        @Override
+        public void serialize(JsonObject jsonObject, ReferenceLootNumberProvider referenceLootNumberProvider, @NotNull JsonSerializationContext context) {
             jsonObject.addProperty("id", referenceLootNumberProvider.id);
+
         }
 
-        public ReferenceLootNumberProvider fromJson(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext) {
-            String id = JsonHelper.getString(jsonObject, "id");
+        public @NotNull ReferenceLootNumberProvider deserialize(@NotNull JsonObject jsonObject, @NotNull JsonDeserializationContext context) {
+            String id = GsonHelper.getAsString(jsonObject, "id");
             return new ReferenceLootNumberProvider(id);
         }
     }

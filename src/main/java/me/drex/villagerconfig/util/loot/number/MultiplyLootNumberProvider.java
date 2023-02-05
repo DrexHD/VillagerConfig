@@ -4,48 +4,49 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import me.drex.villagerconfig.util.loot.LootNumberProviderTypes;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.provider.number.LootNumberProvider;
-import net.minecraft.loot.provider.number.LootNumberProviderType;
-import net.minecraft.util.JsonHelper;
-import net.minecraft.util.JsonSerializer;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import org.jetbrains.annotations.NotNull;
 
-public class MultiplyLootNumberProvider implements LootNumberProvider {
+public class MultiplyLootNumberProvider implements NumberProvider {
 
-    private final LootNumberProvider[] factors;
+    private final NumberProvider[] factors;
 
-    MultiplyLootNumberProvider(LootNumberProvider... factors) {
+    MultiplyLootNumberProvider(NumberProvider... factors) {
         this.factors = factors;
     }
 
     @Override
-    public float nextFloat(LootContext context) {
+    public float getFloat(@NotNull LootContext context) {
         float result = 1;
-        for (LootNumberProvider addend : factors) {
-            result *= addend.nextFloat(context);
+        for (NumberProvider addend : factors) {
+            result *= addend.getFloat(context);
         }
         return result;
     }
 
     @Override
-    public LootNumberProviderType getType() {
+    public @NotNull LootNumberProviderType getType() {
         return LootNumberProviderTypes.MUL;
     }
 
-    public static MultiplyLootNumberProvider create(LootNumberProvider... factors) {
+    public static MultiplyLootNumberProvider create(NumberProvider... factors) {
         return new MultiplyLootNumberProvider(factors);
     }
 
-    public static class Serializer implements JsonSerializer<MultiplyLootNumberProvider> {
+    public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<MultiplyLootNumberProvider> {
         public Serializer() {
         }
 
-        public void toJson(JsonObject jsonObject, MultiplyLootNumberProvider multiplyLootNumberProvider, JsonSerializationContext jsonSerializationContext) {
-            jsonObject.add("factors", jsonSerializationContext.serialize(multiplyLootNumberProvider.factors));
+        @Override
+        public void serialize(JsonObject jsonObject, MultiplyLootNumberProvider multiplyLootNumberProvider, JsonSerializationContext context) {
+            jsonObject.add("factors", context.serialize(multiplyLootNumberProvider.factors));
         }
 
-        public MultiplyLootNumberProvider fromJson(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext) {
-            LootNumberProvider[] factors = JsonHelper.deserialize(jsonObject, "factors", jsonDeserializationContext, LootNumberProvider[].class);
+        public @NotNull MultiplyLootNumberProvider deserialize(@NotNull JsonObject jsonObject, @NotNull JsonDeserializationContext jsonDeserializationContext) {
+            NumberProvider[] factors = GsonHelper.getAsObject(jsonObject, "factors", jsonDeserializationContext, NumberProvider[].class);
             return new MultiplyLootNumberProvider(factors);
         }
     }

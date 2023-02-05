@@ -1,17 +1,16 @@
 package me.drex.villagerconfig.mixin;
 
-import me.drex.villagerconfig.config.ConfigEntries;
 import me.drex.villagerconfig.json.data.TradeTable;
-import me.drex.villagerconfig.util.IMerchantEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.MerchantEntity;
-import net.minecraft.entity.passive.VillagerEntity;
-import net.minecraft.registry.Registries;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
-import net.minecraft.village.TradeOffers;
-import net.minecraft.village.VillagerData;
-import net.minecraft.world.World;
+import me.drex.villagerconfig.util.interfaces.IVillager;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.VillagerData;
+import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,28 +20,29 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static me.drex.villagerconfig.VillagerConfig.TRADE_MANAGER;
+import static me.drex.villagerconfig.config.ConfigManager.CONFIG;
 
-@Mixin(VillagerEntity.class)
-public abstract class VillagerEntityMixin extends MerchantEntity {
+@Mixin(Villager.class)
+public abstract class VillagerMixin extends AbstractVillager {
 
     @Shadow
     public abstract VillagerData getVillagerData();
 
-    public VillagerEntityMixin(EntityType<? extends MerchantEntity> entityType, World world) {
+    public VillagerMixin(EntityType<? extends AbstractVillager> entityType, Level world) {
         super(entityType, world);
     }
 
     @Inject(
-            method = "canRefreshTrades",
+            method = "canRestock",
             at = @At("RETURN"),
             cancellable = true
     )
     public void removeRefreshTradesInfo(CallbackInfoReturnable<Boolean> cir) {
-        if (ConfigEntries.oldTrades.enabled) cir.setReturnValue(false);
+        if (CONFIG.oldTrades.enabled) cir.setReturnValue(false);
     }
 
     @Inject(
-            method = "fillRecipes",
+            method = "updateTrades",
             at = @At(
                     value = "HEAD"
             ),
@@ -53,17 +53,17 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         if (tradeTable != null) {
             VillagerData villagerData = this.getVillagerData();
             int level = villagerData.getLevel();
-            TradeOffers.Factory[] customOffers = tradeTable.getTradeOffers(level, this.random);
-            this.fillRecipesFromPool(getOffers(), customOffers, customOffers.length);
+            VillagerTrades.ItemListing[] customOffers = tradeTable.getTradeOffers(level, this.random);
+            this.addOffersFromItemListings(getOffers(), customOffers, customOffers.length);
             ci.cancel();
         }
     }
 
     @Redirect(
-            method = "canLevelUp",
+            method = "shouldIncreaseLevel",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/village/VillagerData;canLevelUp(I)Z"
+                    target = "Lnet/minecraft/world/entity/npc/VillagerData;canLevelUp(I)Z"
             )
     )
     public boolean adjustMaxLevel(int level) {
@@ -72,10 +72,10 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     }
 
     @Redirect(
-            method = "canLevelUp",
+            method = "shouldIncreaseLevel",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/village/VillagerData;getUpperLevelExperience(I)I"
+                    target = "Lnet/minecraft/world/entity/npc/VillagerData;getMaxXpPerLevel(I)I"
             )
     )
     public int adjustUpperLevelExperience(int level) {
@@ -83,11 +83,11 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     }
 
     @Inject(
-            method = "levelUp",
+            method = "increaseMerchantCareer",
             at = @At("TAIL")
     )
     public void onLevelUp(CallbackInfo ci) {
-        if (ConfigEntries.oldTrades.enabled) ((IMerchantEntity) this).enableTrades();
+        if (CONFIG.oldTrades.enabled) ((IVillager) this).enableTrades();
     }
 
     private int customUpperLevelExperience(int level) {
@@ -97,7 +97,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                 return tradeTable.requiredExperience(level + 1);
             }
         }
-        return VillagerData.getUpperLevelExperience(level);
+        return VillagerData.getMaxXpPerLevel(level);
     }
 
     private boolean customCanLevelUp(int level) {
@@ -110,8 +110,8 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     }
 
     private TradeTable getTradeTable() {
-        if (this.world instanceof ServerWorld) {
-            Identifier identifier = Registries.VILLAGER_PROFESSION.getId(this.getVillagerData().getProfession());
+        if (this.level instanceof ServerLevel) {
+            ResourceLocation identifier = BuiltInRegistries.VILLAGER_PROFESSION.getKey(this.getVillagerData().getProfession());
             return TRADE_MANAGER.getTrade(identifier);
         }
         return null;

@@ -1,14 +1,13 @@
 package me.drex.villagerconfig.mixin;
 
-import me.drex.villagerconfig.config.ConfigEntries;
-import me.drex.villagerconfig.util.IMerchantEntity;
 import me.drex.villagerconfig.util.Math;
-import me.drex.villagerconfig.util.OldTradeOffer;
-import net.minecraft.entity.passive.MerchantEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.village.TradeOffer;
+import me.drex.villagerconfig.util.interfaces.IMerchantOffer;
+import me.drex.villagerconfig.util.interfaces.IVillager;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.trading.MerchantOffer;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,44 +19,46 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-@Mixin(TradeOffer.class)
-public abstract class TradeOfferMixin implements OldTradeOffer {
+import static me.drex.villagerconfig.config.ConfigManager.CONFIG;
+
+@Mixin(MerchantOffer.class)
+public abstract class MerchantOfferMixin implements IMerchantOffer {
 
     public boolean disabled = false;
-    private MerchantEntity merchantEntity = null;
+    private AbstractVillager merchantEntity = null;
 
     @Shadow
     @Final
-    private ItemStack firstBuyItem;
+    private ItemStack baseCostA;
 
     @Shadow
     private int uses;
 
     @Override
-    public void onUse(MerchantEntity merchant) {
+    public void onUse(AbstractVillager merchant) {
         this.merchantEntity = merchant;
     }
 
     @Redirect(
-            method = "increaseSpecialPrice",
+            method = "addToSpecialPriceDiff",
             at = @At(
                     value = "FIELD",
-                    target = "Lnet/minecraft/village/TradeOffer;specialPrice:I",
+                    target = "Lnet/minecraft/world/item/trading/MerchantOffer;specialPriceDiff:I",
                     opcode = Opcodes.PUTFIELD
             )
     )
-    public void adjustSpecialPrice(TradeOffer tradeOffer, int increment) {
-        int maxDiscount = (int) ((this.firstBuyItem.getCount()) * -(ConfigEntries.features.maxDiscount / 100));
-        int maxRaise = (int) ((this.firstBuyItem.getCount()) * (ConfigEntries.features.maxRaise / 100));
-        tradeOffer.setSpecialPrice(MathHelper.clamp(tradeOffer.getSpecialPrice() + increment, maxDiscount, maxRaise));
+    public void adjustSpecialPrice(MerchantOffer tradeOffer, int increment) {
+        int maxDiscount = (int) ((this.baseCostA.getCount()) * -(CONFIG.features.maxDiscount / 100));
+        int maxRaise = (int) ((this.baseCostA.getCount()) * (CONFIG.features.maxRaise / 100));
+        tradeOffer.setSpecialPriceDiff(Mth.clamp(tradeOffer.getSpecialPriceDiff() + increment, maxDiscount, maxRaise));
     }
 
     @Inject(
-            method = "<init>(Lnet/minecraft/nbt/NbtCompound;)V",
+            method = "<init>(Lnet/minecraft/nbt/CompoundTag;)V",
             at = @At("RETURN")
     )
-    public void readCustomTags(NbtCompound nbt, CallbackInfo ci) {
-        if (ConfigEntries.oldTrades.enabled) {
+    public void readCustomTags(CompoundTag nbt, CallbackInfo ci) {
+        if (CONFIG.oldTrades.enabled) {
             if (nbt.contains("villagerconfig_disabled", 1)) {
                 this.disabled = nbt.getBoolean("villagerconfig_disabled");
             }
@@ -65,12 +66,12 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
     }
 
     @Inject(
-            method = "toNbt",
+            method = "createTag",
             at = @At("RETURN"),
             locals = LocalCapture.CAPTURE_FAILHARD
     )
-    public void writeCustomTags(CallbackInfoReturnable<NbtCompound> cir, NbtCompound nbt) {
-        if (ConfigEntries.oldTrades.enabled) {
+    public void writeCustomTags(CallbackInfoReturnable<CompoundTag> cir, CompoundTag nbt) {
+        if (CONFIG.oldTrades.enabled) {
             nbt.putBoolean("villagerconfig_disabled", this.disabled);
         }
     }
@@ -79,30 +80,30 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
      * Re-implement old trading https://minecraft.gamepedia.com/Trading/Before_Village_%26_Pillage
      * */
     @Inject(
-            method = "use",
+            method = "increaseUses",
             at = @At("RETURN")
     )
     public void onUse(CallbackInfo ci) {
-        if (ConfigEntries.oldTrades.enabled) {
-            if (this.uses > ConfigEntries.oldTrades.minUses) {
-                if (Math.chance(ConfigEntries.oldTrades.lockChance)) {
+        if (CONFIG.oldTrades.enabled) {
+            if (this.uses > CONFIG.oldTrades.minUses) {
+                if (Math.chance(CONFIG.oldTrades.lockChance)) {
                     this.disable();
                 }
             }
-            if (this.uses > ConfigEntries.oldTrades.maxUses - 1) {
+            if (this.uses > CONFIG.oldTrades.maxUses - 1) {
                 this.disable();
             }
         }
     }
 
     @Inject(
-            method = "isDisabled",
+            method = "isOutOfStock",
             at = @At("HEAD"),
             cancellable = true
     )
     public void addOldTradeMechanics(CallbackInfoReturnable<Boolean> cir) {
-        if (ConfigEntries.features.infiniteTrades) cir.setReturnValue(false);
-        if (ConfigEntries.oldTrades.enabled) cir.setReturnValue(this.disabled);
+        if (CONFIG.features.infiniteTrades) cir.setReturnValue(false);
+        if (CONFIG.oldTrades.enabled) cir.setReturnValue(this.disabled);
     }
 
     @Inject(
@@ -111,16 +112,16 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
             cancellable = true
     )
     public void infiniteUses(CallbackInfoReturnable<Integer> cir) {
-        if (ConfigEntries.features.infiniteTrades) cir.setReturnValue(Integer.MAX_VALUE);
+        if (CONFIG.features.infiniteTrades) cir.setReturnValue(Integer.MAX_VALUE);
     }
 
     @Inject(
-            method = "updateDemandBonus",
+            method = "updateDemand",
             at = @At("HEAD"),
             cancellable = true
     )
     public void noDemand(CallbackInfo ci) {
-        if (ConfigEntries.features.infiniteTrades) ci.cancel();
+        if (CONFIG.features.infiniteTrades) ci.cancel();
     }
 
     public void enable() {
@@ -129,7 +130,7 @@ public abstract class TradeOfferMixin implements OldTradeOffer {
     }
 
     public void disable() {
-        if (merchantEntity != null) ((IMerchantEntity) merchantEntity).updateCustomOffers();
+        if (merchantEntity != null) ((IVillager) merchantEntity).updateCustomOffers();
         this.disabled = true;
     }
 

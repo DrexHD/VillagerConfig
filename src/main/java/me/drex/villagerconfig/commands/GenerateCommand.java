@@ -4,12 +4,12 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import me.drex.villagerconfig.VillagerConfig;
 import me.drex.villagerconfig.util.TradeProvider;
+import net.minecraft.ChatFormatting;
 import net.minecraft.SharedConstants;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.network.chat.Component;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -18,20 +18,20 @@ public class GenerateCommand {
 
     private static final Path GENERATED = VillagerConfig.DATA_PATH.resolve("generated");
 
-    public static LiteralArgumentBuilder<ServerCommandSource> builder() {
-        return CommandManager.literal("generate").executes(GenerateCommand::execute);
+    public static LiteralArgumentBuilder<CommandSourceStack> builder() {
+        return Commands.literal("generate").executes(GenerateCommand::execute);
     }
 
-    private static int execute(CommandContext<ServerCommandSource> context) {
-        DataGenerator dataGenerator = new DataGenerator(GENERATED, SharedConstants.getGameVersion(), true);
-        DataGenerator.Pack tradesPack = dataGenerator.createVanillaPack(true);
+    private static int execute(CommandContext<CommandSourceStack> context) {
+        DataGenerator dataGenerator = new DataGenerator(GENERATED, SharedConstants.getCurrentVersion(), true);
+        DataGenerator.PackGenerator tradesPack = dataGenerator.getVanillaPack(true);
         tradesPack.addProvider(TradeProvider::new);
         try {
             dataGenerator.run();
-            context.getSource().sendFeedback(Text.literal("Successfully generated trade data to " + GENERATED).formatted(Formatting.GREEN), false);
+            context.getSource().sendSuccess(Component.literal("Successfully generated trade data to " + GENERATED).withStyle(ChatFormatting.GREEN), false);
             return 1;
         } catch (IOException e) {
-            context.getSource().sendFeedback(Text.literal("An error occurred, please look into the console for more information.").formatted(Formatting.RED), false);
+            context.getSource().sendSuccess(Component.literal("An error occurred, please look into the console for more information.").withStyle(ChatFormatting.RED), false);
             VillagerConfig.LOGGER.error("An error occurred, while generating trade data", e);
             return 0;
         }

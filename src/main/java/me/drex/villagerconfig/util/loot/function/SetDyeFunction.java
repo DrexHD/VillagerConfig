@@ -4,34 +4,35 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
-import me.drex.villagerconfig.util.loot.LootFunctionTypes;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.DyeableItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.condition.LootCondition;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.function.ConditionalLootFunction;
-import net.minecraft.loot.function.LootFunctionType;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.JsonHelper;
+import me.drex.villagerconfig.util.loot.LootItemFunctionTypes;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.DyeableLeatherItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class SetDyeFunction extends ConditionalLootFunction {
+public class SetDyeFunction extends LootItemConditionalFunction {
 
     private final List<DyeColor> dyeColors;
     private final boolean add;
 
-    protected SetDyeFunction(LootCondition[] conditions, Collection<DyeColor> dyeColors, boolean add) {
+    protected SetDyeFunction(LootItemCondition[] conditions, Collection<DyeColor> dyeColors, boolean add) {
         super(conditions);
         this.dyeColors = ImmutableList.copyOf(dyeColors);
         this.add = add;
     }
 
     @Override
-    protected ItemStack process(ItemStack stack, LootContext context) {
-        if (!add && stack.getItem() instanceof DyeableItem dyeableItem) {
-            dyeableItem.removeColor(stack);
+    protected @NotNull ItemStack run(@NotNull ItemStack stack, @NotNull LootContext context) {
+        if (!add && stack.getItem() instanceof DyeableLeatherItem dyeableItem) {
+            dyeableItem.clearColor(stack);
         }
         List<DyeColor> colors;
         if (dyeColors.isEmpty()) {
@@ -40,18 +41,19 @@ public class SetDyeFunction extends ConditionalLootFunction {
             colors = ImmutableList.copyOf(DyeColor.values());
         }
         DyeColor color = colors.get(context.getRandom().nextInt(colors.size()));
-        return DyeableItem.blendAndSetColor(stack, Collections.singletonList(DyeItem.byColor(color)));
+        return DyeableLeatherItem.dyeArmor(stack, Collections.singletonList(DyeItem.byColor(color)));
     }
 
     @Override
-    public LootFunctionType getType() {
-        return LootFunctionTypes.SET_DYE;
+    public @NotNull LootItemFunctionType getType() {
+        return LootItemFunctionTypes.SET_DYE;
     }
 
-    public static class Serializer extends ConditionalLootFunction.Serializer<SetDyeFunction> {
+    public static class Serializer extends LootItemConditionalFunction.Serializer<SetDyeFunction> {
+
         @Override
-        public void toJson(JsonObject jsonObject, SetDyeFunction setDyeFunction, JsonSerializationContext context) {
-            super.toJson(jsonObject, setDyeFunction, context);
+        public void serialize(@NotNull JsonObject jsonObject, @NotNull SetDyeFunction setDyeFunction, @NotNull JsonSerializationContext context) {
+            super.serialize(jsonObject, setDyeFunction, context);
             if (!setDyeFunction.dyeColors.isEmpty()) {
                 JsonArray jsonArray = new JsonArray();
                 for (DyeColor dyeColor : setDyeFunction.dyeColors) {
@@ -63,24 +65,24 @@ public class SetDyeFunction extends ConditionalLootFunction {
         }
 
         @Override
-        public SetDyeFunction fromJson(JsonObject jsonObject, JsonDeserializationContext context, LootCondition[] conditions) {
+        public @NotNull SetDyeFunction deserialize(JsonObject jsonObject, @NotNull JsonDeserializationContext context, LootItemCondition @NotNull [] conditions) {
             ArrayList<DyeColor> dyeColors = Lists.newArrayList();
             if (jsonObject.has("dye_colors")) {
-                JsonArray jsonArray = JsonHelper.getArray(jsonObject, "dye_colors");
+                JsonArray jsonArray = GsonHelper.getAsJsonArray(jsonObject, "dye_colors");
                 for (JsonElement jsonElement : jsonArray) {
-                    String dyeId = JsonHelper.asString(jsonElement, "dye_color");
+                    String dyeId = GsonHelper.convertToString(jsonElement, "dye_color");
                     DyeColor dyeColor = DyeColor.byName(dyeId, null);
                     if (dyeColor == null) throw new JsonSyntaxException("Unknown dye color '" + dyeId + "'");
                     dyeColors.add(dyeColor);
                 }
             }
-            boolean add = JsonHelper.getBoolean(jsonObject, "add", false);
+            boolean add = GsonHelper.getAsBoolean(jsonObject, "add", false);
             return new SetDyeFunction(conditions, dyeColors, add);
         }
     }
 
     public static class Builder
-            extends ConditionalLootFunction.Builder<SetDyeFunction.Builder> {
+            extends LootItemConditionalFunction.Builder<SetDyeFunction.Builder> {
         private final Set<DyeColor> dyeColors = Sets.newHashSet();
         private final boolean add;
 
@@ -93,7 +95,7 @@ public class SetDyeFunction extends ConditionalLootFunction {
         }
 
         @Override
-        protected Builder getThisBuilder() {
+        protected @NotNull Builder getThis() {
             return this;
         }
 
@@ -103,7 +105,7 @@ public class SetDyeFunction extends ConditionalLootFunction {
         }
 
         @Override
-        public SetDyeFunction build() {
+        public @NotNull SetDyeFunction build() {
             return new SetDyeFunction(this.getConditions(), this.dyeColors, add);
         }
 

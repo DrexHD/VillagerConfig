@@ -2,9 +2,9 @@ package me.drex.villagerconfig.json.data;
 
 import com.google.common.collect.Sets;
 import com.google.gson.*;
-import net.minecraft.util.JsonHelper;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.village.TradeOffers;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.npc.VillagerTrades;
 
 import java.lang.reflect.Type;
 import java.util.HashSet;
@@ -12,14 +12,14 @@ import java.util.HashSet;
 public class TradeGroup {
 
     final int numToSelect;
-    final TradeOffers.Factory[] trades;
+    final VillagerTrades.ItemListing[] trades;
 
-    public TradeGroup(int numToSelect, TradeOffers.Factory[] trades) {
+    public TradeGroup(int numToSelect, VillagerTrades.ItemListing[] trades) {
         this.numToSelect = numToSelect;
         this.trades = trades;
     }
 
-    public TradeOffers.Factory[] getTrades(Random random) {
+    public VillagerTrades.ItemListing[] getTrades(RandomSource random) {
         HashSet<Integer> set = Sets.newHashSet();
         if (trades.length > numToSelect) {
             while (set.size() < numToSelect) {
@@ -28,7 +28,7 @@ public class TradeGroup {
         } else {
             return trades;
         }
-        TradeOffers.Factory[] factories = new TradeOffers.Factory[set.size()];
+        VillagerTrades.ItemListing[] factories = new VillagerTrades.ItemListing[set.size()];
         int index = 0;
         for (Integer integer : set) {
             factories[index] = trades[integer];
@@ -41,9 +41,9 @@ public class TradeGroup {
 
         @Override
         public TradeGroup deserialize(JsonElement jsonElement, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject jsonObject = JsonHelper.asObject(jsonElement, "trade group");
-            TradeOffers.Factory[] trades = JsonHelper.deserialize(jsonObject, "trades", context, TradeOffers.Factory[].class);
-            int numToSelect = JsonHelper.getInt(jsonObject, "num_to_select");
+            JsonObject jsonObject = GsonHelper.convertToJsonObject(jsonElement, "trade group");
+            VillagerTrades.ItemListing[] trades = GsonHelper.getAsObject(jsonObject, "trades", context, VillagerTrades.ItemListing[].class);
+            int numToSelect = GsonHelper.getAsInt(jsonObject, "num_to_select");
             return new TradeGroup(numToSelect, trades);
         }
 

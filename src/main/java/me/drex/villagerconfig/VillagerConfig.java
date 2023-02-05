@@ -1,14 +1,14 @@
 package me.drex.villagerconfig;
 
 import me.drex.villagerconfig.commands.VillagerConfigCommand;
-import me.drex.villagerconfig.config.Config;
+import me.drex.villagerconfig.config.ConfigManager;
 import me.drex.villagerconfig.json.TradeGsons;
 import me.drex.villagerconfig.util.TradeManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.resource.ResourceType;
+import net.minecraft.server.packs.PackType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,8 +23,8 @@ public class VillagerConfig implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(TRADE_MANAGER);
-        Config.load();
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(TRADE_MANAGER);
+        ConfigManager.load();
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             VillagerConfigCommand.register(dispatcher);
         });

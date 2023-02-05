@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Major trade schema rewrite (not backwards compatible)
+- Config2Brigadier for command config
 
 ### Changed
 - Use `fabric-resource-loader-v0` api instead of mixins
+- Mappings to official mappings
 
 ## [3.0.5] - 2022-08-10
 ### Fixed
