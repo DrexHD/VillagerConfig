@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.IntUnaryOperator;
+import me.drex.villagerconfig.VillagerConfig;
 import me.drex.villagerconfig.json.TradeGsons;
 import me.drex.villagerconfig.json.data.BehaviorTrade;
 import me.drex.villagerconfig.json.data.TradeGroup;
@@ -18,10 +19,10 @@ import me.drex.villagerconfig.util.loot.number.MultiplyLootNumberProvider;
 import me.drex.villagerconfig.util.loot.number.ReferenceLootNumberProvider;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.NbtPredicate;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.data.CachedOutput;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -40,53 +41,69 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyC
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 import static me.drex.villagerconfig.util.TradeProvider.OfferCountType.VILLAGER;
 import static me.drex.villagerconfig.util.TradeProvider.OfferCountType.WANDERING_TRADER;
 
 public class TradeProvider implements DataProvider {
 
-    private final PackOutput.PathProvider pathResolver;
+    private static final Logger LOGGER = VillagerConfig.LOGGER;
     public static final ResourceLocation WANDERING_TRADER_ID = new ResourceLocation("wanderingtrader");
     private static final IntUnaryOperator WANDERING_TRADER_COUNT = i -> switch (i) {
         case 1 -> 5;
         case 2 -> 1;
         default -> 0;
     };
+    private final DataGenerator root;
 
-    public TradeProvider(PackOutput output) {
-        this.pathResolver = output.createPathProvider(PackOutput.Target.DATA_PACK, "trades");
+    public TradeProvider(DataGenerator root) {
+        this.root = root;
     }
 
     @Override
-    public @NotNull CompletableFuture<?> run(@NotNull CachedOutput writer) {
+    public void run(@NotNull CachedOutput cache) {
         HashMap<ResourceLocation, TradeData> map = Maps.newHashMap();
 
         // Save all villager trades
-        for (VillagerProfession villagerProfession : BuiltInRegistries.VILLAGER_PROFESSION) {
-            map.put(BuiltInRegistries.VILLAGER_PROFESSION.getKey(villagerProfession), new TradeData(VillagerTrades.TRADES.getOrDefault(villagerProfession, new Int2ObjectArrayMap<>()), VILLAGER));
+        for (VillagerProfession villagerProfession : Registry.VILLAGER_PROFESSION) {
+            map.put(Registry.VILLAGER_PROFESSION.getKey(villagerProfession), new TradeData(VillagerTrades.TRADES.getOrDefault(villagerProfession, new Int2ObjectArrayMap<>()), VILLAGER));
         }
         // Save wandering trader trades
         map.put(WANDERING_TRADER_ID, new TradeData(VillagerTrades.WANDERING_TRADER_TRADES, WANDERING_TRADER));
-        return CompletableFuture.allOf(map.entrySet().stream().map(entry -> {
-            ResourceLocation identifier = entry.getKey();
-            TradeData tradeData = entry.getValue();
-            Path path = this.pathResolver.json(identifier);
-            return DataProvider.saveStable(writer, toJson(tradeData), path);
-        }).toArray(CompletableFuture[]::new));
+
+        map.forEach((merchantId, tradeData) -> {
+            Path path = getOutput(merchantId);
+            JsonElement jsonElements;
+            try {
+                jsonElements = toJson(tradeData);
+            } catch (Exception e) {
+                LOGGER.error("Couldn't serialize trade data {}", path, e);
+                return;
+            }
+            try {
+                DataProvider.saveStable(cache, jsonElements, path);
+            } catch (IOException e) {
+                LOGGER.error("Couldn't save trade data {}", path, e);
+            }
+        });
     }
 
     @Override
     public @NotNull String getName() {
         return "Trades";
+    }
+
+    private Path getOutput(ResourceLocation merchantId) {
+        return this.root.getOutputFolder().resolve("data/" + merchantId.getNamespace() + "/trades/" + merchantId.getPath() + ".json");
     }
 
     private JsonElement toJson(TradeData tradeData) {
@@ -130,12 +147,12 @@ public class TradeProvider implements DataProvider {
                     LootItem.lootTableItem(factory.itemStack.getItem()).apply(new EnchantWithLevelsFunction.Builder(ReferenceLootNumberProvider.create("enchantLevel")))
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses).numberReference("enchantLevel", UniformGenerator.between(5, 19)).build();
         } else if (original instanceof VillagerTrades.EmeraldsForVillagerTypeItem factory) {
-            LootPoolEntryContainer.Builder<?>[] children = new LootPoolEntryContainer.Builder[BuiltInRegistries.VILLAGER_TYPE.size()];
+            LootPoolEntryContainer.Builder<?>[] children = new LootPoolEntryContainer.Builder[Registry.VILLAGER_TYPE.size()];
             int i = 0;
-            for (VillagerType villagerType : BuiltInRegistries.VILLAGER_TYPE) {
+            for (VillagerType villagerType : Registry.VILLAGER_TYPE) {
                 CompoundTag root = new CompoundTag();
                 CompoundTag villagerData = new CompoundTag();
-                villagerData.putString("type", BuiltInRegistries.VILLAGER_TYPE.getKey(villagerType).toString());
+                villagerData.putString("type", Registry.VILLAGER_TYPE.getKey(villagerType).toString());
                 root.put("VillagerData", villagerData);
                 children[i] = LootItem.lootTableItem(factory.trades.get(villagerType)).apply(
                         SetItemCountFunction.setCount(ConstantValue.exactly(factory.cost))
@@ -147,7 +164,7 @@ public class TradeProvider implements DataProvider {
                     LootItem.lootTableItem(Items.EMERALD)
             ).priceMultiplier(0.05f).traderExperience(factory.villagerXp).maxUses(factory.maxUses).build();
         } else if (original instanceof VillagerTrades.TippedArrowForItemsAndEmeralds factory) {
-            List<Potion> potions = BuiltInRegistries.POTION.stream().filter(potion -> !potion.getEffects().isEmpty() && PotionBrewing.isBrewablePotion(potion)).toList();
+            List<Potion> potions = Registry.POTION.stream().filter(potion -> !potion.getEffects().isEmpty() && PotionBrewing.isBrewablePotion(potion)).toList();
             LootPoolEntryContainer.Builder<?>[] entries = new LootPoolEntryContainer.Builder[potions.size()];
             for (int i = 0; i < potions.size(); i++) {
                 Potion potion = potions.get(i);

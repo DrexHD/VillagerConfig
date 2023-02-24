@@ -2,7 +2,7 @@ package me.drex.villagerconfig.mixin;
 
 import me.drex.villagerconfig.json.data.TradeTable;
 import me.drex.villagerconfig.util.interfaces.IVillager;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
@@ -111,7 +111,7 @@ public abstract class VillagerMixin extends AbstractVillager {
 
     private TradeTable getTradeTable() {
         if (this.level instanceof ServerLevel) {
-            ResourceLocation identifier = BuiltInRegistries.VILLAGER_PROFESSION.getKey(this.getVillagerData().getProfession());
+            ResourceLocation identifier = Registry.VILLAGER_PROFESSION.getKey(this.getVillagerData().getProfession());
             return TRADE_MANAGER.getTrade(identifier);
         }
         return null;

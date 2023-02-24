@@ -45,6 +45,10 @@
     "fabric-lifecycle-events-v1": "*",
     "java": ">=17",
     "fiber": ">=0.23.0-",
-    "minecraft": "1.19.x"
+    "minecraft": [
+      "1.19",
+      "1.19.1",
+      "1.19.2"
+    ]
   }
 }

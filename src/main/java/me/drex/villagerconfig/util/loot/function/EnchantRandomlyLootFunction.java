@@ -7,7 +7,7 @@ import com.google.gson.*;
 import com.mojang.logging.LogUtils;
 import me.drex.villagerconfig.util.loot.LootContextParams;
 import me.drex.villagerconfig.util.loot.LootItemFunctionTypes;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
@@ -59,7 +59,7 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
         if (!this.include.isEmpty()) {
             return this.include;
         }
-        Stream<Enchantment> stream = BuiltInRegistries.ENCHANTMENT.stream();
+        Stream<Enchantment> stream = Registry.ENCHANTMENT.stream();
         if (!this.exclude.isEmpty()) {
             stream = stream.filter(enchantment -> !this.exclude.contains(enchantment));
         }
@@ -138,7 +138,7 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
             if (!enchantments.isEmpty()) {
                 JsonArray jsonArray = new JsonArray();
                 for (Enchantment enchantment : enchantments) {
-                    ResourceLocation identifier = BuiltInRegistries.ENCHANTMENT.getKey(enchantment);
+                    ResourceLocation identifier = Registry.ENCHANTMENT.getKey(enchantment);
                     if (identifier == null) {
                         throw new IllegalArgumentException("Don't know how to serialize enchantment " + enchantment);
                     }
@@ -162,7 +162,7 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
                 JsonArray jsonArray = GsonHelper.getAsJsonArray(jsonObject, key);
                 for (JsonElement jsonElement : jsonArray) {
                     String string = GsonHelper.convertToString(jsonElement, "enchantment");
-                    Enchantment enchantment = BuiltInRegistries.ENCHANTMENT.getOptional(new ResourceLocation(string)).orElseThrow(() -> new JsonSyntaxException("Unknown enchantment '" + string + "'"));
+                    Enchantment enchantment = Registry.ENCHANTMENT.getOptional(new ResourceLocation(string)).orElseThrow(() -> new JsonSyntaxException("Unknown enchantment '" + string + "'"));
                     enchantments.add(enchantment);
                 }
             }

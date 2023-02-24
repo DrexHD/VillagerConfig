@@ -35,3 +35,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           changelog-file: changes.md
           files: build/libs/!(*-@(dev|sources)).jar
+          game-versions: |
+            1.19
+            1.19.1
+            1.19.2

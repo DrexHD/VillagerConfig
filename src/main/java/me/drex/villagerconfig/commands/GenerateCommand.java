@@ -11,8 +11,8 @@ import net.minecraft.commands.Commands;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
 
-import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Collections;
 
 public class GenerateCommand {
 
@@ -23,9 +23,8 @@ public class GenerateCommand {
     }
 
     private static int execute(CommandContext<CommandSourceStack> context) {
-        DataGenerator dataGenerator = new DataGenerator(GENERATED, SharedConstants.getCurrentVersion(), true);
-        DataGenerator.PackGenerator tradesPack = dataGenerator.getVanillaPack(true);
-        tradesPack.addProvider(TradeProvider::new);
+        DataGenerator dataGenerator = new DataGenerator(GENERATED, Collections.emptyList(), SharedConstants.getCurrentVersion(), true);
+        dataGenerator.addProvider(true, new TradeProvider(dataGenerator));
         try {
             dataGenerator.run();
             context.getSource().sendSuccess(Component.literal("Successfully generated trade data to " + GENERATED).withStyle(ChatFormatting.GREEN), false);
