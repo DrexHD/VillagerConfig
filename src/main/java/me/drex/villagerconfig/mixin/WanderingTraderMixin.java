@@ -30,7 +30,7 @@ public abstract class WanderingTraderMixin extends AbstractVillager {
         if (tradeTable != null) {
             // Cancel vanilla trades
             ci.cancel();
-            for (int level = 0; level < tradeTable.maxLevel(); level++) {
+            for (int level = 1; level <= tradeTable.maxLevel(); level++) {
                 VillagerTrades.ItemListing[] tradeOffers = tradeTable.getTradeOffers(level, this.random);
                 MerchantOffers tradeOfferList = this.getOffers();
                 this.addOffersFromItemListings(tradeOfferList, tradeOffers, tradeOffers.length);
