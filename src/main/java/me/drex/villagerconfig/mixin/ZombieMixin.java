@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static me.drex.villagerconfig.config.ConfigManager.CONFIG;
@@ -19,10 +20,10 @@ public abstract class ZombieMixin {
     private Difficulty difficulty = Difficulty.PEACEFUL;
 
     @Inject(
-            method = "wasKilled",
+            method = "killed",
             at = @At("HEAD")
     )
-    public void calculateConversionChance(ServerLevel world, LivingEntity other, CallbackInfoReturnable<Boolean> cir) {
+    public void calculateConversionChance(ServerLevel world, LivingEntity other, CallbackInfo ci) {
         double conversionChance = CONFIG.features.conversionChance;
         if (conversionChance < 0D) {
             difficulty = world.getDifficulty();
@@ -36,7 +37,7 @@ public abstract class ZombieMixin {
     }
 
     @Redirect(
-            method = "wasKilled",
+            method = "killed",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/server/level/ServerLevel;getDifficulty()Lnet/minecraft/world/Difficulty;"

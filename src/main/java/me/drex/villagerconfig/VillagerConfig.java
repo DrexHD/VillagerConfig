@@ -5,7 +5,7 @@ import me.drex.villagerconfig.config.ConfigManager;
 import me.drex.villagerconfig.json.TradeGsons;
 import me.drex.villagerconfig.util.TradeManager;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.packs.PackType;
@@ -25,7 +25,7 @@ public class VillagerConfig implements ModInitializer {
     public void onInitialize() {
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(TRADE_MANAGER);
         ConfigManager.load();
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             VillagerConfigCommand.register(dispatcher);
         });
     }

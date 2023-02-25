@@ -2,10 +2,10 @@ package me.drex.villagerconfig.json.data;
 
 import com.google.gson.*;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.npc.VillagerTrades;
 
 import java.lang.reflect.Type;
+import java.util.Random;
 
 public class TradeTable {
 
@@ -23,7 +23,7 @@ public class TradeTable {
         return TradeTier.EMPTY;
     }
 
-    public VillagerTrades.ItemListing[] getTradeOffers(int level, RandomSource random) {
+    public VillagerTrades.ItemListing[] getTradeOffers(int level, Random random) {
         if (random == null) throw new IllegalArgumentException("Random must not be null");
         TradeTier tradeTier = getTradeTier(level);
         return tradeTier.getTradeOffers(random);

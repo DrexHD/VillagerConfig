@@ -20,9 +20,9 @@ import me.drex.villagerconfig.util.loot.number.ReferenceLootNumberProvider;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.NbtPredicate;
 import net.minecraft.core.Registry;
-import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.HashCache;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -70,7 +70,7 @@ public class TradeProvider implements DataProvider {
     }
 
     @Override
-    public void run(@NotNull CachedOutput cache) {
+    public void run(@NotNull HashCache cache) {
         HashMap<ResourceLocation, TradeData> map = Maps.newHashMap();
 
         // Save all villager trades
@@ -90,7 +90,7 @@ public class TradeProvider implements DataProvider {
                 return;
             }
             try {
-                DataProvider.saveStable(cache, jsonElements, path);
+                DataProvider.save(TradeGsons.GSON, cache, jsonElements, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save trade data {}", path, e);
             }

@@ -11,7 +11,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -45,7 +44,7 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
 
     @Override
     protected @NotNull ItemStack run(@NotNull ItemStack stack, LootContext context) {
-        RandomSource random = context.getRandom();
+        Random random = context.getRandom();
         List<Enchantment> enchantments = getEnchantments(stack);
         if (enchantments.isEmpty()) {
             LOGGER.warn("Couldn't find a compatible enchantment for {}", stack);
@@ -70,7 +69,7 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
         return stream.filter(enchantment -> isBook || enchantment.canEnchant(stack)).toList();
     }
 
-    private static ItemStack addEnchantmentToStack(ItemStack stack, Enchantment enchantment, RandomSource random, LootContext context) {
+    private static ItemStack addEnchantmentToStack(ItemStack stack, Enchantment enchantment, Random random, LootContext context) {
         int level = Mth.nextInt(random, enchantment.getMinLevel(), enchantment.getMaxLevel());
         if (stack.is(Items.BOOK)) {
             stack = new ItemStack(Items.ENCHANTED_BOOK);

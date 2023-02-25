@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import me.drex.villagerconfig.util.interfaces.IMerchantOffer;
 import me.drex.villagerconfig.util.interfaces.IVillager;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
@@ -28,6 +27,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Random;
+
 import static me.drex.villagerconfig.config.ConfigManager.CONFIG;
 
 @Mixin(AbstractVillager.class)
@@ -46,7 +47,7 @@ public abstract class AbstractVillagerMixin extends AgeableMob implements IVilla
     public abstract @Nullable Player getTradingPlayer();
 
     // A random instance, that uses the same seed to ensure trades don't change
-    private RandomSource semiRandom;
+    private Random semiRandom;
 
     protected AbstractVillagerMixin(EntityType<? extends AgeableMob> entityType, Level world) {
         super(entityType, world);
@@ -64,7 +65,7 @@ public abstract class AbstractVillagerMixin extends AgeableMob implements IVilla
             int level = villager.getVillagerData().getLevel();
             seed += level;
         }
-        semiRandom = RandomSource.create(seed);
+        semiRandom = new Random(seed);
     }
 
     @WrapOperation(
@@ -72,10 +73,10 @@ public abstract class AbstractVillagerMixin extends AgeableMob implements IVilla
             at = @At(
                     value = "FIELD",
                     opcode = Opcodes.GETFIELD,
-                    target = "Lnet/minecraft/world/entity/npc/AbstractVillager;random:Lnet/minecraft/util/RandomSource;"
+                    target = "Lnet/minecraft/world/entity/npc/AbstractVillager;random:Ljava/util/Random;"
             )
     )
-    public RandomSource replaceRandom(AbstractVillager merchantEntity, Operation<RandomSource> original) {
+    public Random replaceRandom(AbstractVillager merchantEntity, Operation<Random> original) {
         return CONFIG.features.tradeCycling ? original.call(merchantEntity) : this.semiRandom;
     }
 

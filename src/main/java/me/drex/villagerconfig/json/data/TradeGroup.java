@@ -3,11 +3,11 @@ package me.drex.villagerconfig.json.data;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.npc.VillagerTrades;
 
 import java.lang.reflect.Type;
 import java.util.HashSet;
+import java.util.Random;
 
 public class TradeGroup {
 
@@ -19,7 +19,7 @@ public class TradeGroup {
         this.trades = trades;
     }
 
-    public VillagerTrades.ItemListing[] getTrades(RandomSource random) {
+    public VillagerTrades.ItemListing[] getTrades(Random random) {
         HashSet<Integer> set = Sets.newHashSet();
         if (trades.length > numToSelect) {
             while (set.size() < numToSelect) {

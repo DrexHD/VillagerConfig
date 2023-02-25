@@ -7,6 +7,7 @@ import me.drex.villagerconfig.config.ConfigManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 import static net.minecraft.commands.Commands.literal;
 
@@ -19,7 +20,7 @@ public class ReloadCommand {
     private static int execute(CommandContext<CommandSourceStack> context) {
         ConfigManager.load();
         VillagerConfig.LOGGER.info("VillagerConfig config reloaded!");
-        context.getSource().sendSuccess(Component.literal("VillagerConfig config reloaded.").withStyle(ChatFormatting.GREEN), false);
+        context.getSource().sendSuccess(new TextComponent("VillagerConfig config reloaded.").withStyle(ChatFormatting.GREEN), false);
         return 1;
     }
 

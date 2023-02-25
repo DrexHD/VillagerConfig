@@ -6,7 +6,6 @@ import me.drex.villagerconfig.mixin.MerchantOfferAccessor;
 import me.drex.villagerconfig.util.loot.LootContextParams;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
@@ -22,6 +21,7 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -49,7 +49,7 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
 
     @Nullable
     @Override
-    public MerchantOffer getOffer(Entity entity, RandomSource random) {
+    public MerchantOffer getOffer(Entity entity, Random random) {
 
         LootContext.Builder builder = new LootContext.Builder((ServerLevel) entity.level)
                 .withRandom(random)
@@ -77,7 +77,7 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
         return tradeOffer;
     }
 
-    private Map<String, Float> generateNumberReferences(Entity entity, RandomSource random) {
+    private Map<String, Float> generateNumberReferences(Entity entity, Random random) {
         LootContext.Builder simpleBuilder = new LootContext.Builder((ServerLevel) entity.level).withRandom(random);
         LootContext simpleContext = simpleBuilder.create(net.minecraft.world.level.storage.loot.parameters.LootContextParamSets.EMPTY);
         return referenceProviders.entrySet().stream().collect(

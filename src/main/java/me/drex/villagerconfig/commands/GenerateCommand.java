@@ -10,6 +10,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 import java.nio.file.Path;
 import java.util.Collections;
@@ -23,14 +24,14 @@ public class GenerateCommand {
     }
 
     private static int execute(CommandContext<CommandSourceStack> context) {
-        DataGenerator dataGenerator = new DataGenerator(GENERATED, Collections.emptyList(), SharedConstants.getCurrentVersion(), true);
-        dataGenerator.addProvider(true, new TradeProvider(dataGenerator));
+        DataGenerator dataGenerator = new DataGenerator(GENERATED, Collections.emptyList());
+        dataGenerator.addProvider(new TradeProvider(dataGenerator));
         try {
             dataGenerator.run();
-            context.getSource().sendSuccess(Component.literal("Successfully generated trade data to " + GENERATED).withStyle(ChatFormatting.GREEN), false);
+            context.getSource().sendSuccess(new TextComponent("Successfully generated trade data to " + GENERATED).withStyle(ChatFormatting.GREEN), false);
             return 1;
         } catch (Throwable e) {
-            context.getSource().sendFailure(Component.literal("An error occurred, please look into the console for more information."));
+            context.getSource().sendFailure(new TextComponent("An error occurred, please look into the console for more information."));
             VillagerConfig.LOGGER.error("An error occurred, while generating trade data", e);
             return 0;
         }

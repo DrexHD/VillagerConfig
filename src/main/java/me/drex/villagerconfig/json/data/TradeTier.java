@@ -2,12 +2,12 @@ package me.drex.villagerconfig.json.data;
 
 import com.google.gson.*;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.npc.VillagerTrades;
 
 import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class TradeTier {
 
@@ -21,7 +21,7 @@ public class TradeTier {
         this.groups = groups;
     }
 
-    protected VillagerTrades.ItemListing[] getTradeOffers(RandomSource random) {
+    protected VillagerTrades.ItemListing[] getTradeOffers(Random random) {
         List<VillagerTrades.ItemListing> trades = new LinkedList<>();
         if (this.groups != null) {
             for (TradeGroup group : this.groups) {
