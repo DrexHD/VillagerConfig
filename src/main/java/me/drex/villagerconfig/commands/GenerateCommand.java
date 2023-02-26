@@ -11,7 +11,6 @@ import net.minecraft.commands.Commands;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 public class GenerateCommand {
