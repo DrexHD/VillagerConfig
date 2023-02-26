@@ -42,11 +42,9 @@ dependencies {
 
     implementation annotationProcessor("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
 
-    //modImplementation include('com.github.samolego.Config2Brigadier:config2brigadier-fabric:2ef4ad70e5')
     modImplementation include("com.github.samolego.Config2Brigadier:config2brigadier-fabric:${project.config2brigadier_version}") {
         exclude group: "net.fabricmc.fabric-api"
     }
-
     modImplementation ("com.terraformersmc:modmenu:${project.mod_menu_version}") {
         exclude group: "net.fabricmc.fabric-api"
     }
