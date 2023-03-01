@@ -40,7 +40,8 @@ dependencies {
         modImplementation include(fabricApi.module(it, project.fabric_version))
     }
 
-    implementation annotationProcessor("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
+    implementation include("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
+    annotationProcessor("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
 
     modImplementation ("com.terraformersmc:modmenu:${project.mod_menu_version}") {
         exclude group: "net.fabricmc.fabric-api"
