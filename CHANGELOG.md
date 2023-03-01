@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.1] - 2023-03-01
+### Fixed
+- Immediate crash on startup
+
 ## [4.0.0] - 2023-02-26
 ### Added
 - Major trade schema rewrite (not backwards compatible)
