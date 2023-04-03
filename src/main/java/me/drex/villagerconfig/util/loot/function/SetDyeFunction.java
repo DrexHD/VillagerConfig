@@ -35,7 +35,7 @@ public class SetDyeFunction extends LootItemConditionalFunction {
             dyeableItem.clearColor(stack);
         }
         List<DyeColor> colors;
-        if (dyeColors.isEmpty()) {
+        if (!dyeColors.isEmpty()) {
             colors = dyeColors;
         } else {
             colors = ImmutableList.copyOf(DyeColor.values());
