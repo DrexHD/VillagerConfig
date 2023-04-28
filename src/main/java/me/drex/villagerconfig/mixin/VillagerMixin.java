@@ -110,7 +110,7 @@ public abstract class VillagerMixin extends AbstractVillager {
     }
 
     private TradeTable getTradeTable() {
-        if (this.level instanceof ServerLevel) {
+        if (this.level() instanceof ServerLevel) {
             ResourceLocation identifier = BuiltInRegistries.VILLAGER_PROFESSION.getKey(this.getVillagerData().getProfession());
             return TRADE_MANAGER.getTrade(identifier);
         }

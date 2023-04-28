@@ -39,7 +39,7 @@ public abstract class WanderingTraderMixin extends AbstractVillager {
     }
 
     private TradeTable getTradeTable() {
-        if (this.level instanceof ServerLevel) {
+        if (this.level() instanceof ServerLevel) {
             TradeManager tradeManager = VillagerConfig.TRADE_MANAGER;
             return tradeManager.getTrade(TradeProvider.WANDERING_TRADER_ID);
         }

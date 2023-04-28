@@ -44,7 +44,6 @@
     "fabric-command-api-v2": "*",
     "fabric-lifecycle-events-v1": "*",
     "java": ">=17",
-    "fiber": ">=0.23.0-",
-    "minecraft": "1.19.x"
+    "fiber": ">=0.23.0-"
   }
 }

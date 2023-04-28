@@ -51,7 +51,7 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
     @Override
     public MerchantOffer getOffer(Entity entity, RandomSource random) {
 
-        LootContext.Builder builder = new LootContext.Builder((ServerLevel) entity.level)
+        LootContext.Builder builder = new LootContext.Builder((ServerLevel) entity.level())
                 .withRandom(random)
                 .withParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.THIS_ENTITY, entity)
                 .withParameter(LootContextParams.NUMBER_REFERENCE, generateNumberReferences(entity, random));
@@ -78,7 +78,7 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
     }
 
     private Map<String, Float> generateNumberReferences(Entity entity, RandomSource random) {
-        LootContext.Builder simpleBuilder = new LootContext.Builder((ServerLevel) entity.level).withRandom(random);
+        LootContext.Builder simpleBuilder = new LootContext.Builder((ServerLevel) entity.level()).withRandom(random);
         LootContext simpleContext = simpleBuilder.create(net.minecraft.world.level.storage.loot.parameters.LootContextParamSets.EMPTY);
         return referenceProviders.entrySet().stream().collect(
                 Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getFloat(simpleContext))
