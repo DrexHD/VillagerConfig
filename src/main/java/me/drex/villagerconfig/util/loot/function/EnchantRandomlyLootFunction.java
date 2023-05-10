@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
 import com.mojang.logging.LogUtils;
-import me.drex.villagerconfig.util.loot.LootContextParams;
+import me.drex.villagerconfig.util.loot.VCLootContextParams;
 import me.drex.villagerconfig.util.loot.LootItemFunctionTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -78,8 +78,8 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
         } else {
             stack.enchant(enchantment, level);
         }
-        if (context.hasParam(LootContextParams.NUMBER_REFERENCE)) {
-            Map<String, Float> referenceProviders = context.getParamOrNull(LootContextParams.NUMBER_REFERENCE);
+        if (context.hasParam(VCLootContextParams.NUMBER_REFERENCE)) {
+            Map<String, Float> referenceProviders = context.getParamOrNull(VCLootContextParams.NUMBER_REFERENCE);
             referenceProviders.put("enchantmentLevel", (float) level);
             referenceProviders.put("treasureMultiplier", enchantment.isTreasureOnly() ? (float) 2 : 1);
         }

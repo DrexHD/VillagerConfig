@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static me.drex.villagerconfig.VillagerConfig.modId;
 
-public class LootContextParams {
+public class VCLootContextParams {
 
     public static final LootContextParam<Map<String, Float>> NUMBER_REFERENCE = LootContextParamsAccessor.invokeCreate(modId("number_reference"));
     public static final LootContextParamSet VILLAGER_LOOT_CONTEXT = LootContextParamSetsAccessor.invokeRegister("villager", builder -> builder.required(net.minecraft.world.level.storage.loot.parameters.LootContextParams.THIS_ENTITY).required(NUMBER_REFERENCE));

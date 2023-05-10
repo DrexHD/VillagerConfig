@@ -1,6 +1,6 @@
 package me.drex.villagerconfig.mixin.loot;
 
-import me.drex.villagerconfig.util.loot.LootContextParams;
+import me.drex.villagerconfig.util.loot.VCLootContextParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,7 +12,7 @@ public class LootContextParamSetsMixin {
 
     @Inject(method = "<clinit>", at = @At("RETURN"))
     private static void onClInit(CallbackInfo ci) {
-        LootContextParams.init();
+        VCLootContextParams.init();
     }
 
 }

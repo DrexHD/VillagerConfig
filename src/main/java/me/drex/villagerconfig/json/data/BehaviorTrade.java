@@ -3,7 +3,7 @@ package me.drex.villagerconfig.json.data;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import me.drex.villagerconfig.mixin.MerchantOfferAccessor;
-import me.drex.villagerconfig.util.loot.LootContextParams;
+import me.drex.villagerconfig.util.loot.VCLootContextParams;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
@@ -12,8 +12,12 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.Nullable;
@@ -51,11 +55,11 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
     @Override
     public MerchantOffer getOffer(Entity entity, RandomSource random) {
 
-        LootContext.Builder builder = new LootContext.Builder((ServerLevel) entity.level())
-                .withRandom(random)
-                .withParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.THIS_ENTITY, entity)
-                .withParameter(LootContextParams.NUMBER_REFERENCE, generateNumberReferences(entity, random));
-        LootContext lootContext = builder.create(LootContextParams.VILLAGER_LOOT_CONTEXT);
+        LootParams lootParams = new LootParams.Builder((ServerLevel) entity.level())
+                .withOptionalParameter(LootContextParams.THIS_ENTITY, entity)
+                .withParameter(VCLootContextParams.NUMBER_REFERENCE, generateNumberReferences(entity, random))
+                .create(VCLootContextParams.VILLAGER_LOOT_CONTEXT);
+        LootContext lootContext = new LootContext.Builder(lootParams).create(LootTable.DEFAULT_RANDOM_SEQUENCE);
 
         AtomicReference<ItemStack> costA = new AtomicReference<>(ItemStack.EMPTY);
         AtomicReference<ItemStack> costB = new AtomicReference<>(ItemStack.EMPTY);
@@ -78,8 +82,9 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
     }
 
     private Map<String, Float> generateNumberReferences(Entity entity, RandomSource random) {
-        LootContext.Builder simpleBuilder = new LootContext.Builder((ServerLevel) entity.level()).withRandom(random);
-        LootContext simpleContext = simpleBuilder.create(net.minecraft.world.level.storage.loot.parameters.LootContextParamSets.EMPTY);
+        LootParams lootParams = new LootParams.Builder((ServerLevel) entity.level())
+                .create(LootContextParamSets.EMPTY);
+        LootContext simpleContext = new LootContext.Builder(lootParams).create(LootTable.DEFAULT_RANDOM_SEQUENCE);
         return referenceProviders.entrySet().stream().collect(
                 Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getFloat(simpleContext))
         );

@@ -3,7 +3,7 @@ package me.drex.villagerconfig.util.loot.number;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import me.drex.villagerconfig.util.loot.LootContextParams;
+import me.drex.villagerconfig.util.loot.VCLootContextParams;
 import me.drex.villagerconfig.util.loot.LootNumberProviderTypes;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -21,10 +21,10 @@ public class ReferenceLootNumberProvider implements NumberProvider {
 
     @Override
     public float getFloat(LootContext context) {
-        if (!context.hasParam(LootContextParams.NUMBER_REFERENCE)) {
+        if (!context.hasParam(VCLootContextParams.NUMBER_REFERENCE)) {
             return 0f;
         }
-        return context.getParamOrNull(LootContextParams.NUMBER_REFERENCE).getOrDefault(id, 0f);
+        return context.getParamOrNull(VCLootContextParams.NUMBER_REFERENCE).getOrDefault(id, 0f);
     }
 
     @Override
