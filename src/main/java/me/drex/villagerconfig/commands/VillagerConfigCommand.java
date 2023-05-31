@@ -32,7 +32,7 @@ public class VillagerConfigCommand {
 
     private static int execute(CommandContext<CommandSourceStack> context) {
         String version = FabricLoader.getInstance().getModContainer(VillagerConfig.MOD_ID).get().getMetadata().getVersion().getFriendlyString();
-        context.getSource().sendSuccess(
+        context.getSource().sendSuccess(() ->
         Component.empty()
                 .append(
                         Component.literal("VillagerConfig").withStyle(ChatFormatting.BOLD)

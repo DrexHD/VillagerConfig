@@ -59,7 +59,7 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
                 .withOptionalParameter(LootContextParams.THIS_ENTITY, entity)
                 .withParameter(VCLootContextParams.NUMBER_REFERENCE, generateNumberReferences(entity, random))
                 .create(VCLootContextParams.VILLAGER_LOOT_CONTEXT);
-        LootContext lootContext = new LootContext.Builder(lootParams).create(LootTable.DEFAULT_RANDOM_SEQUENCE);
+        LootContext lootContext = new LootContext.Builder(lootParams).create(null);
 
         AtomicReference<ItemStack> costA = new AtomicReference<>(ItemStack.EMPTY);
         AtomicReference<ItemStack> costB = new AtomicReference<>(ItemStack.EMPTY);
@@ -84,7 +84,7 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
     private Map<String, Float> generateNumberReferences(Entity entity, RandomSource random) {
         LootParams lootParams = new LootParams.Builder((ServerLevel) entity.level())
                 .create(LootContextParamSets.EMPTY);
-        LootContext simpleContext = new LootContext.Builder(lootParams).create(LootTable.DEFAULT_RANDOM_SEQUENCE);
+        LootContext simpleContext = new LootContext.Builder(lootParams).create(null);
         return referenceProviders.entrySet().stream().collect(
                 Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getFloat(simpleContext))
         );

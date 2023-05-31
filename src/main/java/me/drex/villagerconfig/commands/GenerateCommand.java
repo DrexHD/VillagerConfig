@@ -27,7 +27,7 @@ public class GenerateCommand {
         tradesPack.addProvider(TradeProvider::new);
         try {
             dataGenerator.run();
-            context.getSource().sendSuccess(Component.literal("Successfully generated trade data to " + GENERATED).withStyle(ChatFormatting.GREEN), false);
+            context.getSource().sendSuccess(() -> Component.literal("Successfully generated trade data to " + GENERATED).withStyle(ChatFormatting.GREEN), false);
             return 1;
         } catch (Throwable e) {
             context.getSource().sendFailure(Component.literal("An error occurred, please look into the console for more information."));

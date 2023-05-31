@@ -40,8 +40,7 @@ dependencies {
         modImplementation include(fabricApi.module(it, project.fabric_version))
     }
 
-    implementation include("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
-    annotationProcessor("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
+    include(implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-fabric:${project.mixin_extras_version}")))
 
     modImplementation include("com.github.samolego.Config2Brigadier:config2brigadier-fabric:${project.config2brigadier_version}") {
         exclude group: "net.fabricmc.fabric-api"

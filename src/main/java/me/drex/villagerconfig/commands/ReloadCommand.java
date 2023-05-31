@@ -19,7 +19,7 @@ public class ReloadCommand {
     private static int execute(CommandContext<CommandSourceStack> context) {
         ConfigManager.load();
         VillagerConfig.LOGGER.info("VillagerConfig config reloaded!");
-        context.getSource().sendSuccess(Component.literal("VillagerConfig config reloaded.").withStyle(ChatFormatting.GREEN), false);
+        context.getSource().sendSuccess(() -> Component.literal("VillagerConfig config reloaded.").withStyle(ChatFormatting.GREEN), false);
         return 1;
     }
 
