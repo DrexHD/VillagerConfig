@@ -27,10 +27,10 @@ public abstract class ZombieMixin extends Monster {
     }
 
     @Inject(
-            method = "hurt",
+            method = "killedEntity",
             at = @At("HEAD")
     )
-    public void calculateConversionChance(DamageSource damageSource, float f, CallbackInfoReturnable<Boolean> cir) {
+    public void calculateConversionChance(ServerLevel serverLevel, LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir) {
         double conversionChance = CONFIG.features.conversionChance;
         if (conversionChance < 0D) {
             difficulty = this.level().getDifficulty();
@@ -44,14 +44,14 @@ public abstract class ZombieMixin extends Monster {
     }
 
     @Redirect(
-            method = "hurt",
+            method = "killedEntity",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/world/level/Level;getDifficulty()Lnet/minecraft/world/Difficulty;"
+                    target = "Lnet/minecraft/server/level/ServerLevel;getDifficulty()Lnet/minecraft/world/Difficulty;"
             ),
             require = 0
     )
-    public Difficulty shouldConvert(Level level) {
+    public Difficulty shouldConvert(ServerLevel serverLevel) {
         return difficulty;
     }
 
