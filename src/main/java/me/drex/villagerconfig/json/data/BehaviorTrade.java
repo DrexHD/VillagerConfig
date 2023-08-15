@@ -56,7 +56,8 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
     public MerchantOffer getOffer(Entity entity, RandomSource random) {
 
         LootParams lootParams = new LootParams.Builder((ServerLevel) entity.level())
-                .withOptionalParameter(LootContextParams.THIS_ENTITY, entity)
+                .withParameter(LootContextParams.ORIGIN, entity.position())
+                .withParameter(LootContextParams.THIS_ENTITY, entity)
                 .withParameter(VCLootContextParams.NUMBER_REFERENCE, generateNumberReferences(entity, random))
                 .create(VCLootContextParams.VILLAGER_LOOT_CONTEXT);
         LootContext lootContext = new LootContext.Builder(lootParams).create(null);

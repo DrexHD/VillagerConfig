@@ -23,6 +23,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -201,7 +202,9 @@ public class TradeProvider implements DataProvider {
             return new BehaviorTrade.Builder(
                     LootItem.lootTableItem(Items.EMERALD).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.emeraldCost))),
                     LootItem.lootTableItem(Items.COMPASS),
-                    LootItem.lootTableItem(Items.MAP).apply(new ExplorationMapFunction.Builder().setSearchRadius(100).setMapDecoration(factory.destinationType).setDestination(factory.destination).setZoom((byte) 2).setSkipKnownStructures(true))
+                    LootItem.lootTableItem(Items.MAP)
+                        .apply(new ExplorationMapFunction.Builder().setSearchRadius(100).setMapDecoration(factory.destinationType).setDestination(factory.destination).setZoom((byte) 2).setSkipKnownStructures(true))
+                        .apply(SetNameFunction.setName(Component.translatable(factory.displayName)))
             ).traderExperience(factory.villagerXp).maxUses(factory.maxUses).build();
         } else if (original instanceof VillagerTrades.DyedArmorForEmeralds factory) {
             return new BehaviorTrade.Builder(
