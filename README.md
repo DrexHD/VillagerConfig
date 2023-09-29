@@ -27,7 +27,7 @@ You can configure a *maximum* and *minimum* **discount** a villager can put on t
 ![](media/discount.png)
 
 ### Old trade mechanics
-There is a config option that allows to enable trade mechanics, that replicate the [trade behaviour before the 1.14 village and pillage update](https://minecraft.fandom.com/wiki/Trading/Before_Village_%26_Pillage#Mechanics).
+There is a config option that allows to enable trade mechanics, that replicate the [trade behaviour before the 1.14 village and pillage update](https://minecraft.wiki/w/Trading/Before_Village_%26_Pillage#Mechanics).
 
 ### Other
 There are several other config options available to customize villager behaviour!
