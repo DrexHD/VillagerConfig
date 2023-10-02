@@ -1,5 +1,6 @@
 package me.drex.villagerconfig.commands;
 
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import me.drex.villagerconfig.VillagerConfig;
@@ -18,19 +19,24 @@ public class GenerateCommand {
     private static final Path GENERATED = VillagerConfig.DATA_PATH.resolve("generated");
 
     public static LiteralArgumentBuilder<CommandSourceStack> builder() {
-        return Commands.literal("generate").executes(GenerateCommand::execute);
+        return Commands.literal("generate")
+            .then(
+                Commands.argument("experimental", BoolArgumentType.bool())
+                    .executes(ctx -> execute(ctx.getSource(), BoolArgumentType.getBool(ctx, "experimental")))
+            )
+            .executes(ctx -> execute(ctx.getSource(), false));
     }
 
-    private static int execute(CommandContext<CommandSourceStack> context) {
+    private static int execute(CommandSourceStack src, boolean experimental) {
         DataGenerator dataGenerator = new DataGenerator(GENERATED, SharedConstants.getCurrentVersion(), true);
         DataGenerator.PackGenerator tradesPack = dataGenerator.getVanillaPack(true);
-        tradesPack.addProvider(TradeProvider::new);
+        tradesPack.addProvider(packOutput -> new TradeProvider(packOutput, experimental));
         try {
             dataGenerator.run();
-            context.getSource().sendSuccess(() -> Component.literal("Successfully generated trade data to " + GENERATED).withStyle(ChatFormatting.GREEN), false);
+            src.sendSuccess(() -> Component.literal("Successfully generated trade " + (experimental ? "(experimental) " : "") + "data to " + GENERATED).withStyle(ChatFormatting.GREEN), false);
             return 1;
         } catch (Throwable e) {
-            context.getSource().sendFailure(Component.literal("An error occurred, please look into the console for more information."));
+            src.sendFailure(Component.literal("An error occurred, please look into the console for more information."));
             VillagerConfig.LOGGER.error("An error occurred, while generating trade data", e);
             return 0;
         }

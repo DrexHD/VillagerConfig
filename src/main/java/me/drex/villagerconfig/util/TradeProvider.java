@@ -26,10 +26,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionBrewing;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.SuspiciousEffectHolder;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.entries.*;
@@ -38,6 +42,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyC
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -45,21 +50,30 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
-import static me.drex.villagerconfig.util.TradeProvider.OfferCountType.VILLAGER;
-import static me.drex.villagerconfig.util.TradeProvider.OfferCountType.WANDERING_TRADER;
+import static me.drex.villagerconfig.util.TradeProvider.OfferCountType.*;
 
 public class TradeProvider implements DataProvider {
 
     private final PackOutput.PathProvider pathResolver;
+    private final boolean experimental;
     public static final ResourceLocation WANDERING_TRADER_ID = new ResourceLocation("wanderingtrader");
     private static final IntUnaryOperator WANDERING_TRADER_COUNT = i -> switch (i) {
         case 1 -> 5;
         case 2 -> 1;
         default -> 0;
     };
+    private static final IntUnaryOperator EXPERIMENTAL_WANDERING_TRADER_COUNT = i -> {
+        if (i > VillagerTrades.EXPERIMENTAL_WANDERING_TRADER_TRADES.size()) {
+            // Invalid level
+            return 0;
+        } else {
+            return VillagerTrades.EXPERIMENTAL_WANDERING_TRADER_TRADES.get(i - 1).getValue();
+        }
+    };
 
-    public TradeProvider(PackOutput output) {
+    public TradeProvider(PackOutput output, boolean experimental) {
         this.pathResolver = output.createPathProvider(PackOutput.Target.DATA_PACK, "trades");
+        this.experimental = experimental;
     }
 
     @Override
@@ -68,10 +82,25 @@ public class TradeProvider implements DataProvider {
 
         // Save all villager trades
         for (VillagerProfession villagerProfession : BuiltInRegistries.VILLAGER_PROFESSION) {
-            map.put(BuiltInRegistries.VILLAGER_PROFESSION.getKey(villagerProfession), new TradeData(VillagerTrades.TRADES.getOrDefault(villagerProfession, new Int2ObjectArrayMap<>()), VILLAGER));
+            Int2ObjectMap<VillagerTrades.ItemListing[]> trades = VillagerTrades.TRADES.getOrDefault(villagerProfession, new Int2ObjectArrayMap<>());
+            Int2ObjectMap<VillagerTrades.ItemListing[]> experimentalTrades = VillagerTrades.EXPERIMENTAL_TRADES.get(villagerProfession);
+            if (experimental && experimentalTrades != null) {
+                trades = experimentalTrades;
+            }
+            map.put(BuiltInRegistries.VILLAGER_PROFESSION.getKey(villagerProfession), new TradeData(trades, VILLAGER));
         }
         // Save wandering trader trades
-        map.put(WANDERING_TRADER_ID, new TradeData(VillagerTrades.WANDERING_TRADER_TRADES, WANDERING_TRADER));
+        if (experimental) {
+            Int2ObjectMap<VillagerTrades.ItemListing[]> experimentalTrades = new Int2ObjectArrayMap<>();
+            List<Pair<VillagerTrades.ItemListing[], Integer>> experimentalWanderingTraderTrades = VillagerTrades.EXPERIMENTAL_WANDERING_TRADER_TRADES;
+            for (int i = 0; i < experimentalWanderingTraderTrades.size(); i++) {
+                Pair<VillagerTrades.ItemListing[], Integer> pair = experimentalWanderingTraderTrades.get(i);
+                experimentalTrades.put(i + 1, pair.getLeft());
+            }
+            map.put(WANDERING_TRADER_ID, new TradeData(experimentalTrades, EXPERIMENTAL_WANDERING_TRADER));
+        } else {
+            map.put(WANDERING_TRADER_ID, new TradeData(VillagerTrades.WANDERING_TRADER_TRADES, WANDERING_TRADER));
+        }
         return CompletableFuture.allOf(map.entrySet().stream().map(entry -> {
             ResourceLocation identifier = entry.getKey();
             TradeData tradeData = entry.getValue();
@@ -95,13 +124,13 @@ public class TradeProvider implements DataProvider {
     private BehaviorTrade.Builder[] convert(VillagerTrades.ItemListing original) {
         if (original instanceof VillagerTrades.EmeraldForItems factory) {
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
-                LootItem.lootTableItem(factory.itemStack.getItem()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.itemStack.getCount()))),
-                LootItem.lootTableItem(Items.EMERALD)
+                lootTableItemStack(factory.itemStack),
+                LootItem.lootTableItem(Items.EMERALD).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.emeraldAmount)))
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
         } else if (original instanceof VillagerTrades.ItemsForEmeralds factory) {
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
                 LootItem.lootTableItem(Items.EMERALD).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.emeraldCost))),
-                LootItem.lootTableItem(factory.itemStack.getItem()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.itemStack.getCount())))
+                lootTableItemStack(factory.itemStack)
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
         } else if (original instanceof VillagerTrades.SuspiciousStewForEmerald factory) {
             LootPoolSingletonContainer.Builder<?> suspciousStewBuilder = LootItem.lootTableItem(Items.SUSPICIOUS_STEW);
@@ -115,15 +144,15 @@ public class TradeProvider implements DataProvider {
         } else if (original instanceof VillagerTrades.ItemsAndEmeraldsToItems factory) {
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
                 LootItem.lootTableItem(Items.EMERALD).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.emeraldCost))),
-                LootItem.lootTableItem(factory.fromItem.getItem()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.fromItem.getCount()))),
-                LootItem.lootTableItem(factory.toItem.getItem()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.toItem.getCount())))
+                lootTableItemStack(factory.fromItem),
+                lootTableItemStack(factory.toItem)
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
         } else if (original instanceof VillagerTrades.EnchantedItemForEmeralds factory) {
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
                 LootItem.lootTableItem(Items.EMERALD)
                     .apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.baseEmeraldCost)))
                     .apply(SetItemCountFunction.setCount(ReferenceLootNumberProvider.create("enchantLevel"), true)),
-                LootItem.lootTableItem(factory.itemStack.getItem()).apply(new EnchantWithLevelsFunction.Builder(ReferenceLootNumberProvider.create("enchantLevel")))
+                lootTableItemStack(factory.itemStack).apply(new EnchantWithLevelsFunction.Builder(ReferenceLootNumberProvider.create("enchantLevel")))
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses).numberReference("enchantLevel", UniformGenerator.between(5, 19))};
         } else if (original instanceof VillagerTrades.EmeraldsForVillagerTypeItem factory) {
             LootPoolEntryContainer.Builder<?>[] children = new LootPoolEntryContainer.Builder[BuiltInRegistries.VILLAGER_TYPE.size()];
@@ -147,7 +176,7 @@ public class TradeProvider implements DataProvider {
             LootPoolEntryContainer.Builder<?>[] entries = new LootPoolEntryContainer.Builder[potions.size()];
             for (int i = 0; i < potions.size(); i++) {
                 Potion potion = potions.get(i);
-                entries[i] = LootItem.lootTableItem(factory.toItem.getItem()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.toCount))).apply(SetPotionFunction.setPotion(potion));
+                entries[i] = lootTableItemStack(factory.toItem).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.toCount))).apply(SetPotionFunction.setPotion(potion));
             }
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
                 LootItem.lootTableItem(Items.EMERALD).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.emeraldCost))),
@@ -160,8 +189,6 @@ public class TradeProvider implements DataProvider {
                 .minLevel(factory.minLevel).maxLevel(factory.maxLevel)
                 .tradeEnchantments();
             if (!defaultEnchantments.equals(factory.tradeableEnchantments)) {
-                System.out.println(defaultEnchantments);
-                System.out.println(factory.tradeableEnchantments);
                 enchantRandomlyFunction.include(factory.tradeableEnchantments.toArray(Enchantment[]::new));
             }
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
@@ -212,7 +239,6 @@ public class TradeProvider implements DataProvider {
         } else if (original instanceof VillagerTrades.DyedArmorForEmeralds factory) {
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
                 LootItem.lootTableItem(Items.EMERALD).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.value))),
-                LootItem.lootTableItem(factory.item),
                 LootItem.lootTableItem(factory.item)
                     .apply(new SetDyeFunction.Builder(true))
                     .apply(new SetDyeFunction.Builder(true).when(LootItemRandomChanceCondition.randomChance(0.3f)))
@@ -237,8 +263,26 @@ public class TradeProvider implements DataProvider {
         return new BehaviorTrade.Builder[]{};
     }
 
+    private static LootPoolSingletonContainer.Builder<?> lootTableItemStack(ItemStack itemStack) {
+        LootPoolSingletonContainer.Builder<?> builder = LootItem.lootTableItem(itemStack.getItem());
+        // Item Count
+        if (itemStack.getCount() != 1) {
+            builder.apply(SetItemCountFunction.setCount(ConstantValue.exactly(itemStack.getCount())));
+        }
+        // Enchantments
+        EnchantmentHelper.getEnchantments(itemStack).forEach((enchantment, level) -> {
+            builder.apply(new SetEnchantmentsFunction.Builder(true).withEnchantment(enchantment, ConstantValue.exactly(level)));
+        });
+        // Potion effects
+        Potion potion = PotionUtils.getPotion(itemStack);
+        if (potion != Potions.EMPTY) {
+            builder.apply(SetPotionFunction.setPotion(potion));
+        }
+        return builder;
+    }
+
     public enum OfferCountType {
-        VILLAGER(i -> 2), WANDERING_TRADER(WANDERING_TRADER_COUNT);
+        VILLAGER(i -> 2), WANDERING_TRADER(WANDERING_TRADER_COUNT), EXPERIMENTAL_WANDERING_TRADER(EXPERIMENTAL_WANDERING_TRADER_COUNT);
 
         private final IntUnaryOperator operator;
 
@@ -253,7 +297,6 @@ public class TradeProvider implements DataProvider {
     }
 
     public record TradeData(Int2ObjectMap<VillagerTrades.ItemListing[]> trades, OfferCountType offerCountType) {
-
     }
 
 }
