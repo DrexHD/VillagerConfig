@@ -1,7 +1,7 @@
 package me.drex.villagerconfig.mixin;
 
 import me.drex.villagerconfig.VillagerConfig;
-import me.drex.villagerconfig.json.data.TradeTable;
+import me.drex.villagerconfig.data.TradeTable;
 import me.drex.villagerconfig.util.TradeManager;
 import me.drex.villagerconfig.util.TradeProvider;
 import net.minecraft.server.level.ServerLevel;
@@ -31,7 +31,7 @@ public abstract class WanderingTraderMixin extends AbstractVillager {
             // Cancel vanilla trades
             ci.cancel();
             for (int level = 1; level <= tradeTable.maxLevel(); level++) {
-                VillagerTrades.ItemListing[] tradeOffers = tradeTable.getTradeOffers(level, this.random);
+                VillagerTrades.ItemListing[] tradeOffers = tradeTable.getTradeOffers(this, level);
                 MerchantOffers tradeOfferList = this.getOffers();
                 this.addOffersFromItemListings(tradeOfferList, tradeOffers, tradeOffers.length);
             }

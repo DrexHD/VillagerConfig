@@ -1,11 +1,11 @@
-package me.drex.villagerconfig.json.data;
+package me.drex.villagerconfig.data;
 
-import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
+import com.google.common.collect.Lists;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.drex.villagerconfig.mixin.MerchantOfferAccessor;
 import me.drex.villagerconfig.util.loot.VCLootContextParams;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -13,40 +13,60 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntries;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Type;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class BehaviorTrade implements VillagerTrades.ItemListing {
 
+    public static final Codec<BehaviorTrade> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        LootPoolEntries.CODEC.fieldOf("cost_a").forGetter(behaviorTrade -> behaviorTrade.costA),
+        LootPoolEntries.CODEC.optionalFieldOf("cost_b").forGetter(behaviorTrade -> behaviorTrade.costB),
+        LootPoolEntries.CODEC.fieldOf("result").forGetter(behaviorTrade -> behaviorTrade.result),
+        NumberProviders.CODEC.optionalFieldOf("price_multiplier", ConstantValue.exactly(0.2f)).forGetter(behaviorTrade -> behaviorTrade.priceMultiplier),
+        NumberProviders.CODEC.optionalFieldOf("trader_experience", ConstantValue.exactly(0)).forGetter(behaviorTrade -> behaviorTrade.traderExperience),
+        NumberProviders.CODEC.optionalFieldOf("max_uses", ConstantValue.exactly(12)).forGetter(behaviorTrade -> behaviorTrade.maxUses),
+        LootItemConditions.CODEC.listOf().optionalFieldOf("conditions", List.of()).forGetter(behaviorTrade -> behaviorTrade.conditions),
+        Codec.unboundedMap(Codec.STRING, NumberProviders.CODEC).optionalFieldOf("reference_providers", Map.of()).forGetter(behaviorTrade -> behaviorTrade.referenceProviders),
+        Codec.BOOL.optionalFieldOf("reward_experience", true).forGetter(behaviorTrade -> behaviorTrade.rewardExperience)
+        ).apply(instance, BehaviorTrade::new));
+
     private final LootPoolEntryContainer costA;
-    private final LootPoolEntryContainer costB;
+    private final Optional<LootPoolEntryContainer> costB;
     private final LootPoolEntryContainer result;
     private final NumberProvider priceMultiplier;
     private final NumberProvider traderExperience;
     private final NumberProvider maxUses;
+    protected final Predicate<LootContext> compositeCondition;
+    private final List<LootItemCondition> conditions;
     private final Map<String, NumberProvider> referenceProviders;
     private final boolean rewardExperience;
 
-    BehaviorTrade(LootPoolEntryContainer costA, LootPoolEntryContainer costB, LootPoolEntryContainer result, NumberProvider priceMultiplier, NumberProvider traderExperience, NumberProvider maxUses, Map<String, NumberProvider> referenceProviders, boolean rewardExperience) {
+    BehaviorTrade(LootPoolEntryContainer costA, Optional<LootPoolEntryContainer> costB, LootPoolEntryContainer result, NumberProvider priceMultiplier, NumberProvider traderExperience, NumberProvider maxUses, List<LootItemCondition> conditions, Map<String, NumberProvider> referenceProviders, boolean rewardExperience) {
         this.costA = costA;
         this.costB = costB;
         this.result = result;
         this.priceMultiplier = priceMultiplier;
         this.traderExperience = traderExperience;
         this.maxUses = maxUses;
+        this.conditions = conditions;
+        this.compositeCondition = LootItemConditions.andConditions(conditions);
         this.referenceProviders = referenceProviders;
         this.rewardExperience = rewardExperience;
     }
@@ -60,14 +80,14 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
                 .withParameter(LootContextParams.THIS_ENTITY, entity)
                 .withParameter(VCLootContextParams.NUMBER_REFERENCE, generateNumberReferences(entity, random))
                 .create(VCLootContextParams.VILLAGER_LOOT_CONTEXT);
-        LootContext lootContext = new LootContext.Builder(lootParams).create(null);
+        LootContext lootContext = new LootContext.Builder(lootParams).create(Optional.empty());
 
         AtomicReference<ItemStack> costA = new AtomicReference<>(ItemStack.EMPTY);
         AtomicReference<ItemStack> costB = new AtomicReference<>(ItemStack.EMPTY);
         AtomicReference<ItemStack> result = new AtomicReference<>(ItemStack.EMPTY);
         // Result needs to be generated first, because it's number references may be required for the costs
         this.result.expand(lootContext, lootChoice -> lootChoice.createItemStack(result::set, lootContext));
-        this.costB.expand(lootContext, lootChoice -> lootChoice.createItemStack(costB::set, lootContext));
+        this.costB.orElse(EmptyLootItem.emptyItem().build()).expand(lootContext, lootChoice -> lootChoice.createItemStack(costB::set, lootContext));
         this.costA.expand(lootContext, lootChoice -> lootChoice.createItemStack(costA::set, lootContext));
 
         MerchantOffer tradeOffer = new MerchantOffer(
@@ -85,7 +105,7 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
     private Map<String, Float> generateNumberReferences(Entity entity, RandomSource random) {
         LootParams lootParams = new LootParams.Builder((ServerLevel) entity.level())
                 .create(LootContextParamSets.EMPTY);
-        LootContext simpleContext = new LootContext.Builder(lootParams).create(null);
+        LootContext simpleContext = new LootContext.Builder(lootParams).create(Optional.empty());
         return referenceProviders.entrySet().stream().collect(
                 Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getFloat(simpleContext))
         );
@@ -94,11 +114,12 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
     public static class Builder {
 
         private final LootPoolEntryContainer costA;
-        private LootPoolEntryContainer costB = EmptyLootItem.emptyItem().build();
+        private Optional<LootPoolEntryContainer> costB = Optional.empty();
         private final LootPoolEntryContainer result;
         private NumberProvider priceMultiplier = ConstantValue.exactly(0.2F);
         private NumberProvider traderExperience = ConstantValue.exactly(1);
         private NumberProvider maxUses = ConstantValue.exactly(12);
+        private final List<LootItemCondition> conditions = Lists.newArrayList();
         private final Map<String, NumberProvider> referenceProviders = new HashMap<>();
         private boolean rewardExperience = true;
 
@@ -109,7 +130,7 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
 
         public Builder(LootPoolEntryContainer.Builder<?> costA, LootPoolEntryContainer.Builder<?> costB, LootPoolEntryContainer.Builder<?> result) {
             this.costA = costA.build();
-            this.costB = costB.build();
+            this.costB = Optional.of(costB.build());
             this.result = result.build();
         }
 
@@ -128,6 +149,11 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
 
         public Builder traderExperience(NumberProvider traderExp) {
             this.traderExperience = traderExp;
+            return this;
+        }
+
+        public Builder when(LootItemCondition.Builder builder) {
+            this.conditions.add(builder.build());
             return this;
         }
 
@@ -151,49 +177,9 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
         }
 
         public BehaviorTrade build() {
-            return new BehaviorTrade(costA, costB, result, priceMultiplier, traderExperience, maxUses, referenceProviders, rewardExperience);
+            return new BehaviorTrade(costA, costB, result, priceMultiplier, traderExperience, maxUses, this.conditions, referenceProviders, rewardExperience);
         }
 
-    }
-
-    public static class Serializer implements JsonSerializer<BehaviorTrade>, JsonDeserializer<BehaviorTrade> {
-
-        private static final Type REFERENCE_PROVIDERS_TYPE = TypeToken.getParameterized(Map.class, String.class, NumberProvider.class).getType();
-
-        @Override
-        public BehaviorTrade deserialize(JsonElement jsonElement, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject jsonObject = GsonHelper.convertToJsonObject(jsonElement, "behaviour trade");
-            LootPoolEntryContainer costA = GsonHelper.getAsObject(jsonObject, "cost_a", context, LootPoolEntryContainer.class);
-            LootPoolEntryContainer costB = GsonHelper.getAsObject(jsonObject, "cost_b", EmptyLootItem.emptyItem().build(), context, LootPoolEntryContainer.class);
-            LootPoolEntryContainer result = GsonHelper.getAsObject(jsonObject, "result", context, LootPoolEntryContainer.class);
-            NumberProvider priceMultiplier = GsonHelper.getAsObject(jsonObject, "price_multiplier", ConstantValue.exactly(0.2f), context, NumberProvider.class);
-            NumberProvider traderExperience = GsonHelper.getAsObject(jsonObject, "trader_experience", ConstantValue.exactly(0), context, NumberProvider.class);
-            NumberProvider maxUses = GsonHelper.getAsObject(jsonObject, "max_uses", ConstantValue.exactly(12), context, NumberProvider.class);
-            Map<String, NumberProvider> referenceProviders = Collections.emptyMap();
-            if (jsonObject.has("reference_providers")) {
-                referenceProviders = context.deserialize(jsonObject.get("reference_providers"), REFERENCE_PROVIDERS_TYPE);
-            }
-            boolean rewardExperience = GsonHelper.getAsBoolean(jsonObject, "reward_experience", true);
-            return new BehaviorTrade(costA, costB, result, priceMultiplier, traderExperience, maxUses, referenceProviders, rewardExperience);
-        }
-
-        @Override
-        public JsonElement serialize(BehaviorTrade behaviorTrade, Type typeOfSrc, JsonSerializationContext context) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.add("cost_a", context.serialize(behaviorTrade.costA));
-            if (!(behaviorTrade.costB instanceof EmptyLootItem)) {
-                jsonObject.add("cost_b", context.serialize(behaviorTrade.costB));
-            }
-            jsonObject.add("result", context.serialize(behaviorTrade.result));
-            jsonObject.add("price_multiplier", context.serialize(behaviorTrade.priceMultiplier));
-            jsonObject.add("trader_experience", context.serialize(behaviorTrade.traderExperience));
-            jsonObject.add("max_uses", context.serialize(behaviorTrade.maxUses));
-            if (!behaviorTrade.referenceProviders.isEmpty()) {
-                jsonObject.add("reference_providers", context.serialize(behaviorTrade.referenceProviders, REFERENCE_PROVIDERS_TYPE));
-            }
-            jsonObject.addProperty("reward_experience", behaviorTrade.rewardExperience);
-            return jsonObject;
-        }
     }
 
 }

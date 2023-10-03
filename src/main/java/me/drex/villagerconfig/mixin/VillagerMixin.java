@@ -1,6 +1,6 @@
 package me.drex.villagerconfig.mixin;
 
-import me.drex.villagerconfig.json.data.TradeTable;
+import me.drex.villagerconfig.data.TradeTable;
 import me.drex.villagerconfig.util.interfaces.IVillager;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -53,7 +53,7 @@ public abstract class VillagerMixin extends AbstractVillager {
         if (tradeTable != null) {
             VillagerData villagerData = this.getVillagerData();
             int level = villagerData.getLevel();
-            VillagerTrades.ItemListing[] customOffers = tradeTable.getTradeOffers(level, this.random);
+            VillagerTrades.ItemListing[] customOffers = tradeTable.getTradeOffers(this, level);
             this.addOffersFromItemListings(getOffers(), customOffers, customOffers.length);
             ci.cancel();
         }

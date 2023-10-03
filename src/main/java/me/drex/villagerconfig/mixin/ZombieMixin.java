@@ -1,9 +1,8 @@
 package me.drex.villagerconfig.mixin;
 
-import me.drex.villagerconfig.util.Math;
+import me.drex.villagerconfig.util.RandomUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
@@ -35,7 +34,7 @@ public abstract class ZombieMixin extends Monster {
         if (conversionChance < 0D) {
             difficulty = this.level().getDifficulty();
         } else {
-            if (!Math.chance(conversionChance)) {
+            if (!RandomUtil.chance(conversionChance)) {
                 difficulty = Difficulty.EASY;
             } else {
                 difficulty = Difficulty.HARD;

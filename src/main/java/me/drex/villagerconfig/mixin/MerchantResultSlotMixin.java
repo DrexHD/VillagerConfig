@@ -1,6 +1,6 @@
 package me.drex.villagerconfig.mixin;
 
-import me.drex.villagerconfig.util.Math;
+import me.drex.villagerconfig.util.RandomUtil;
 import me.drex.villagerconfig.util.interfaces.IVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MerchantResultSlot;
@@ -31,7 +31,7 @@ public abstract class MerchantResultSlotMixin {
     )
     public void onTrade(Player player, ItemStack stack, CallbackInfo ci) {
         if (CONFIG.oldTrades.enabled) {
-            if (Math.chance(CONFIG.oldTrades.unlockChance)) {
+            if (RandomUtil.chance(CONFIG.oldTrades.unlockChance)) {
                 if (this.merchant instanceof IVillager merchantEntity) {
                     merchantEntity.enableTrades();
                 }

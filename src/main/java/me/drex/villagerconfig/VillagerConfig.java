@@ -2,7 +2,6 @@ package me.drex.villagerconfig;
 
 import me.drex.villagerconfig.commands.VillagerConfigCommand;
 import me.drex.villagerconfig.config.ConfigManager;
-import me.drex.villagerconfig.json.TradeGsons;
 import me.drex.villagerconfig.util.TradeManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -19,7 +18,7 @@ public class VillagerConfig implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger("VillagerConfig");
     public static final Path DATA_PATH = FabricLoader.getInstance().getConfigDir().resolve("VillagerConfig");
     public static final String MOD_ID = "villagerconfig";
-    public static final TradeManager TRADE_MANAGER = new TradeManager(TradeGsons.GSON);
+    public static final TradeManager TRADE_MANAGER = new TradeManager();
 
     @Override
     public void onInitialize() {

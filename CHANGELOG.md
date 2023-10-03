@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 2023-09-30
+### Changed
+- Updated to 1.20.2
+- `num_to_select` accepts number providers 
+- Trades can have `conditions`
+- `villagerconfig:enchant_randomly` has `min_level` and `max_level` options
+
 ## [4.0.3] - 2023-09-15
 ### Fixed
 - `exploration_map` function not working

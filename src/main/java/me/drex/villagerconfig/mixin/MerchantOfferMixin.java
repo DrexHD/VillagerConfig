@@ -1,6 +1,6 @@
 package me.drex.villagerconfig.mixin;
 
-import me.drex.villagerconfig.util.Math;
+import me.drex.villagerconfig.util.RandomUtil;
 import me.drex.villagerconfig.util.interfaces.IMerchantOffer;
 import me.drex.villagerconfig.util.interfaces.IVillager;
 import net.minecraft.nbt.CompoundTag;
@@ -86,7 +86,7 @@ public abstract class MerchantOfferMixin implements IMerchantOffer {
     public void onUse(CallbackInfo ci) {
         if (CONFIG.oldTrades.enabled) {
             if (this.uses > CONFIG.oldTrades.minUses) {
-                if (Math.chance(CONFIG.oldTrades.lockChance)) {
+                if (RandomUtil.chance(CONFIG.oldTrades.lockChance)) {
                     this.disable();
                 }
             }
