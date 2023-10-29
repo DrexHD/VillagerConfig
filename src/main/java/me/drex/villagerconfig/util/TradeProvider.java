@@ -192,7 +192,6 @@ public class TradeProvider implements DataProvider {
                 enchantRandomlyFunction.include(factory.tradeableEnchantments.toArray(Enchantment[]::new));
             }
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
-                LootItem.lootTableItem(Items.BOOK),
                 LootItem.lootTableItem(Items.EMERALD).apply(SetItemCountFunction.setCount(
                     // Count formula: (2 + (random.nextInt(5 + (enchantmentLevel * 10))) + (3 * enchantmentLevel)) * treasureMultiplier
                     // Treasure multiplier
@@ -226,6 +225,7 @@ public class TradeProvider implements DataProvider {
                         ReferenceLootNumberProvider.create("treasureMultiplier")
                     )
                 )),
+                LootItem.lootTableItem(Items.BOOK),
                 LootItem.lootTableItem(Items.BOOK).apply(enchantRandomlyFunction)
             ).traderExperience(factory.villagerXp)};
         } else if (original instanceof VillagerTrades.TreasureMapForEmeralds factory) {
