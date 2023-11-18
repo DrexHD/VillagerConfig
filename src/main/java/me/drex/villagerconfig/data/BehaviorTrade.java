@@ -15,6 +15,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntries;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntry;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -23,13 +24,12 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -86,9 +86,9 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
         AtomicReference<ItemStack> costB = new AtomicReference<>(ItemStack.EMPTY);
         AtomicReference<ItemStack> result = new AtomicReference<>(ItemStack.EMPTY);
         // Result needs to be generated first, because it's number references may be required for the costs
-        this.result.expand(lootContext, lootChoice -> lootChoice.createItemStack(result::set, lootContext));
-        this.costB.orElse(EmptyLootItem.emptyItem().build()).expand(lootContext, lootChoice -> lootChoice.createItemStack(costB::set, lootContext));
-        this.costA.expand(lootContext, lootChoice -> lootChoice.createItemStack(costA::set, lootContext));
+        addRandomItem(result::set, lootContext, this.result);
+        addRandomItem(costB::set, lootContext, this.costB.orElse(EmptyLootItem.emptyItem().build()));
+        addRandomItem(costA::set, lootContext, this.costA);
 
         MerchantOffer tradeOffer = new MerchantOffer(
                 costA.get(),
@@ -100,6 +100,34 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
         );
         ((MerchantOfferAccessor) tradeOffer).setRewardExp(rewardExperience);
         return tradeOffer;
+    }
+
+    // Copied from LootPool.addRandomItem()
+    private void addRandomItem(Consumer<ItemStack> consumer, LootContext lootContext, LootPoolEntryContainer lootPoolEntryContainer) {
+        RandomSource randomSource = lootContext.getRandom();
+        ArrayList<LootPoolEntry> entries = Lists.newArrayList();
+        MutableInt totalWeight = new MutableInt();
+        lootPoolEntryContainer.expand(lootContext, lootPoolEntry -> {
+            int weight = lootPoolEntry.getWeight(lootContext.getLuck());
+            if (weight > 0) {
+                entries.add(lootPoolEntry);
+                totalWeight.add(weight);
+            }
+        });
+        int size = entries.size();
+        if (totalWeight.intValue() == 0 || size == 0) {
+            return;
+        }
+        if (size == 1) {
+            entries.get(0).createItemStack(consumer, lootContext);
+            return;
+        }
+        int j = randomSource.nextInt(totalWeight.intValue());
+        for (LootPoolEntry lootPoolEntry : entries) {
+            if ((j -= lootPoolEntry.getWeight(lootContext.getLuck())) >= 0) continue;
+            lootPoolEntry.createItemStack(consumer, lootContext);
+            return;
+        }
     }
 
     private Map<String, Float> generateNumberReferences(Entity entity, RandomSource random) {
