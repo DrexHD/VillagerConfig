@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.2] - 2023-11-23
+### Fixed
+- Minecraft version requirement
+- Fabric API version
+
 ## [4.1.1] - 2023-11-23
 ### Fixed
 - Item tags not working correctly
