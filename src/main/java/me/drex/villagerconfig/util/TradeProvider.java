@@ -26,6 +26,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
@@ -155,22 +156,23 @@ public class TradeProvider implements DataProvider {
                 lootTableItemStack(factory.itemStack).apply(new EnchantWithLevelsFunction.Builder(ReferenceLootNumberProvider.create("enchantLevel")))
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses).numberReference("enchantLevel", UniformGenerator.between(5, 19))};
         } else if (original instanceof VillagerTrades.EmeraldsForVillagerTypeItem factory) {
-            LootPoolEntryContainer.Builder<?>[] children = new LootPoolEntryContainer.Builder[BuiltInRegistries.VILLAGER_TYPE.size()];
-            int i = 0;
-            for (VillagerType villagerType : BuiltInRegistries.VILLAGER_TYPE) {
+            List<BehaviorTrade.Builder> trades = new ArrayList<>(factory.trades.size());
+            for (Map.Entry<VillagerType, Item> entry : factory.trades.entrySet()) {
                 CompoundTag root = new CompoundTag();
                 CompoundTag villagerData = new CompoundTag();
-                villagerData.putString("type", BuiltInRegistries.VILLAGER_TYPE.getKey(villagerType).toString());
+                villagerData.putString("type", BuiltInRegistries.VILLAGER_TYPE.getKey(entry.getKey()).toString());
                 root.put("VillagerData", villagerData);
-                children[i] = LootItem.lootTableItem(factory.trades.get(villagerType)).apply(
-                    SetItemCountFunction.setCount(ConstantValue.exactly(factory.cost))
-                ).when(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().nbt(new NbtPredicate(root))));
-                i++;
+                BehaviorTrade.Builder trade = new BehaviorTrade.Builder(
+                    LootItem.lootTableItem(factory.trades.get(entry.getKey())).apply(
+                        SetItemCountFunction.setCount(ConstantValue.exactly(factory.cost))
+                    ),
+                    LootItem.lootTableItem(Items.EMERALD)
+                ).priceMultiplier(0.05f)
+                    .traderExperience(factory.villagerXp).maxUses(factory.maxUses)
+                    .when(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().nbt(new NbtPredicate(root))));
+                trades.add(trade);
             }
-            return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
-                AlternativesEntry.alternatives(children),
-                LootItem.lootTableItem(Items.EMERALD)
-            ).priceMultiplier(0.05f).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
+            return trades.toArray(BehaviorTrade.Builder[]::new);
         } else if (original instanceof VillagerTrades.TippedArrowForItemsAndEmeralds factory) {
             List<Potion> potions = BuiltInRegistries.POTION.stream().filter(potion -> !potion.getEffects().isEmpty() && PotionBrewing.isBrewablePotion(potion)).toList();
             LootPoolEntryContainer.Builder<?>[] entries = new LootPoolEntryContainer.Builder[potions.size()];
@@ -246,7 +248,7 @@ public class TradeProvider implements DataProvider {
 
             ).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
         } else if (original instanceof VillagerTrades.TypeSpecificTrade factory) {
-            List<BehaviorTrade.Builder> trades = new ArrayList<>(BuiltInRegistries.VILLAGER_TYPE.size());
+            List<BehaviorTrade.Builder> trades = new ArrayList<>(factory.trades().size());
             for (Map.Entry<VillagerType, VillagerTrades.ItemListing> entry : factory.trades().entrySet()) {
                 CompoundTag root = new CompoundTag();
                 CompoundTag villagerData = new CompoundTag();
