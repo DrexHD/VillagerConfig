@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.3-SNAPSHOT'
+    id 'fabric-loom' version '1.5-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -39,8 +39,6 @@ dependencies {
     apiModules.forEach {
         modImplementation include(fabricApi.module(it, project.fabric_version))
     }
-
-    include(implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-fabric:${project.mixin_extras_version}")))
 
     modImplementation include("com.github.samolego.Config2Brigadier:config2brigadier-fabric:${project.config2brigadier_version}") {
         exclude group: "net.fabricmc.fabric-api"
