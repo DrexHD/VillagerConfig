@@ -1,21 +1,22 @@
 package me.drex.villagerconfig.util.loot.number;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
 import me.drex.villagerconfig.util.loot.LootNumberProviderTypes;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+public class AddLootNumberProvider implements NumberProvider {
 
-public record AddLootNumberProvider(List<NumberProvider> addends) implements NumberProvider {
+    private final NumberProvider[] addends;
 
-    public static final Codec<AddLootNumberProvider> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        NumberProviders.CODEC.listOf().fieldOf("addends").forGetter(AddLootNumberProvider::addends)
-    ).apply(instance, AddLootNumberProvider::new));
+    AddLootNumberProvider(NumberProvider... addends) {
+        this.addends = addends;
+    }
 
     @Override
     public float getFloat(@NotNull LootContext context) {
@@ -32,7 +33,21 @@ public record AddLootNumberProvider(List<NumberProvider> addends) implements Num
     }
 
     public static AddLootNumberProvider create(NumberProvider... addends) {
-        return new AddLootNumberProvider(List.of(addends));
+        return new AddLootNumberProvider(addends);
     }
 
+    public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<AddLootNumberProvider> {
+        public Serializer() {
+        }
+
+        @Override
+        public void serialize(JsonObject jsonObject, AddLootNumberProvider addLootNumberProvider, JsonSerializationContext context) {
+            jsonObject.add("addends", context.serialize(addLootNumberProvider.addends));
+        }
+
+        public @NotNull AddLootNumberProvider deserialize(@NotNull JsonObject jsonObject, @NotNull JsonDeserializationContext context) {
+            NumberProvider[] addends = GsonHelper.getAsObject(jsonObject, "addends", context, NumberProvider[].class);
+            return new AddLootNumberProvider(addends);
+        }
+    }
 }

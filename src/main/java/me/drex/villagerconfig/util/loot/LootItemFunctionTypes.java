@@ -9,8 +9,8 @@ import static me.drex.villagerconfig.VillagerConfig.modId;
 
 public class LootItemFunctionTypes {
 
-    public static final LootItemFunctionType SET_DYE = LootItemFunctionsAccessor.invokeRegister(modId("set_dye"), SetDyeFunction.CODEC);
-    public static final LootItemFunctionType ENCHANT_RANDOMLY = LootItemFunctionsAccessor.invokeRegister(modId("enchant_randomly"), EnchantRandomlyLootFunction.CODEC);
+    public static final LootItemFunctionType SET_DYE = LootItemFunctionsAccessor.invokeRegister(modId("set_dye"), new SetDyeFunction.Serializer());
+    public static final LootItemFunctionType ENCHANT_RANDOMLY = LootItemFunctionsAccessor.invokeRegister(modId("enchant_randomly"), new EnchantRandomlyLootFunction.Serializer());
 
     public static void init() {
     }

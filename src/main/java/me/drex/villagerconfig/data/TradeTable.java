@@ -1,17 +1,14 @@
 package me.drex.villagerconfig.data;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.google.gson.*;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.VillagerTrades;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class TradeTable {
-
-    public static final Codec<TradeTable> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        TradeTier.CODEC.listOf().fieldOf("tiers").forGetter(tradeTable -> tradeTable.tiers)
-    ).apply(instance, TradeTable::new));
 
     final List<TradeTier> tiers;
 
@@ -38,6 +35,23 @@ public class TradeTable {
 
     public int maxLevel() {
         return tiers.size();
+    }
+
+    public static class Serializer implements JsonSerializer<TradeTable>, JsonDeserializer<TradeTable> {
+
+        @Override
+        public TradeTable deserialize(JsonElement jsonElement, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            JsonObject jsonObject = GsonHelper.convertToJsonObject(jsonElement, "trade table");
+            TradeTier[] tiers = GsonHelper.getAsObject(jsonObject, "tiers", context, TradeTier[].class);
+            return new TradeTable(List.of(tiers));
+        }
+
+        @Override
+        public JsonElement serialize(TradeTable tradeTable, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.add("tiers", context.serialize(tradeTable.tiers));
+            return jsonObject;
+        }
     }
 
 }

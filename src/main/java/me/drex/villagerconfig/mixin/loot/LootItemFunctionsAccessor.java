@@ -1,6 +1,6 @@
 package me.drex.villagerconfig.mixin.loot;
 
-import com.mojang.serialization.Codec;
+import net.minecraft.world.level.storage.loot.Serializer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface LootItemFunctionsAccessor {
 
     @Invoker
-    static LootItemFunctionType invokeRegister(String id, Codec<? extends LootItemFunction> codec) {
+    static LootItemFunctionType invokeRegister(String id, Serializer<? extends LootItemFunction> jsonSerializer) {
         throw new AssertionError();
     }
 

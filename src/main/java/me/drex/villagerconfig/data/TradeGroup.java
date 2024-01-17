@@ -1,27 +1,21 @@
 package me.drex.villagerconfig.data;
 
 import com.google.common.collect.Sets;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.google.gson.*;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
+import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 public class TradeGroup {
-
-    public static final Codec<TradeGroup> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        NumberProviders.CODEC.fieldOf("num_to_select").forGetter(tradeGroup -> tradeGroup.numToSelect),
-        BehaviorTrade.CODEC.listOf().fieldOf("trades").forGetter(tradeGroup -> tradeGroup.trades)
-    ).apply(instance, TradeGroup::new));
 
     final NumberProvider numToSelect;
     final List<BehaviorTrade> trades;
@@ -35,7 +29,7 @@ public class TradeGroup {
         LootParams lootParams = new LootParams.Builder((ServerLevel) villager.level())
             .withOptionalParameter(LootContextParams.THIS_ENTITY, villager)
             .create(LootContextParamSets.PIGLIN_BARTER);
-        LootContext lootContext = new LootContext.Builder(lootParams).create(Optional.empty());
+        LootContext lootContext = new LootContext.Builder(lootParams).create(null);
 
         List<BehaviorTrade> applicableTrades = trades.stream().filter(behaviorTrade -> behaviorTrade.compositeCondition.test(lootContext)).toList();
 
@@ -55,6 +49,25 @@ public class TradeGroup {
             index++;
         }
         return List.of(factories);
+    }
+
+    public static class Serializer implements JsonSerializer<TradeGroup>, JsonDeserializer<TradeGroup> {
+
+        @Override
+        public TradeGroup deserialize(JsonElement jsonElement, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            JsonObject jsonObject = GsonHelper.convertToJsonObject(jsonElement, "trade group");
+            BehaviorTrade[] trades = GsonHelper.getAsObject(jsonObject, "trades", context, BehaviorTrade[].class);
+            NumberProvider numToSelect = GsonHelper.getAsObject(jsonObject, "num_to_select", context, NumberProvider.class);
+            return new TradeGroup(numToSelect, List.of(trades));
+        }
+
+        @Override
+        public JsonElement serialize(TradeGroup tradeGroup, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.add("trades", context.serialize(tradeGroup.trades));
+            jsonObject.add("num_to_select", context.serialize(tradeGroup.numToSelect));
+            return jsonObject;
+        }
     }
 
 }
