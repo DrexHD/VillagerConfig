@@ -16,6 +16,7 @@ import me.drex.villagerconfig.util.loot.number.MultiplyLootNumberProvider;
 import me.drex.villagerconfig.util.loot.number.ReferenceLootNumberProvider;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.NbtPredicate;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -49,6 +50,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static me.drex.villagerconfig.util.TradeProvider.OfferCountType.*;
@@ -174,10 +176,13 @@ public class TradeProvider implements DataProvider {
             }
             return trades.toArray(BehaviorTrade.Builder[]::new);
         } else if (original instanceof VillagerTrades.TippedArrowForItemsAndEmeralds factory) {
-            List<Potion> potions = BuiltInRegistries.POTION.stream().filter(potion -> !potion.getEffects().isEmpty() && PotionBrewing.isBrewablePotion(potion)).toList();
+            List<Holder<Potion>> potions = BuiltInRegistries.POTION
+                .holders()
+                .filter(reference -> !reference.value().getEffects().isEmpty() && PotionBrewing.isBrewablePotion(reference))
+                .collect(Collectors.toList());
             LootPoolEntryContainer.Builder<?>[] entries = new LootPoolEntryContainer.Builder[potions.size()];
             for (int i = 0; i < potions.size(); i++) {
-                Potion potion = potions.get(i);
+                Holder<Potion> potion = potions.get(i);
                 entries[i] = lootTableItemStack(factory.toItem).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.toCount))).apply(SetPotionFunction.setPotion(potion));
             }
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
@@ -276,7 +281,7 @@ public class TradeProvider implements DataProvider {
             builder.apply(new SetEnchantmentsFunction.Builder(true).withEnchantment(enchantment, ConstantValue.exactly(level)));
         });
         // Potion effects
-        Potion potion = PotionUtils.getPotion(itemStack);
+        Holder<Potion> potion = PotionUtils.getPotion(itemStack);
         if (potion != Potions.EMPTY) {
             builder.apply(SetPotionFunction.setPotion(potion));
         }
