@@ -61,46 +61,6 @@ public class ConfigScreen {
                 .setTooltip(Component.translatable("config.villagerconfig.infiniteTrades.tooltip"))
                 .build());
 
-        ConfigCategory oldTrades = builder.getOrCreateCategory(Component.translatable("config.villagerconfig.category.old_trades"))
-                .setCategoryBackground(new ResourceLocation("minecraft:textures/block/emerald_block.png"));
-
-        oldTrades.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.villagerconfig.enabled"), CONFIG.oldTrades.enabled)
-                .setDefaultValue(false)
-                .setSaveConsumer(value -> CONFIG.oldTrades.enabled = value)
-                .setTooltip(Component.translatable("config.villagerconfig.enabled.tooltip"))
-                .build());
-
-        oldTrades.addEntry(entryBuilder.startIntField(Component.translatable("config.villagerconfig.minuses"), CONFIG.oldTrades.minUses)
-                .setDefaultValue(2)
-                .setMin(0)
-                .setSaveConsumer(value -> CONFIG.oldTrades.minUses = value)
-                .setTooltip(Component.translatable("config.villagerconfig.minuses.tooltip"))
-                .build());
-
-        oldTrades.addEntry(entryBuilder.startIntField(Component.translatable("config.villagerconfig.maxuses2"), CONFIG.oldTrades.maxUses)
-                .setDefaultValue(12)
-                .setMin(0)
-                .setSaveConsumer(value -> CONFIG.oldTrades.maxUses = value)
-                .setTooltip(Component.translatable("config.villagerconfig.maxuses2.tooltip"))
-                .build());
-
-        oldTrades.addEntry(entryBuilder.startDoubleField(Component.translatable("config.villagerconfig.lockchance"), CONFIG.oldTrades.lockChance)
-                .setDefaultValue(20)
-                .setMin(0)
-                .setMax(100)
-                .setSaveConsumer(value -> CONFIG.oldTrades.lockChance = value)
-                .setTooltip(Component.translatable("config.villagerconfig.lockchance.tooltip"))
-                .build());
-
-        oldTrades.addEntry(entryBuilder.startDoubleField(Component.translatable("config.villagerconfig.unlockchance"), CONFIG.oldTrades.unlockChance)
-                .setDefaultValue(20)
-                .setMin(0)
-                .setMax(100)
-                .setSaveConsumer(value -> CONFIG.oldTrades.unlockChance = value)
-                .setTooltip(Component.translatable("config.villagerconfig.unlockchance.tooltip"))
-                .build());
-
-
         builder.setSavingRunnable(ConfigManager::saveModConfig);
 
         return builder.build();

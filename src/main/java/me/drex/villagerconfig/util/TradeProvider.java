@@ -17,6 +17,7 @@ import me.drex.villagerconfig.util.loot.number.ReferenceLootNumberProvider;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.NbtPredicate;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -58,6 +59,7 @@ import static me.drex.villagerconfig.util.TradeProvider.OfferCountType.*;
 public class TradeProvider implements DataProvider {
 
     private final PackOutput.PathProvider pathResolver;
+    private final HolderLookup.Provider provider;
     private final boolean experimental;
     public static final ResourceLocation WANDERING_TRADER_ID = new ResourceLocation("wanderingtrader");
     private static final IntUnaryOperator WANDERING_TRADER_COUNT = i -> switch (i) {
@@ -74,8 +76,9 @@ public class TradeProvider implements DataProvider {
         }
     };
 
-    public TradeProvider(PackOutput output, boolean experimental) {
+    public TradeProvider(PackOutput output, HolderLookup.Provider provider, boolean experimental) {
         this.pathResolver = output.createPathProvider(PackOutput.Target.DATA_PACK, "trades");
+        this.provider = provider;
         this.experimental = experimental;
     }
 
@@ -115,7 +118,7 @@ public class TradeProvider implements DataProvider {
                 tiers[level - 1] = new TradeTier((VillagerDataAccessor.getNextLevelXpThresholds()[level - 1]), List.of(tradeGroup));
             });
             TradeTable tradeTable = new TradeTable(List.of(tiers));
-            return DataProvider.saveStable(writer, TradeTable.CODEC, tradeTable, path);
+            return DataProvider.saveStable(writer, provider, TradeTable.CODEC, tradeTable, path);
         }).toArray(CompletableFuture[]::new));
     }
 

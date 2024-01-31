@@ -2,21 +2,15 @@ package me.drex.villagerconfig.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import me.drex.villagerconfig.util.interfaces.IMerchantOffer;
 import me.drex.villagerconfig.util.interfaces.IVillager;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.MerchantMenu;
 import net.minecraft.world.item.trading.Merchant;
-import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
@@ -77,41 +71,6 @@ public abstract class AbstractVillagerMixin extends AgeableMob implements IVilla
     )
     public RandomSource replaceRandom(AbstractVillager merchantEntity, Operation<RandomSource> original) {
         return CONFIG.features.tradeCycling ? original.call(merchantEntity) : this.semiRandom;
-    }
-
-    @Inject(
-            method = "notifyTrade",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/item/trading/MerchantOffer;increaseUses()V"
-            )
-    )
-    public void useTradeOffer(MerchantOffer offer, CallbackInfo ci) {
-        if (CONFIG.oldTrades.enabled) {
-            ((IMerchantOffer) offer).onUse((AbstractVillager) (Object) this);
-        }
-    }
-
-    @Override
-    public void updateCustomOffers() {
-        int levelProgress = 1;
-        if ((Object) this instanceof Villager villagerEntity) {
-            levelProgress = villagerEntity.getVillagerData().getLevel();
-        }
-        if (this.getTradingPlayer() instanceof ServerPlayer serverPlayerEntity) {
-            if (serverPlayerEntity.containerMenu instanceof MerchantMenu merchantScreenHandler) {
-                serverPlayerEntity.sendMerchantOffers(merchantScreenHandler.containerId, this.getOffers(), levelProgress, this.getVillagerXp(), this.showProgressBar(), this.canRestock());
-            }
-        }
-    }
-
-    @Override
-    public void enableTrades() {
-        for (MerchantOffer offer : this.getOffers()) {
-            ((IMerchantOffer) offer).enable();
-        }
-        this.updateCustomOffers();
-        this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 0));
     }
 
 }

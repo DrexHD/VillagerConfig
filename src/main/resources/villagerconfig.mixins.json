@@ -7,7 +7,6 @@
     "AbstractVillagerMixin",
     "MerchantOfferAccessor",
     "MerchantOfferMixin",
-    "MerchantResultSlotMixin",
     "VillagerDataAccessor",
     "VillagerMixin",
     "WanderingTraderMixin",

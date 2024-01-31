@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.drex.villagerconfig.mixin.MerchantOfferAccessor;
 import me.drex.villagerconfig.util.loot.VCLootContextParams;
+import net.minecraft.Util;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -66,7 +67,7 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
         this.traderExperience = traderExperience;
         this.maxUses = maxUses;
         this.conditions = conditions;
-        this.compositeCondition = LootItemConditions.andConditions(conditions);
+        this.compositeCondition = Util.allOf(conditions);
         this.referenceProviders = referenceProviders;
         this.rewardExperience = rewardExperience;
     }

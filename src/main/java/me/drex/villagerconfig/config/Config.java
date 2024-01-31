@@ -40,33 +40,4 @@ public class Config implements IBrigadierConfigurator {
         public boolean infiniteTrades = false;
     }
 
-    @Group
-    public OldTradesGroup oldTrades = new OldTradesGroup();
-
-    public static class OldTradesGroup {
-        @BrigadierDescription("Whether https://minecraft.gamepedia.com/Trading/Before_Village_%26_Pillage#Mechanics should be used for trade (un)locking")
-        @Setting(comment = "Whether https://minecraft.gamepedia.com/Trading/Before_Village_%26_Pillage#Mechanics should be used for trade (un)locking")
-        public boolean enabled = false;
-
-        @Setting.Constrain.Range(min = 0)
-        @BrigadierDescription("The minimum amount of trades possible after which it can get locked (1.12 default: 2)")
-        @Setting(comment = "The minimum amount of trades possible after which it can get locked (1.12 default: 2)")
-        public int minUses = 2;
-
-        @Setting.Constrain.Range(min = 0)
-        @BrigadierDescription("The maximum amount of trades possible, if reached a trade is guaranteed to get locked (1.12 default: 12)")
-        @Setting(comment = "The maximum amount of trades possible, if reached a trade is guaranteed to get locked (1.12 default: 12)")
-        public int maxUses = 12;
-
-        @Setting.Constrain.Range(min = 0, max = 100)
-        @BrigadierDescription("The chance of a trade locking itself (1.12 default: 20)")
-        @Setting(comment = "The chance of a trade locking itself (1.12 default: 20)")
-        public double lockChance = 20;
-
-        @Setting.Constrain.Range(min = 0, max = 100)
-        @BrigadierDescription("The chance of a trade unlocking all other trades (1.12 default: 20)")
-        @Setting(comment = "The chance of a trade unlocking all other trades (1.12 default: 20)")
-        public double unlockChance = 20;
-    }
-
 }

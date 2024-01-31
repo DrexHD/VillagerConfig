@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.drex.villagerconfig.util.loot.LootItemFunctionTypes;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
@@ -45,8 +46,9 @@ public class SetDyeFunction extends LootItemConditionalFunction {
 
     @Override
     protected @NotNull ItemStack run(@NotNull ItemStack stack, @NotNull LootContext context) {
-        if (!add && stack.getItem() instanceof DyeableLeatherItem dyeableItem) {
-            dyeableItem.clearColor(stack);
+        if (stack.is(ItemTags.DYEABLE)) return stack;
+        if (!add) {
+            DyeableLeatherItem.clearColor(stack);
         }
         List<DyeColor> colors = dyeColors.orElse(ImmutableList.copyOf(DyeColor.values()));
         DyeColor color = colors.get(context.getRandom().nextInt(colors.size()));

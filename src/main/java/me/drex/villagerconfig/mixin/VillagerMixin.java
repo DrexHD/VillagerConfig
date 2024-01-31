@@ -1,7 +1,6 @@
 package me.drex.villagerconfig.mixin;
 
 import me.drex.villagerconfig.data.TradeTable;
-import me.drex.villagerconfig.util.interfaces.IVillager;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -17,10 +16,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static me.drex.villagerconfig.VillagerConfig.TRADE_MANAGER;
-import static me.drex.villagerconfig.config.ConfigManager.CONFIG;
 
 @Mixin(Villager.class)
 public abstract class VillagerMixin extends AbstractVillager {
@@ -30,15 +27,6 @@ public abstract class VillagerMixin extends AbstractVillager {
 
     public VillagerMixin(EntityType<? extends AbstractVillager> entityType, Level world) {
         super(entityType, world);
-    }
-
-    @Inject(
-            method = "canRestock",
-            at = @At("RETURN"),
-            cancellable = true
-    )
-    public void removeRefreshTradesInfo(CallbackInfoReturnable<Boolean> cir) {
-        if (CONFIG.oldTrades.enabled) cir.setReturnValue(false);
     }
 
     @Inject(
@@ -80,14 +68,6 @@ public abstract class VillagerMixin extends AbstractVillager {
     )
     public int adjustUpperLevelExperience(int level) {
         return customUpperLevelExperience(level);
-    }
-
-    @Inject(
-            method = "increaseMerchantCareer",
-            at = @At("TAIL")
-    )
-    public void onLevelUp(CallbackInfo ci) {
-        if (CONFIG.oldTrades.enabled) ((IVillager) this).enableTrades();
     }
 
     private int customUpperLevelExperience(int level) {
