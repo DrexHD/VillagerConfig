@@ -3,6 +3,7 @@ package me.drex.villagerconfig.mixin;
 import com.mojang.serialization.Codec;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
@@ -21,7 +22,7 @@ public abstract class MerchantOfferMixin {
 
     @Shadow
     @Final
-    private ItemStack baseCostA;
+    private ItemCost baseCostA;
 
     @Shadow @Final public static Codec<MerchantOffer> CODEC;
 
@@ -34,8 +35,8 @@ public abstract class MerchantOfferMixin {
             )
     )
     public void adjustSpecialPrice(MerchantOffer tradeOffer, int increment) {
-        int maxDiscount = (int) ((this.baseCostA.getCount()) * -(CONFIG.features.maxDiscount / 100));
-        int maxRaise = (int) ((this.baseCostA.getCount()) * (CONFIG.features.maxRaise / 100));
+        int maxDiscount = (int) ((this.baseCostA.count()) * -(CONFIG.features.maxDiscount / 100));
+        int maxRaise = (int) ((this.baseCostA.count()) * (CONFIG.features.maxRaise / 100));
         tradeOffer.setSpecialPriceDiff(Mth.clamp(tradeOffer.getSpecialPriceDiff() + increment, maxDiscount, maxRaise));
     }
 

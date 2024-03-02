@@ -104,10 +104,8 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
         level = Mth.clamp(level, this.minLevel, this.maxLevel);
         if (itemStack.is(Items.BOOK)) {
             itemStack = new ItemStack(Items.ENCHANTED_BOOK);
-            EnchantedBookItem.addEnchantment(itemStack, new EnchantmentInstance(enchantment, level));
-        } else {
-            itemStack.enchant(enchantment, level);
         }
+        itemStack.enchant(enchantment, level);
         if (context.hasParam(VCLootContextParams.NUMBER_REFERENCE)) {
             Map<String, Float> referenceProviders = context.getParamOrNull(VCLootContextParams.NUMBER_REFERENCE);
             referenceProviders.put("enchantmentLevel", (float) level);

@@ -18,6 +18,7 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.NbtPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -33,13 +34,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionBrewing;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.component.SuspiciousStewEffects;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.block.SuspiciousEffectHolder;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.entries.*;
+import net.minecraft.world.level.storage.loot.entries.EntryGroup;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
@@ -130,7 +133,7 @@ public class TradeProvider implements DataProvider {
     private BehaviorTrade.Builder[] convert(VillagerTrades.ItemListing original) {
         if (original instanceof VillagerTrades.EmeraldForItems factory) {
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
-                lootTableItemStack(factory.itemStack),
+                lootTableItemStack(factory.itemStack.itemStack()),
                 LootItem.lootTableItem(Items.EMERALD).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.emeraldAmount)))
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
         } else if (original instanceof VillagerTrades.ItemsForEmeralds factory) {
@@ -140,7 +143,7 @@ public class TradeProvider implements DataProvider {
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
         } else if (original instanceof VillagerTrades.SuspiciousStewForEmerald factory) {
             LootPoolSingletonContainer.Builder<?> suspciousStewBuilder = LootItem.lootTableItem(Items.SUSPICIOUS_STEW);
-            for (SuspiciousEffectHolder.EffectEntry effect : factory.effects) {
+            for (SuspiciousStewEffects.Entry effect : factory.effects.effects()) {
                 suspciousStewBuilder.apply(new SetStewEffectFunction.Builder().withEffect(effect.effect(), ConstantValue.exactly(effect.duration())));
             }
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
@@ -150,7 +153,7 @@ public class TradeProvider implements DataProvider {
         } else if (original instanceof VillagerTrades.ItemsAndEmeraldsToItems factory) {
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
                 LootItem.lootTableItem(Items.EMERALD).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.emeraldCost))),
-                lootTableItemStack(factory.fromItem),
+                lootTableItemStack(factory.fromItem.itemStack()),
                 lootTableItemStack(factory.toItem)
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
         } else if (original instanceof VillagerTrades.EnchantedItemForEmeralds factory) {
@@ -280,14 +283,15 @@ public class TradeProvider implements DataProvider {
             builder.apply(SetItemCountFunction.setCount(ConstantValue.exactly(itemStack.getCount())));
         }
         // Enchantments
-        EnchantmentHelper.getEnchantments(itemStack).forEach((enchantment, level) -> {
-            builder.apply(new SetEnchantmentsFunction.Builder(true).withEnchantment(enchantment, ConstantValue.exactly(level)));
+        ItemEnchantments enchantments = itemStack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+        enchantments.entrySet().forEach(holderEntry -> {
+            builder.apply(new SetEnchantmentsFunction.Builder(true).withEnchantment(holderEntry.getKey().value(), ConstantValue.exactly(holderEntry.getIntValue())));
         });
         // Potion effects
-        Holder<Potion> potion = PotionUtils.getPotion(itemStack);
-        if (potion != Potions.EMPTY) {
-            builder.apply(SetPotionFunction.setPotion(potion));
-        }
+        PotionContents potionContents = itemStack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+        potionContents.potion().ifPresent(potionHolder -> {
+            builder.apply(SetPotionFunction.setPotion(potionHolder));
+        });
         return builder;
     }
 

@@ -6,11 +6,14 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.drex.villagerconfig.mixin.MerchantOfferAccessor;
 import me.drex.villagerconfig.util.loot.VCLootContextParams;
 import net.minecraft.Util;
+import net.minecraft.core.component.DataComponentPredicate;
+import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -46,7 +49,7 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
         LootItemConditions.CODEC.listOf().optionalFieldOf("conditions", List.of()).forGetter(behaviorTrade -> behaviorTrade.conditions),
         Codec.unboundedMap(Codec.STRING, NumberProviders.CODEC).optionalFieldOf("reference_providers", Map.of()).forGetter(behaviorTrade -> behaviorTrade.referenceProviders),
         Codec.BOOL.optionalFieldOf("reward_experience", true).forGetter(behaviorTrade -> behaviorTrade.rewardExperience)
-        ).apply(instance, BehaviorTrade::new));
+    ).apply(instance, BehaviorTrade::new));
 
     private final LootPoolEntryContainer costA;
     private final Optional<LootPoolEntryContainer> costB;
@@ -77,10 +80,10 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
     public MerchantOffer getOffer(Entity entity, RandomSource random) {
 
         LootParams lootParams = new LootParams.Builder((ServerLevel) entity.level())
-                .withParameter(LootContextParams.ORIGIN, entity.position())
-                .withParameter(LootContextParams.THIS_ENTITY, entity)
-                .withParameter(VCLootContextParams.NUMBER_REFERENCE, generateNumberReferences(entity, random))
-                .create(VCLootContextParams.VILLAGER_LOOT_CONTEXT);
+            .withParameter(LootContextParams.ORIGIN, entity.position())
+            .withParameter(LootContextParams.THIS_ENTITY, entity)
+            .withParameter(VCLootContextParams.NUMBER_REFERENCE, generateNumberReferences(entity, random))
+            .create(VCLootContextParams.VILLAGER_LOOT_CONTEXT);
         LootContext lootContext = new LootContext.Builder(lootParams).create(Optional.empty());
 
         AtomicReference<ItemStack> costA = new AtomicReference<>(ItemStack.EMPTY);
@@ -88,19 +91,38 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
         AtomicReference<ItemStack> result = new AtomicReference<>(ItemStack.EMPTY);
         // Result needs to be generated first, because it's number references may be required for the costs
         addRandomItem(result::set, lootContext, this.result);
-        addRandomItem(costB::set, lootContext, this.costB.orElse(EmptyLootItem.emptyItem().build()));
+        this.costB.ifPresent(container -> addRandomItem(costB::set, lootContext, container));
         addRandomItem(costA::set, lootContext, this.costA);
 
+        Optional<ItemCost> itemCostB = Optional.empty();
+        if (this.costB.isPresent()) {
+            itemCostB = Optional.of(convertToCost(costB.get()));
+        }
         MerchantOffer tradeOffer = new MerchantOffer(
-                costA.get(),
-                costB.get(),
-                result.get(),
-                maxUses.getInt(lootContext),
-                traderExperience.getInt(lootContext),
-                priceMultiplier.getFloat(lootContext)
+            convertToCost(costA.get()),
+            itemCostB,
+            result.get(),
+            maxUses.getInt(lootContext),
+            traderExperience.getInt(lootContext),
+            priceMultiplier.getFloat(lootContext)
         );
         ((MerchantOfferAccessor) tradeOffer).setRewardExp(rewardExperience);
         return tradeOffer;
+    }
+
+    private static ItemCost convertToCost(ItemStack stack) {
+        ItemCost itemCost = new ItemCost(stack.getItem(), stack.getCount());
+        itemCost.withComponents(builder -> {
+            for (TypedDataComponent<?> component : stack.getComponents()) {
+                addToBuilder(builder, component);
+            }
+            return builder;
+        });
+        return itemCost;
+    }
+
+    private static <T> void addToBuilder(DataComponentPredicate.Builder builder, TypedDataComponent<T> type) {
+        builder.expect(type.type(), type.value());
     }
 
     // Copied from LootPool.addRandomItem()
@@ -133,10 +155,10 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
 
     private Map<String, Float> generateNumberReferences(Entity entity, RandomSource random) {
         LootParams lootParams = new LootParams.Builder((ServerLevel) entity.level())
-                .create(LootContextParamSets.EMPTY);
+            .create(LootContextParamSets.EMPTY);
         LootContext simpleContext = new LootContext.Builder(lootParams).create(Optional.empty());
         return referenceProviders.entrySet().stream().collect(
-                Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getFloat(simpleContext))
+            Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getFloat(simpleContext))
         );
     }
 
