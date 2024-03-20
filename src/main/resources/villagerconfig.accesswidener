@@ -65,7 +65,7 @@ accessible    field    net/minecraft/world/entity/npc/VillagerTrades$TippedArrow
 accessible    field    net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds    emeraldCost    I
 accessible    field    net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds    destination    Lnet/minecraft/tags/TagKey;
 accessible    field    net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds    displayName    Ljava/lang/String;
-accessible    field    net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds    destinationType    Lnet/minecraft/world/level/saveddata/maps/MapDecoration$Type;
+accessible    field    net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds    destinationType    Lnet/minecraft/core/Holder;
 accessible    field    net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds    maxUses    I
 accessible    field    net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds    villagerXp    I
 
