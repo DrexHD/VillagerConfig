@@ -9,7 +9,6 @@ import com.mojang.serialization.JsonOps;
 import me.drex.villagerconfig.VillagerConfig;
 import me.drex.villagerconfig.data.TradeTable;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
-import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -41,7 +40,7 @@ public class TradeManager extends SimpleJsonResourceReloadListener implements Id
         ImmutableMap.Builder<ResourceLocation, TradeTable> builder = ImmutableMap.builder();
         prepared.forEach((identifier, jsonElement) -> {
             try {
-                TradeTable table = Util.getOrThrow(TradeTable.CODEC.parse(JsonOps.INSTANCE, jsonElement), JsonParseException::new);
+                TradeTable table = TradeTable.CODEC.parse(JsonOps.INSTANCE, jsonElement).getOrThrow(JsonParseException::new);
                 builder.put(identifier, table);
             } catch (Exception exception) {
                 LOGGER.error("Failed to load trade {}", identifier, exception);

@@ -1,6 +1,6 @@
 package me.drex.villagerconfig.util.loot.number;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.drex.villagerconfig.util.loot.LootNumberProviderTypes;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public record AddLootNumberProvider(List<NumberProvider> addends) implements NumberProvider {
 
-    public static final Codec<AddLootNumberProvider> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<AddLootNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         NumberProviders.CODEC.listOf().fieldOf("addends").forGetter(AddLootNumberProvider::addends)
     ).apply(instance, AddLootNumberProvider::new));
 

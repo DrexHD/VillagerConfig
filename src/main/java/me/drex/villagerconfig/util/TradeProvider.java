@@ -247,7 +247,7 @@ public class TradeProvider implements DataProvider {
                 LootItem.lootTableItem(Items.COMPASS),
                 LootItem.lootTableItem(Items.MAP)
                     .apply(new ExplorationMapFunction.Builder().setSearchRadius(100).setMapDecoration(factory.destinationType).setDestination(factory.destination).setZoom((byte) 2).setSkipKnownStructures(true))
-                    .apply(SetNameFunction.setName(Component.translatable(factory.displayName)))
+                    .apply(SetNameFunction.setName(Component.translatable(factory.displayName), SetNameFunction.Target.ITEM_NAME))
             ).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
         } else if (original instanceof VillagerTrades.DyedArmorForEmeralds factory) {
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(

@@ -3,6 +3,7 @@ package me.drex.villagerconfig.util.loot.function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.drex.villagerconfig.util.loot.LootItemFunctionTypes;
 import net.minecraft.core.component.DataComponents;
@@ -25,11 +26,11 @@ import java.util.Set;
 
 public class SetDyeFunction extends LootItemConditionalFunction {
 
-    public static final Codec<SetDyeFunction> CODEC = RecordCodecBuilder.create(
+    public static final MapCodec<SetDyeFunction> CODEC = RecordCodecBuilder.mapCodec(
         instance -> commonFields(instance)
             .and(
                 instance.group(
-                    ExtraCodecs.strictOptionalField(DyeColor.CODEC.listOf(), "dye_colors").forGetter(setDyeFunction -> setDyeFunction.dyeColors),
+                    DyeColor.CODEC.listOf().optionalFieldOf("dye_colors").forGetter(setDyeFunction -> setDyeFunction.dyeColors),
                     Codec.BOOL.fieldOf("add").orElse(false).forGetter(setDyeFunction -> setDyeFunction.add)
                 )
             )

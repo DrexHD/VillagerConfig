@@ -2,6 +2,7 @@ package me.drex.villagerconfig.util.loot.function;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.drex.villagerconfig.util.loot.LootItemFunctionTypes;
 import me.drex.villagerconfig.util.loot.VCLootContextParams;
@@ -38,13 +39,13 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
         .listOf()
         .xmap(HolderSet::direct, holderSet -> holderSet.stream().toList());
 
-    public static final Codec<EnchantRandomlyLootFunction> CODEC = RecordCodecBuilder.create(
+    public static final MapCodec<EnchantRandomlyLootFunction> CODEC = RecordCodecBuilder.mapCodec(
         instance -> commonFields(instance)
             .and(
                 instance.group(
-                    ExtraCodecs.strictOptionalField(ENCHANTMENT_SET_CODEC, "include")
+                    ENCHANTMENT_SET_CODEC.optionalFieldOf("include")
                         .forGetter(enchantRandomlyFunction -> enchantRandomlyFunction.include),
-                    ExtraCodecs.strictOptionalField(ENCHANTMENT_SET_CODEC, "exclude")
+                    ENCHANTMENT_SET_CODEC.optionalFieldOf("exclude")
                         .forGetter(enchantRandomlyFunction -> enchantRandomlyFunction.exclude),
                     Codec.INT.optionalFieldOf("min_level", 0).forGetter(enchantRandomlyLootFunction -> enchantRandomlyLootFunction.minLevel),
                     Codec.INT.optionalFieldOf("max_level", Integer.MAX_VALUE).forGetter(enchantRandomlyLootFunction -> enchantRandomlyLootFunction.maxLevel),

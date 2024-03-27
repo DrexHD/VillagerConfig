@@ -1,6 +1,7 @@
 package me.drex.villagerconfig.util.loot.number;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.drex.villagerconfig.util.loot.LootNumberProviderTypes;
 import me.drex.villagerconfig.util.loot.VCLootContextParams;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 public record ReferenceLootNumberProvider(String id) implements NumberProvider {
 
-    public static final Codec<ReferenceLootNumberProvider> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<ReferenceLootNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.STRING.fieldOf("id").forGetter(ReferenceLootNumberProvider::id)
     ).apply(instance, ReferenceLootNumberProvider::new));
 
