@@ -17,7 +17,6 @@ import me.drex.villagerconfig.util.loot.number.ReferenceLootNumberProvider;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.NbtPredicate;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
@@ -26,6 +25,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
@@ -33,7 +33,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.SuspiciousStewEffects;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -62,7 +61,7 @@ import static me.drex.villagerconfig.util.TradeProvider.OfferCountType.*;
 public class TradeProvider implements DataProvider {
 
     private final PackOutput.PathProvider pathResolver;
-    private final HolderLookup.Provider provider;
+    private final MinecraftServer server;
     private final boolean experimental;
     public static final ResourceLocation WANDERING_TRADER_ID = new ResourceLocation("wanderingtrader");
     private static final IntUnaryOperator WANDERING_TRADER_COUNT = i -> switch (i) {
@@ -79,9 +78,9 @@ public class TradeProvider implements DataProvider {
         }
     };
 
-    public TradeProvider(PackOutput output, HolderLookup.Provider provider, boolean experimental) {
+    public TradeProvider(PackOutput output, MinecraftServer server, boolean experimental) {
         this.pathResolver = output.createPathProvider(PackOutput.Target.DATA_PACK, "trades");
-        this.provider = provider;
+        this.server = server;
         this.experimental = experimental;
     }
 
@@ -121,7 +120,7 @@ public class TradeProvider implements DataProvider {
                 tiers[level - 1] = new TradeTier((VillagerDataAccessor.getNextLevelXpThresholds()[level - 1]), List.of(tradeGroup));
             });
             TradeTable tradeTable = new TradeTable(List.of(tiers));
-            return DataProvider.saveStable(writer, provider, TradeTable.CODEC, tradeTable, path);
+            return DataProvider.saveStable(writer, server.registryAccess(), TradeTable.CODEC, tradeTable, path);
         }).toArray(CompletableFuture[]::new));
     }
 
@@ -184,7 +183,7 @@ public class TradeProvider implements DataProvider {
         } else if (original instanceof VillagerTrades.TippedArrowForItemsAndEmeralds factory) {
             List<Holder<Potion>> potions = BuiltInRegistries.POTION
                 .holders()
-                .filter(reference -> !reference.value().getEffects().isEmpty() && PotionBrewing.isBrewablePotion(reference))
+                .filter(reference -> !(reference.value()).getEffects().isEmpty() && server.potionBrewing().isBrewablePotion(reference))
                 .collect(Collectors.toList());
             LootPoolEntryContainer.Builder<?>[] entries = new LootPoolEntryContainer.Builder[potions.size()];
             for (int i = 0; i < potions.size(); i++) {

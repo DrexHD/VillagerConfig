@@ -30,7 +30,7 @@ public class GenerateCommand {
     private static int execute(CommandSourceStack src, boolean experimental) {
         DataGenerator dataGenerator = new DataGenerator(GENERATED, SharedConstants.getCurrentVersion(), true);
         DataGenerator.PackGenerator tradesPack = dataGenerator.getVanillaPack(true);
-        tradesPack.addProvider(packOutput -> new TradeProvider(packOutput, src.getServer().registryAccess(), experimental));
+        tradesPack.addProvider(packOutput -> new TradeProvider(packOutput, src.getServer(), experimental));
         try {
             dataGenerator.run();
             src.sendSuccess(() -> Component.literal("Successfully generated trade " + (experimental ? "(experimental) " : "") + "data to " + GENERATED).withStyle(ChatFormatting.GREEN), false);
