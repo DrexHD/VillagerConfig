@@ -9,6 +9,7 @@ import com.mojang.serialization.JsonOps;
 import me.drex.villagerconfig.VillagerConfig;
 import me.drex.villagerconfig.data.TradeTable;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -23,11 +24,13 @@ public class TradeManager extends SimpleJsonResourceReloadListener implements Id
 
     private static final Logger LOGGER = VillagerConfig.LOGGER;
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+    private final HolderLookup.Provider provider;
 
     private Map<ResourceLocation, TradeTable> trades = ImmutableMap.of();
 
-    public TradeManager() {
+    public TradeManager(HolderLookup.Provider provider) {
         super(GSON, "trades");
+        this.provider = provider;
     }
 
     @Nullable
@@ -40,7 +43,7 @@ public class TradeManager extends SimpleJsonResourceReloadListener implements Id
         ImmutableMap.Builder<ResourceLocation, TradeTable> builder = ImmutableMap.builder();
         prepared.forEach((identifier, jsonElement) -> {
             try {
-                TradeTable table = TradeTable.CODEC.parse(JsonOps.INSTANCE, jsonElement).getOrThrow(JsonParseException::new);
+                TradeTable table = TradeTable.CODEC.parse(provider.createSerializationContext(JsonOps.INSTANCE), jsonElement).getOrThrow();
                 builder.put(identifier, table);
             } catch (Exception exception) {
                 LOGGER.error("Failed to load trade {}", identifier, exception);

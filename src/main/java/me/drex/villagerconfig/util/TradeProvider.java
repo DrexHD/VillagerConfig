@@ -19,6 +19,7 @@ import net.minecraft.advancements.critereon.NbtPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -35,7 +36,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.SuspiciousStewEffects;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.entries.EntryGroup;
@@ -196,13 +196,9 @@ public class TradeProvider implements DataProvider {
                 EntryGroup.list(entries)
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
         } else if (original instanceof VillagerTrades.EnchantBookForEmeralds factory) {
-            List<Enchantment> defaultEnchantments = BuiltInRegistries.ENCHANTMENT.stream().filter(Enchantment::isTradeable).toList();
             EnchantRandomlyLootFunction.Builder enchantRandomlyFunction = new EnchantRandomlyLootFunction.Builder()
                 .minLevel(factory.minLevel).maxLevel(factory.maxLevel)
-                .tradeEnchantments();
-            if (!defaultEnchantments.equals(factory.tradeableEnchantments)) {
-                enchantRandomlyFunction.include(factory.tradeableEnchantments.toArray(Enchantment[]::new));
-            }
+                .include(server.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getOrCreateTag(factory.tradeableEnchantments));
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
                 LootItem.lootTableItem(Items.EMERALD).apply(SetItemCountFunction.setCount(
                     // Count formula: (2 + (random.nextInt(5 + (enchantmentLevel * 10))) + (3 * enchantmentLevel)) * treasureMultiplier
@@ -284,7 +280,7 @@ public class TradeProvider implements DataProvider {
         // Enchantments
         ItemEnchantments enchantments = itemStack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
         enchantments.entrySet().forEach(holderEntry -> {
-            builder.apply(new SetEnchantmentsFunction.Builder(true).withEnchantment(holderEntry.getKey().value(), ConstantValue.exactly(holderEntry.getIntValue())));
+            builder.apply(new SetEnchantmentsFunction.Builder(true).withEnchantment(holderEntry.getKey(), ConstantValue.exactly(holderEntry.getIntValue())));
         });
         // Potion effects
         PotionContents potionContents = itemStack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);

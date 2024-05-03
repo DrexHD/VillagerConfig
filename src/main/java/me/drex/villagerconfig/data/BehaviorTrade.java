@@ -17,14 +17,12 @@ import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntries;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntry;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
@@ -46,7 +44,7 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
         NumberProviders.CODEC.optionalFieldOf("price_multiplier", ConstantValue.exactly(0.2f)).forGetter(behaviorTrade -> behaviorTrade.priceMultiplier),
         NumberProviders.CODEC.optionalFieldOf("trader_experience", ConstantValue.exactly(0)).forGetter(behaviorTrade -> behaviorTrade.traderExperience),
         NumberProviders.CODEC.optionalFieldOf("max_uses", ConstantValue.exactly(12)).forGetter(behaviorTrade -> behaviorTrade.maxUses),
-        LootItemConditions.DIRECT_CODEC.listOf().optionalFieldOf("conditions", List.of()).forGetter(behaviorTrade -> behaviorTrade.conditions),
+        LootItemCondition.DIRECT_CODEC.listOf().optionalFieldOf("conditions", List.of()).forGetter(behaviorTrade -> behaviorTrade.conditions),
         Codec.unboundedMap(Codec.STRING, NumberProviders.CODEC).optionalFieldOf("reference_providers", Map.of()).forGetter(behaviorTrade -> behaviorTrade.referenceProviders),
         Codec.BOOL.optionalFieldOf("reward_experience", true).forGetter(behaviorTrade -> behaviorTrade.rewardExperience)
     ).apply(instance, BehaviorTrade::new));

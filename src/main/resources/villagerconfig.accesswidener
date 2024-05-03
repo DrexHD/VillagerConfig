@@ -7,7 +7,7 @@ accessible    field    net/minecraft/world/entity/npc/VillagerTrades$TypeSpecifi
 
 # EnchantBookForEmeralds
 accessible    field    net/minecraft/world/entity/npc/VillagerTrades$EnchantBookForEmeralds    villagerXp    I
-accessible    field    net/minecraft/world/entity/npc/VillagerTrades$EnchantBookForEmeralds    tradeableEnchantments    Ljava/util/List;
+accessible    field    net/minecraft/world/entity/npc/VillagerTrades$EnchantBookForEmeralds    tradeableEnchantments    Lnet/minecraft/tags/TagKey;
 accessible    field    net/minecraft/world/entity/npc/VillagerTrades$EnchantBookForEmeralds    minLevel    I
 accessible    field    net/minecraft/world/entity/npc/VillagerTrades$EnchantBookForEmeralds    maxLevel    I
 
