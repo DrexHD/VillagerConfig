@@ -14,7 +14,7 @@ public class ConfigScreen {
     public static Screen getConfigScreen(Screen parentScreen) {
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parentScreen)
-                .setDefaultBackgroundTexture(new ResourceLocation("minecraft:textures/block/emerald_block.png"))
+                .setDefaultBackgroundTexture(ResourceLocation.parse("minecraft:textures/block/emerald_block.png"))
                 .setTitle(Component.translatable("config.villagerconfig.title"));
 
         builder.setGlobalized(true);

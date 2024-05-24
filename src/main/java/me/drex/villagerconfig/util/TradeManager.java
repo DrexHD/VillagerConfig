@@ -56,6 +56,6 @@ public class TradeManager extends SimpleJsonResourceReloadListener implements Id
 
     @Override
     public ResourceLocation getFabricId() {
-        return new ResourceLocation(VillagerConfig.MOD_ID, "trades");
+        return ResourceLocation.fromNamespaceAndPath(VillagerConfig.MOD_ID, "trades");
     }
 }

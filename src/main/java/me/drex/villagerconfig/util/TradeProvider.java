@@ -63,7 +63,7 @@ public class TradeProvider implements DataProvider {
     private final PackOutput.PathProvider pathResolver;
     private final MinecraftServer server;
     private final boolean experimental;
-    public static final ResourceLocation WANDERING_TRADER_ID = new ResourceLocation("wanderingtrader");
+    public static final ResourceLocation WANDERING_TRADER_ID = ResourceLocation.withDefaultNamespace("wanderingtrader");
     private static final IntUnaryOperator WANDERING_TRADER_COUNT = i -> switch (i) {
         case 1 -> 5;
         case 2 -> 1;
