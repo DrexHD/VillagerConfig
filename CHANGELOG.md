@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Incomplete EmeraldsForVillagerTypeItem causing generation errors
+- Backport: `villagerconfig:enchant_randomly` has `min_level` and `max_level` options
 
 ## [4.1.2] - 2023-11-23
 ### Fixed

@@ -34,12 +34,16 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
 
     private final List<Enchantment> include;
     private final List<Enchantment> exclude;
+    private final int minLevel;
+    private final int maxLevel;
     private final boolean tradeEnchantments;
 
-    EnchantRandomlyLootFunction(LootItemCondition[] conditions, Collection<Enchantment> include, Collection<Enchantment> exclude, boolean tradeEnchantments) {
+    EnchantRandomlyLootFunction(LootItemCondition[] conditions, Collection<Enchantment> include, Collection<Enchantment> exclude, int minLevel, int maxLevel, boolean tradeEnchantments) {
         super(conditions);
         this.include = ImmutableList.copyOf(include);
         this.exclude = ImmutableList.copyOf(exclude);
+        this.minLevel = minLevel;
+        this.maxLevel = maxLevel;
         this.tradeEnchantments = tradeEnchantments;
     }
 
@@ -70,8 +74,9 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
         return stream.filter(enchantment -> isBook || enchantment.canEnchant(stack)).toList();
     }
 
-    private static ItemStack addEnchantmentToStack(ItemStack stack, Enchantment enchantment, RandomSource random, LootContext context) {
+    private ItemStack addEnchantmentToStack(ItemStack stack, Enchantment enchantment, RandomSource random, LootContext context) {
         int level = Mth.nextInt(random, enchantment.getMinLevel(), enchantment.getMaxLevel());
+        level = Mth.clamp(level, this.minLevel, this.maxLevel);
         if (stack.is(Items.BOOK)) {
             stack = new ItemStack(Items.ENCHANTED_BOOK);
             EnchantedBookItem.addEnchantment(stack, new EnchantmentInstance(enchantment, level));
@@ -92,7 +97,7 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
     }
 
     public static class Builder
-            extends LootItemConditionalFunction.Builder<EnchantRandomlyLootFunction.Builder> {
+        extends LootItemConditionalFunction.Builder<EnchantRandomlyLootFunction.Builder> {
 
         private final Set<Enchantment> include = Sets.newHashSet();
         private final Set<Enchantment> exclude = Sets.newHashSet();
@@ -115,7 +120,7 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
 
         @Override
         public @NotNull LootItemFunction build() {
-            return new EnchantRandomlyLootFunction(this.getConditions(), include, exclude, tradeEnchantments);
+            return new EnchantRandomlyLootFunction(this.getConditions(), include, exclude, 0, Integer.MAX_VALUE, tradeEnchantments);
         }
 
         @Override
@@ -125,14 +130,21 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
     }
 
     public static class Serializer
-            extends LootItemConditionalFunction.Serializer<EnchantRandomlyLootFunction> {
+        extends LootItemConditionalFunction.Serializer<EnchantRandomlyLootFunction> {
 
         @Override
         public void serialize(@NotNull JsonObject jsonObject, @NotNull EnchantRandomlyLootFunction enchantRandomlyLootFunction, @NotNull JsonSerializationContext jsonSerializationContext) {
             super.serialize(jsonObject, enchantRandomlyLootFunction, jsonSerializationContext);
             addEnchantments(jsonObject, enchantRandomlyLootFunction.include, "include");
             addEnchantments(jsonObject, enchantRandomlyLootFunction.exclude, "exclude");
-            jsonObject.addProperty("trade_enchantments", enchantRandomlyLootFunction.tradeEnchantments);        }
+            if (enchantRandomlyLootFunction.minLevel != 0) {
+                jsonObject.addProperty("min_level", enchantRandomlyLootFunction.minLevel);
+            }
+            if (enchantRandomlyLootFunction.minLevel != Integer.MAX_VALUE) {
+                jsonObject.addProperty("max_level", enchantRandomlyLootFunction.maxLevel);
+            }
+            jsonObject.addProperty("trade_enchantments", enchantRandomlyLootFunction.tradeEnchantments);
+        }
 
         private static void addEnchantments(JsonObject jsonObject, List<Enchantment> enchantments, String key) {
             if (!enchantments.isEmpty()) {
@@ -152,8 +164,10 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
         public @NotNull EnchantRandomlyLootFunction deserialize(@NotNull JsonObject jsonObject, @NotNull JsonDeserializationContext context, LootItemCondition @NotNull [] lootConditions) {
             List<Enchantment> include = getEnchantments(jsonObject, "include");
             List<Enchantment> exclude = getEnchantments(jsonObject, "exclude");
+            int minLevel = GsonHelper.getAsInt(jsonObject, "min_level", 0);
+            int maxLevel = GsonHelper.getAsInt(jsonObject, "max_level", Integer.MAX_VALUE);
             boolean tradeEnchantments = GsonHelper.getAsBoolean(jsonObject, "trade_enchantments", false);
-            return new EnchantRandomlyLootFunction(lootConditions, include, exclude, tradeEnchantments);
+            return new EnchantRandomlyLootFunction(lootConditions, include, exclude, minLevel, maxLevel, tradeEnchantments);
         }
 
         private static List<Enchantment> getEnchantments(JsonObject jsonObject, String key) {
