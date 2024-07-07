@@ -140,15 +140,19 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
             return;
         }
         if (size == 1) {
-            entries.get(0).createItemStack(consumer, lootContext);
+            entries.getFirst().createItemStack(itemStack -> limitCount(consumer, itemStack), lootContext);
             return;
         }
         int j = randomSource.nextInt(totalWeight.intValue());
         for (LootPoolEntry lootPoolEntry : entries) {
             if ((j -= lootPoolEntry.getWeight(lootContext.getLuck())) >= 0) continue;
-            lootPoolEntry.createItemStack(consumer, lootContext);
+            lootPoolEntry.createItemStack(itemStack -> limitCount(consumer, itemStack), lootContext);
             return;
         }
+    }
+
+    private static void limitCount(Consumer<ItemStack> consumer, ItemStack itemStack) {
+        consumer.accept(itemStack.copyWithCount(Math.min(itemStack.getMaxStackSize(), itemStack.getCount())));
     }
 
     private Map<String, Float> generateNumberReferences(Entity entity, RandomSource random) {

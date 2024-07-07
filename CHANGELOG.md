@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Incomplete EmeraldsForVillagerTypeItem causing generation errors
+- Stack counts exceeding maximum stack size
 
 ## [4.1.2] - 2023-11-23
 ### Fixed

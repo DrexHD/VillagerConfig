@@ -36,7 +36,4 @@ public class VillagerConfig implements ModInitializer {
         });
     }
 
-    public static String modId(String path) {
-        return MOD_ID + ":" + path;
-    }
 }
