@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [4.1.2] - 2024-07-29
+## [4.2.0] - 2024-07-29
 ### Changed
 - Removed `trade_enchantments` field from `enchant_randomly` loot function
 
