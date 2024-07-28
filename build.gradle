@@ -1,6 +1,10 @@
+import org.jetbrains.changelog.Changelog
+
 plugins {
     id 'fabric-loom' version '1.6-SNAPSHOT'
     id 'maven-publish'
+    id "me.modmuss50.mod-publish-plugin" version "0.+"
+    id 'org.jetbrains.changelog' version '2.+'
 }
 
 sourceCompatibility = JavaVersion.VERSION_21
@@ -37,6 +41,32 @@ dependencies {
 
 }
 
+publishMods {
+    file = remapJar.archiveFile
+    type = STABLE
+    changelog = fetchChangelog()
+
+    displayName = "VillagerConfig ${version.get()}"
+    modLoaders.add("fabric")
+    modLoaders.add("quilt")
+
+    curseforge {
+        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+        projectId = "400741"
+        minecraftVersions.add(project.minecraft_version)
+    }
+    modrinth {
+        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+        projectId = "OClpEDe3"
+        minecraftVersions.add(project.minecraft_version)
+    }
+    github {
+        accessToken = providers.environmentVariable("GITHUB_TOKEN")
+        repository = providers.environmentVariable("GITHUB_REPOSITORY").getOrElse("DrexHD/dryrun")
+        commitish = providers.environmentVariable("GITHUB_REF_NAME").getOrElse("dryrun")
+    }
+}
+
 processResources {
     inputs.property "version", project.version
 
@@ -53,5 +83,17 @@ tasks.withType(JavaCompile).configureEach {
 jar {
     from("LICENSE") {
         rename { "${it}_${project.archivesBaseName}" }
+    }
+}
+
+private String fetchChangelog() {
+    def log = getChangelog.changelog.get()
+    if (log.has(project.mod_version)) {
+        return log.renderItem(
+                log.get(project.mod_version).withHeader(false),
+                Changelog.OutputType.MARKDOWN
+        )
+    } else {
+        return ""
     }
 }
