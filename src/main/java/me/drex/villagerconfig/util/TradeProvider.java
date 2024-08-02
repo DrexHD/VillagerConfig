@@ -17,6 +17,7 @@ import me.drex.villagerconfig.util.loot.number.ReferenceLootNumberProvider;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.NbtPredicate;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -25,8 +26,11 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
@@ -36,7 +40,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.SuspiciousStewEffects;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.item.enchantment.providers.EnchantmentProvider;
+import net.minecraft.world.item.enchantment.providers.SingleEnchantment;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.entries.EntryGroup;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -136,9 +143,11 @@ public class TradeProvider implements DataProvider {
                 LootItem.lootTableItem(Items.EMERALD).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.emeraldAmount)))
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
         } else if (original instanceof VillagerTrades.ItemsForEmeralds factory) {
+            LootPoolSingletonContainer.Builder<?> result = lootTableItemStack(factory.itemStack);
+            enchantItem(result, factory.enchantmentProvider, factory);
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
                 LootItem.lootTableItem(Items.EMERALD).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.emeraldCost))),
-                lootTableItemStack(factory.itemStack)
+                result
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
         } else if (original instanceof VillagerTrades.SuspiciousStewForEmerald factory) {
             LootPoolSingletonContainer.Builder<?> suspciousStewBuilder = LootItem.lootTableItem(Items.SUSPICIOUS_STEW);
@@ -150,17 +159,22 @@ public class TradeProvider implements DataProvider {
                 suspciousStewBuilder
             ).traderExperience(factory.xp)};
         } else if (original instanceof VillagerTrades.ItemsAndEmeraldsToItems factory) {
+            LootPoolSingletonContainer.Builder<?> result = lootTableItemStack(factory.fromItem.itemStack());
+            enchantItem(result, factory.enchantmentProvider, factory);
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
                 LootItem.lootTableItem(Items.EMERALD).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.emeraldCost))),
-                lootTableItemStack(factory.fromItem.itemStack()),
+                result,
                 lootTableItemStack(factory.toItem)
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
         } else if (original instanceof VillagerTrades.EnchantedItemForEmeralds factory) {
+            Optional<HolderSet.Named<Enchantment>> optional = server.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getTag(EnchantmentTags.ON_TRADED_EQUIPMENT);
+            EnchantWithLevelsFunction.Builder builder = new EnchantWithLevelsFunction.Builder(ReferenceLootNumberProvider.create("enchantLevel"));
+            optional.ifPresent(builder::fromOptions);
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
                 LootItem.lootTableItem(Items.EMERALD)
                     .apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.baseEmeraldCost)))
                     .apply(SetItemCountFunction.setCount(ReferenceLootNumberProvider.create("enchantLevel"), true)),
-                lootTableItemStack(factory.itemStack).apply(new EnchantWithLevelsFunction.Builder(ReferenceLootNumberProvider.create("enchantLevel")))
+                lootTableItemStack(factory.itemStack).apply(builder)
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses).numberReference("enchantLevel", UniformGenerator.between(5, 19))};
         } else if (original instanceof VillagerTrades.EmeraldsForVillagerTypeItem factory) {
             List<BehaviorTrade.Builder> trades = new ArrayList<>(factory.trades.size());
@@ -269,6 +283,17 @@ public class TradeProvider implements DataProvider {
         }
         LOGGER.warn("Unable to convert {}, generated json won't be complete!", original.getClass());
         return new BehaviorTrade.Builder[]{};
+    }
+
+    private void enchantItem(LootPoolSingletonContainer.Builder<?> builder, Optional<ResourceKey<EnchantmentProvider>> optional, VillagerTrades.ItemListing factory) {
+        if (optional.isPresent()) {
+            EnchantmentProvider enchantmentProvider = server.registryAccess().registryOrThrow(Registries.ENCHANTMENT_PROVIDER).get(optional.get());
+            if (enchantmentProvider instanceof SingleEnchantment singleEnchantment && singleEnchantment.level() instanceof ConstantInt constantInt) {
+                builder.apply(new SetEnchantmentsFunction.Builder().withEnchantment(singleEnchantment.enchantment(), new ConstantValue(constantInt.getValue())));
+            } else {
+                LOGGER.warn("Failed to generate trades '{}', encountered unexpected enchantment provider '{}'.", factory, enchantmentProvider);
+            }
+        }
     }
 
     private static LootPoolSingletonContainer.Builder<?> lootTableItemStack(ItemStack itemStack) {

@@ -24,6 +24,7 @@ accessible    field    net/minecraft/world/entity/npc/VillagerTrades$ItemsForEme
 accessible    field    net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds    maxUses    I
 accessible    field    net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds    villagerXp    I
 accessible    field    net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds    priceMultiplier    F
+accessible    field    net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds    enchantmentProvider    Ljava/util/Optional;
 
 # SuspiciousStewForEmerald
 accessible    field    net/minecraft/world/entity/npc/VillagerTrades$SuspiciousStewForEmerald    effects    Lnet/minecraft/world/item/component/SuspiciousStewEffects;
@@ -37,6 +38,7 @@ accessible    field    net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEme
 accessible    field    net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems    maxUses    I
 accessible    field    net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems    villagerXp    I
 accessible    field    net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems    priceMultiplier    F
+accessible    field    net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems    enchantmentProvider    Ljava/util/Optional;
 
 # EnchantedItemForEmeralds
 accessible    field    net/minecraft/world/entity/npc/VillagerTrades$EnchantedItemForEmeralds    itemStack    Lnet/minecraft/world/item/ItemStack;
