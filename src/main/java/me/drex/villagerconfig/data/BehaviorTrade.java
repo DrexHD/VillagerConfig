@@ -110,13 +110,12 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
 
     private static ItemCost convertToCost(ItemStack stack) {
         ItemCost itemCost = new ItemCost(stack.getItem(), stack.getCount());
-        itemCost.withComponents(builder -> {
+        return itemCost.withComponents(builder -> {
             for (TypedDataComponent<?> component : stack.getComponents()) {
                 addToBuilder(builder, component);
             }
             return builder;
         });
-        return itemCost;
     }
 
     private static <T> void addToBuilder(DataComponentPredicate.Builder builder, TypedDataComponent<T> type) {
