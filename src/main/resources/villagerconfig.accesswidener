@@ -1,6 +1,7 @@
 accessWidener v1 named
 accessible    class    net/minecraft/resources/RegistryOps$RegistryInfo
 accessible    method    net/minecraft/world/level/storage/loot/providers/number/UniformGenerator    <init>    (Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;)V
+accessible class net/minecraft/server/ReloadableServerResources$ConfigurableRegistryLookup
 
 # TypeSpecificTrade
 accessible    field    net/minecraft/world/entity/npc/VillagerTrades$TypeSpecificTrade    trades    Ljava/util/Map;

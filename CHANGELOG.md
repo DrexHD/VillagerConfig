@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Item cost component predicates not being used
 - Suspicious stew effect duration for non-instant effects
+- Trades loading to early
 
 ## [4.2.0] - 2024-07-29
 ### Changed

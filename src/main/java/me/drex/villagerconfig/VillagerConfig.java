@@ -25,11 +25,6 @@ public class VillagerConfig implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        DynamicRegistrySetupCallback.EVENT.register(registryView -> {
-            if (TRADE_MANAGER != null) return;
-            TRADE_MANAGER = new TradeManager(registryView.asDynamicRegistryManager());
-            ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(TRADE_MANAGER);
-        });
         ConfigManager.load();
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             VillagerConfigCommand.register(dispatcher);
