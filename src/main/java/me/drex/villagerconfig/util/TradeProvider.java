@@ -152,7 +152,11 @@ public class TradeProvider implements DataProvider {
         } else if (original instanceof VillagerTrades.SuspiciousStewForEmerald factory) {
             LootPoolSingletonContainer.Builder<?> suspciousStewBuilder = LootItem.lootTableItem(Items.SUSPICIOUS_STEW);
             for (SuspiciousStewEffects.Entry effect : factory.effects.effects()) {
-                suspciousStewBuilder.apply(new SetStewEffectFunction.Builder().withEffect(effect.effect(), ConstantValue.exactly(effect.duration())));
+                int duration = effect.duration();
+                if (!effect.effect().value().isInstantenous()) {
+                    duration /= 20;
+                }
+                suspciousStewBuilder.apply(new SetStewEffectFunction.Builder().withEffect(effect.effect(), ConstantValue.exactly(duration)));
             }
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
                 LootItem.lootTableItem(Items.EMERALD),
