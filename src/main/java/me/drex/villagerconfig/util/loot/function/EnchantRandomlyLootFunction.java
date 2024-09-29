@@ -68,7 +68,7 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
             () -> {
                 boolean isBook = stack.is(Items.BOOK);
                 HolderSet<Enchantment> excluded = exclude.orElse(HolderSet.direct());
-                List<Holder.Reference<Enchantment>> list = context.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT).holders()
+                List<Holder.Reference<Enchantment>> list = context.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).listElements()
                     .filter(reference -> isBook || reference.value().canEnchant(stack))
                     .filter(reference -> !excluded.contains(reference))
                     .toList();

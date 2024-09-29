@@ -171,7 +171,7 @@ public class TradeProvider implements DataProvider {
                 lootTableItemStack(factory.toItem)
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
         } else if (original instanceof VillagerTrades.EnchantedItemForEmeralds factory) {
-            Optional<HolderSet.Named<Enchantment>> optional = server.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getTag(EnchantmentTags.ON_TRADED_EQUIPMENT);
+            Optional<HolderSet.Named<Enchantment>> optional = server.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).get(EnchantmentTags.ON_TRADED_EQUIPMENT);
             EnchantWithLevelsFunction.Builder builder = new EnchantWithLevelsFunction.Builder(ReferenceLootNumberProvider.create("enchantLevel"));
             optional.ifPresent(builder::fromOptions);
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
@@ -200,7 +200,7 @@ public class TradeProvider implements DataProvider {
             return trades.toArray(BehaviorTrade.Builder[]::new);
         } else if (original instanceof VillagerTrades.TippedArrowForItemsAndEmeralds factory) {
             List<Holder<Potion>> potions = BuiltInRegistries.POTION
-                .holders()
+                .listElements()
                 .filter(reference -> !(reference.value()).getEffects().isEmpty() && server.potionBrewing().isBrewablePotion(reference))
                 .collect(Collectors.toList());
             LootPoolEntryContainer.Builder<?>[] entries = new LootPoolEntryContainer.Builder[potions.size()];
@@ -216,7 +216,7 @@ public class TradeProvider implements DataProvider {
         } else if (original instanceof VillagerTrades.EnchantBookForEmeralds factory) {
             EnchantRandomlyLootFunction.Builder enchantRandomlyFunction = new EnchantRandomlyLootFunction.Builder()
                 .minLevel(factory.minLevel).maxLevel(factory.maxLevel)
-                .include(server.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getOrCreateTag(factory.tradeableEnchantments));
+                .include(server.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(factory.tradeableEnchantments));
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
                 LootItem.lootTableItem(Items.EMERALD).apply(SetItemCountFunction.setCount(
                     // Count formula: (2 + (random.nextInt(5 + (enchantmentLevel * 10))) + (3 * enchantmentLevel)) * treasureMultiplier
@@ -291,7 +291,7 @@ public class TradeProvider implements DataProvider {
 
     private void enchantItem(LootPoolSingletonContainer.Builder<?> builder, Optional<ResourceKey<EnchantmentProvider>> optional, VillagerTrades.ItemListing factory) {
         if (optional.isPresent()) {
-            EnchantmentProvider enchantmentProvider = server.registryAccess().registryOrThrow(Registries.ENCHANTMENT_PROVIDER).get(optional.get());
+            EnchantmentProvider enchantmentProvider = server.registryAccess().lookupOrThrow(Registries.ENCHANTMENT_PROVIDER).getValue(optional.get());
             if (enchantmentProvider instanceof SingleEnchantment singleEnchantment && singleEnchantment.level() instanceof ConstantInt constantInt) {
                 builder.apply(new SetEnchantmentsFunction.Builder().withEnchantment(singleEnchantment.enchantment(), new ConstantValue(constantInt.getValue())));
             } else {
