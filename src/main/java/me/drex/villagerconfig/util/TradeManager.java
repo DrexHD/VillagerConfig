@@ -1,10 +1,12 @@
 package me.drex.villagerconfig.util;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.serialization.JsonOps;
 import me.drex.villagerconfig.VillagerConfig;
 import me.drex.villagerconfig.data.TradeTable;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -21,7 +23,7 @@ public class TradeManager extends SimpleJsonResourceReloadListener<TradeTable> i
     private Map<ResourceLocation, TradeTable> trades = ImmutableMap.of();
 
     public TradeManager(HolderLookup.Provider provider) {
-        super(provider, TradeTable.CODEC, "trades");
+        super(provider.createSerializationContext(JsonOps.INSTANCE), TradeTable.CODEC, FileToIdConverter.json("trades"));
     }
 
     @Nullable
