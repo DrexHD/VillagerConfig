@@ -2,7 +2,6 @@ package me.drex.villagerconfig.commands;
 
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import me.drex.villagerconfig.VillagerConfig;
 import me.drex.villagerconfig.util.TradeProvider;
 import net.minecraft.ChatFormatting;
@@ -11,6 +10,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.flag.FeatureFlags;
 
 import java.nio.file.Path;
 
@@ -30,6 +30,13 @@ public class GenerateCommand {
     private static int execute(CommandSourceStack src, boolean experimental) {
         DataGenerator dataGenerator = new DataGenerator(GENERATED, SharedConstants.getCurrentVersion(), true);
         DataGenerator.PackGenerator tradesPack = dataGenerator.getVanillaPack(true);
+        if (experimental) {
+            if (!src.getLevel().enabledFeatures().contains(FeatureFlags.TRADE_REBALANCE)) {
+                src.sendFailure(Component.literal("You need to enable experimental trade rebalance datapack to generate experimental trades"));
+                return 0;
+            }
+        }
+
         tradesPack.addProvider(packOutput -> new TradeProvider(packOutput, src.getServer(), experimental));
         try {
             dataGenerator.run();
