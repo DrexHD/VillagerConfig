@@ -15,16 +15,11 @@ import static net.minecraft.commands.Commands.literal;
 public class VillagerConfigCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        LiteralCommandNode<CommandSourceStack> config = literal("config").build();
-        CONFIG.generateCommand(config);
         LiteralCommandNode<CommandSourceStack> root = dispatcher.register(
                 literal("villagerconfig")
                         .requires(src -> src.hasPermission(2))
                         .then(GenerateCommand.builder())
                         .then(ReloadCommand.builder())
-                        .then(
-                                config
-                        )
                         .executes(VillagerConfigCommand::execute)
         );
         dispatcher.register(literal("vc").requires(src -> src.hasPermission(2)).executes(VillagerConfigCommand::execute).redirect(root));
