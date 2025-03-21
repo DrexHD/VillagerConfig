@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.drex.villagerconfig.mixin.MerchantOfferAccessor;
 import me.drex.villagerconfig.util.loot.VCLootContextParams;
 import net.minecraft.Util;
-import net.minecraft.core.component.DataComponentPredicate;
+import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -118,7 +118,7 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
         });
     }
 
-    private static <T> void addToBuilder(DataComponentPredicate.Builder builder, TypedDataComponent<T> type) {
+    private static <T> void addToBuilder(DataComponentExactPredicate.Builder builder, TypedDataComponent<T> type) {
         builder.expect(type.type(), type.value());
     }
 

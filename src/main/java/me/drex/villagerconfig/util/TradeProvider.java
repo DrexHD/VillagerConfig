@@ -77,11 +77,11 @@ public class TradeProvider implements DataProvider {
         default -> 0;
     };
     private static final IntUnaryOperator EXPERIMENTAL_WANDERING_TRADER_COUNT = i -> {
-        if (i > VillagerTrades.EXPERIMENTAL_WANDERING_TRADER_TRADES.size()) {
+        if (i > VillagerTrades.WANDERING_TRADER_TRADES.size()) {
             // Invalid level
             return 0;
         } else {
-            return VillagerTrades.EXPERIMENTAL_WANDERING_TRADER_TRADES.get(i - 1).getValue();
+            return VillagerTrades.WANDERING_TRADER_TRADES.get(i - 1).getValue();
         }
     };
 
@@ -96,26 +96,22 @@ public class TradeProvider implements DataProvider {
         HashMap<ResourceLocation, TradeData> map = Maps.newHashMap();
 
         // Save all villager trades
-        for (VillagerProfession villagerProfession : BuiltInRegistries.VILLAGER_PROFESSION) {
+        for (ResourceKey<VillagerProfession> villagerProfession : BuiltInRegistries.VILLAGER_PROFESSION.registryKeySet()) {
             Int2ObjectMap<VillagerTrades.ItemListing[]> trades = VillagerTrades.TRADES.getOrDefault(villagerProfession, new Int2ObjectArrayMap<>());
             Int2ObjectMap<VillagerTrades.ItemListing[]> experimentalTrades = VillagerTrades.EXPERIMENTAL_TRADES.get(villagerProfession);
             if (experimental && experimentalTrades != null) {
                 trades = experimentalTrades;
             }
-            map.put(BuiltInRegistries.VILLAGER_PROFESSION.getKey(villagerProfession), new TradeData(trades, VILLAGER));
+            map.put(villagerProfession.location(), new TradeData(trades, VILLAGER));
         }
         // Save wandering trader trades
-        if (experimental) {
-            Int2ObjectMap<VillagerTrades.ItemListing[]> experimentalTrades = new Int2ObjectArrayMap<>();
-            List<Pair<VillagerTrades.ItemListing[], Integer>> experimentalWanderingTraderTrades = VillagerTrades.EXPERIMENTAL_WANDERING_TRADER_TRADES;
-            for (int i = 0; i < experimentalWanderingTraderTrades.size(); i++) {
-                Pair<VillagerTrades.ItemListing[], Integer> pair = experimentalWanderingTraderTrades.get(i);
-                experimentalTrades.put(i + 1, pair.getLeft());
-            }
-            map.put(WANDERING_TRADER_ID, new TradeData(experimentalTrades, EXPERIMENTAL_WANDERING_TRADER));
-        } else {
-            map.put(WANDERING_TRADER_ID, new TradeData(VillagerTrades.WANDERING_TRADER_TRADES, WANDERING_TRADER));
+        Int2ObjectMap<VillagerTrades.ItemListing[]> trades = new Int2ObjectArrayMap<>();
+        List<Pair<VillagerTrades.ItemListing[], Integer>> experimentalWanderingTraderTrades = VillagerTrades.WANDERING_TRADER_TRADES;
+        for (int i = 0; i < experimentalWanderingTraderTrades.size(); i++) {
+            Pair<VillagerTrades.ItemListing[], Integer> pair = experimentalWanderingTraderTrades.get(i);
+            trades.put(i + 1, pair.getLeft());
         }
+        map.put(WANDERING_TRADER_ID, new TradeData(trades, EXPERIMENTAL_WANDERING_TRADER));
         return CompletableFuture.allOf(map.entrySet().stream().map(entry -> {
             ResourceLocation identifier = entry.getKey();
             TradeData tradeData = entry.getValue();
@@ -182,10 +178,10 @@ public class TradeProvider implements DataProvider {
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses).numberReference("enchantLevel", UniformGenerator.between(5, 19))};
         } else if (original instanceof VillagerTrades.EmeraldsForVillagerTypeItem factory) {
             List<BehaviorTrade.Builder> trades = new ArrayList<>(factory.trades.size());
-            for (Map.Entry<VillagerType, Item> entry : factory.trades.entrySet()) {
+            for (Map.Entry<ResourceKey<VillagerType>, Item> entry : factory.trades.entrySet()) {
                 CompoundTag root = new CompoundTag();
                 CompoundTag villagerData = new CompoundTag();
-                villagerData.putString("type", BuiltInRegistries.VILLAGER_TYPE.getKey(entry.getKey()).toString());
+                villagerData.putString("type", entry.getKey().location().toString());
                 root.put("VillagerData", villagerData);
                 BehaviorTrade.Builder trade = new BehaviorTrade.Builder(
                     LootItem.lootTableItem(factory.trades.get(entry.getKey())).apply(
@@ -273,10 +269,10 @@ public class TradeProvider implements DataProvider {
             ).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
         } else if (original instanceof VillagerTrades.TypeSpecificTrade factory) {
             List<BehaviorTrade.Builder> trades = new ArrayList<>(factory.trades().size());
-            for (Map.Entry<VillagerType, VillagerTrades.ItemListing> entry : factory.trades().entrySet()) {
+            for (Map.Entry<ResourceKey<VillagerType>, VillagerTrades.ItemListing> entry : factory.trades().entrySet()) {
                 CompoundTag root = new CompoundTag();
                 CompoundTag villagerData = new CompoundTag();
-                villagerData.putString("type", BuiltInRegistries.VILLAGER_TYPE.getKey(entry.getKey()).toString());
+                villagerData.putString("type", entry.getKey().location().toString());
                 root.put("VillagerData", villagerData);
                 for (BehaviorTrade.Builder behaviorTrade : convert(entry.getValue())) {
                     behaviorTrade.when(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().nbt(new NbtPredicate(root))));

@@ -40,7 +40,7 @@ public abstract class VillagerMixin extends AbstractVillager {
         TradeTable tradeTable = getTradeTable();
         if (tradeTable != null) {
             VillagerData villagerData = this.getVillagerData();
-            int level = villagerData.getLevel();
+            int level = villagerData.level();
             VillagerTrades.ItemListing[] customOffers = tradeTable.getTradeOffers(this, level);
             this.addOffersFromItemListings(getOffers(), customOffers, customOffers.length);
             ci.cancel();
@@ -91,7 +91,7 @@ public abstract class VillagerMixin extends AbstractVillager {
 
     private TradeTable getTradeTable() {
         if (this.level() instanceof ServerLevel) {
-            ResourceLocation identifier = BuiltInRegistries.VILLAGER_PROFESSION.getKey(this.getVillagerData().getProfession());
+            ResourceLocation identifier = BuiltInRegistries.VILLAGER_PROFESSION.getKey(this.getVillagerData().profession().value());
             return TRADE_MANAGER.getTrade(identifier);
         }
         return null;
