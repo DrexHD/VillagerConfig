@@ -113,13 +113,13 @@ public class TradeProvider implements DataProvider {
         }
         map.put(WANDERING_TRADER_ID, new TradeData(trades, EXPERIMENTAL_WANDERING_TRADER));
         return CompletableFuture.allOf(map.entrySet().stream().map(entry -> {
-            ResourceLocation identifier = entry.getKey();
+            ResourceLocation id = entry.getKey();
             TradeData tradeData = entry.getValue();
-            Path path = this.pathResolver.json(identifier);
+            Path path = this.pathResolver.json(id);
             int levels = tradeData.trades().size();
             final TradeTier[] tiers = new TradeTier[levels];
             tradeData.trades().forEach((level, factoryArr) -> {
-                TradeGroup tradeGroup = new TradeGroup(ConstantValue.exactly(tradeData.offerCountType().getOfferCount(level)), Arrays.stream(factoryArr).map(this::convert).flatMap(Stream::of).map(BehaviorTrade.Builder::build).filter(Objects::nonNull).toList());
+                TradeGroup tradeGroup = new TradeGroup(ConstantValue.exactly(tradeData.offerCountType().getOfferCount(level)), Arrays.stream(factoryArr).map(itemListing -> convert(itemListing, id)).flatMap(Stream::of).map(BehaviorTrade.Builder::build).filter(Objects::nonNull).toList());
                 tiers[level - 1] = new TradeTier((VillagerDataAccessor.getNextLevelXpThresholds()[level - 1]), List.of(tradeGroup));
             });
             TradeTable tradeTable = new TradeTable(List.of(tiers));
@@ -132,7 +132,7 @@ public class TradeProvider implements DataProvider {
         return "Trades";
     }
 
-    private BehaviorTrade.Builder[] convert(VillagerTrades.ItemListing original) {
+    private BehaviorTrade.Builder[] convert(VillagerTrades.ItemListing original, ResourceLocation id) {
         if (original instanceof VillagerTrades.EmeraldForItems factory) {
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
                 lootTableItemStack(factory.itemStack.itemStack()),
@@ -274,14 +274,14 @@ public class TradeProvider implements DataProvider {
                 CompoundTag villagerData = new CompoundTag();
                 villagerData.putString("type", entry.getKey().location().toString());
                 root.put("VillagerData", villagerData);
-                for (BehaviorTrade.Builder behaviorTrade : convert(entry.getValue())) {
+                for (BehaviorTrade.Builder behaviorTrade : convert(entry.getValue(), id)) {
                     behaviorTrade.when(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().nbt(new NbtPredicate(root))));
                     trades.add(behaviorTrade);
                 }
             }
             return trades.toArray(BehaviorTrade.Builder[]::new);
         }
-        LOGGER.warn("Unable to convert {}, generated json won't be complete!", original.getClass());
+        LOGGER.warn("Unable to convert {}: {} for {}, generated json won't be complete!", original.getClass(), original, id);
         return new BehaviorTrade.Builder[]{};
     }
 
