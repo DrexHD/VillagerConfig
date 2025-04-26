@@ -6,8 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.drex.villagerconfig.mixin.MerchantOfferAccessor;
 import me.drex.villagerconfig.util.loot.VCLootContextParams;
 import net.minecraft.Util;
-import net.minecraft.core.component.DataComponentExactPredicate;
-import net.minecraft.core.component.TypedDataComponent;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -111,15 +110,13 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
     private static ItemCost convertToCost(ItemStack stack) {
         ItemCost itemCost = new ItemCost(stack.getItem(), stack.getCount());
         return itemCost.withComponents(builder -> {
-            for (TypedDataComponent<?> component : stack.getComponents()) {
-                addToBuilder(builder, component);
+            for (Map.Entry<DataComponentType<?>, Optional<?>> componentPatch : stack.getComponentsPatch().entrySet()) {
+                Optional<?> value = componentPatch.getValue();
+                DataComponentType<?> key = componentPatch.getKey();
+                value.ifPresent(o -> builder.expect((DataComponentType<Object>) key, o));
             }
             return builder;
         });
-    }
-
-    private static <T> void addToBuilder(DataComponentExactPredicate.Builder builder, TypedDataComponent<T> type) {
-        builder.expect(type.type(), type.value());
     }
 
     // Copied from LootPool.addRandomItem()

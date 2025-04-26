@@ -42,7 +42,7 @@ dependencies {
 
 publishMods {
     file = remapJar.archiveFile
-    type = BETA
+    type = STABLE
     changelog = fetchChangelog()
 
     displayName = "VillagerConfig ${version.get()}"
