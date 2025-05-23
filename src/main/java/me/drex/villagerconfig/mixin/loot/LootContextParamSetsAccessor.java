@@ -1,6 +1,10 @@
 package me.drex.villagerconfig.mixin.loot;
 
+//? if >= 1.21.2 {
 import net.minecraft.util.context.ContextKeySet;
+//?} else {
+/*import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
+*///?}
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
@@ -10,7 +14,7 @@ import java.util.function.Consumer;
 @Mixin(LootContextParamSets.class)
 public interface LootContextParamSetsAccessor {
     @Invoker
-    static ContextKeySet invokeRegister(String name, Consumer<ContextKeySet.Builder> type) {
+    static /*? if >= 1.21.2 {*/ ContextKeySet /*?} else {*/ /*LootContextParamSet *//*?}*/ invokeRegister(String name, Consumer</*? if >= 1.21.2 {*/ ContextKeySet /*?} else {*/ /*LootContextParamSet *//*?}*/.Builder> type) {
         throw new AssertionError();
     }
 }

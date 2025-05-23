@@ -91,8 +91,8 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
             itemStack = new ItemStack(Items.ENCHANTED_BOOK);
         }
         itemStack.enchant(holder, level);
-        if (context.hasParameter(VCLootContextParams.NUMBER_REFERENCE)) {
-            Map<String, Float> referenceProviders = context.getParameter(VCLootContextParams.NUMBER_REFERENCE);
+        if (context./*? if >= 1.21.2 {*/ hasParameter /*?} else {*/ /*hasParam *//*?}*/(VCLootContextParams.NUMBER_REFERENCE)) {
+            Map<String, Float> referenceProviders = context./*? if >= 1.21.2 {*/ getParameter /*?} else {*/ /*getParam *//*?}*/(VCLootContextParams.NUMBER_REFERENCE);
             referenceProviders.put("enchantmentLevel", (float) level);
             referenceProviders.put("treasureMultiplier", holder.is(EnchantmentTags.DOUBLE_TRADE_PRICE) ? (float) 2 : 1);
         }

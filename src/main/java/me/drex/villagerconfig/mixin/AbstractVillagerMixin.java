@@ -55,7 +55,7 @@ public abstract class AbstractVillagerMixin extends AgeableMob implements IVilla
         long seed = this.uuid.getLeastSignificantBits();
         if ((Object) this instanceof Villager villager) {
             // This is used to make sure, different levels choose different trade index
-            int level = villager.getVillagerData().level();
+            int level = villager.getVillagerData()./*? if >= 1.21.5 {*/ level() /*?} else {*/ /*getLevel() *//*?}*/;
             seed += level;
         }
         semiRandom = RandomSource.create(seed);

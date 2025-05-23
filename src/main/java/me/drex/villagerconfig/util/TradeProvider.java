@@ -17,6 +17,7 @@ import me.drex.villagerconfig.util.loot.number.ReferenceLootNumberProvider;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.NbtPredicate;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -71,19 +72,28 @@ public class TradeProvider implements DataProvider {
     private final MinecraftServer server;
     private final boolean experimental;
     public static final ResourceLocation WANDERING_TRADER_ID = ResourceLocation.withDefaultNamespace("wanderingtrader");
-    private static final IntUnaryOperator WANDERING_TRADER_COUNT = i -> switch (i) {
+
+    private static final IntUnaryOperator EXPERIMENTAL1_21_4_WANDERING_TRADER_COUNT = i -> {
+
+        var trades = VillagerTrades./*? if >= 1.21.5 {*/ WANDERING_TRADER_TRADES /*?} else {*/ /*EXPERIMENTAL_WANDERING_TRADER_TRADES *//*?}*/;
+        if (i > trades.size()) {
+            // Invalid level
+            return 0;
+        } else {
+            return trades.get(i - 1).getValue();
+        }
+    };
+
+    //? if >= 1.21.5 {
+    // in 1.21.5 wandering traders always use the "1.21.4 experimental" trades
+    private static final IntUnaryOperator WANDERING_TRADER_COUNT = EXPERIMENTAL1_21_4_WANDERING_TRADER_COUNT;
+    //?} else {
+    /*private static final IntUnaryOperator WANDERING_TRADER_COUNT = i -> switch (i) {
         case 1 -> 5;
         case 2 -> 1;
         default -> 0;
     };
-    private static final IntUnaryOperator EXPERIMENTAL_WANDERING_TRADER_COUNT = i -> {
-        if (i > VillagerTrades.WANDERING_TRADER_TRADES.size()) {
-            // Invalid level
-            return 0;
-        } else {
-            return VillagerTrades.WANDERING_TRADER_TRADES.get(i - 1).getValue();
-        }
-    };
+    *///?}
 
     public TradeProvider(PackOutput output, MinecraftServer server, boolean experimental) {
         this.pathResolver = output.createPathProvider(PackOutput.Target.DATA_PACK, "trades");
@@ -105,6 +115,7 @@ public class TradeProvider implements DataProvider {
             map.put(villagerProfession.location(), new TradeData(trades, VILLAGER));
         }
         // Save wandering trader trades
+        //? if >= 1.21.5 {
         Int2ObjectMap<VillagerTrades.ItemListing[]> trades = new Int2ObjectArrayMap<>();
         List<Pair<VillagerTrades.ItemListing[], Integer>> experimentalWanderingTraderTrades = VillagerTrades.WANDERING_TRADER_TRADES;
         for (int i = 0; i < experimentalWanderingTraderTrades.size(); i++) {
@@ -112,6 +123,19 @@ public class TradeProvider implements DataProvider {
             trades.put(i + 1, pair.getLeft());
         }
         map.put(WANDERING_TRADER_ID, new TradeData(trades, EXPERIMENTAL_WANDERING_TRADER));
+        //?} else {
+        /*if (experimental) {
+            Int2ObjectMap<VillagerTrades.ItemListing[]> experimentalTrades = new Int2ObjectArrayMap<>();
+            List<Pair<VillagerTrades.ItemListing[], Integer>> experimentalWanderingTraderTrades = VillagerTrades.EXPERIMENTAL_WANDERING_TRADER_TRADES;
+            for (int i = 0; i < experimentalWanderingTraderTrades.size(); i++) {
+                Pair<VillagerTrades.ItemListing[], Integer> pair = experimentalWanderingTraderTrades.get(i);
+                experimentalTrades.put(i + 1, pair.getLeft());
+            }
+            map.put(WANDERING_TRADER_ID, new TradeData(experimentalTrades, EXPERIMENTAL_WANDERING_TRADER));
+        } else {
+            map.put(WANDERING_TRADER_ID, new TradeData(VillagerTrades.WANDERING_TRADER_TRADES, WANDERING_TRADER));
+        }
+        *///?}
         return CompletableFuture.allOf(map.entrySet().stream().map(entry -> {
             ResourceLocation id = entry.getKey();
             TradeData tradeData = entry.getValue();
@@ -178,10 +202,14 @@ public class TradeProvider implements DataProvider {
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses).numberReference("enchantLevel", UniformGenerator.between(5, 19))};
         } else if (original instanceof VillagerTrades.EmeraldsForVillagerTypeItem factory) {
             List<BehaviorTrade.Builder> trades = new ArrayList<>(factory.trades.size());
-            for (Map.Entry<ResourceKey<VillagerType>, Item> entry : factory.trades.entrySet()) {
+            for (Map.Entry</*? if >= 1.21.5 {*/ ResourceKey<VillagerType> /*?} else {*/ /*VillagerType *//*?}*/, Item> entry : factory.trades.entrySet()) {
                 CompoundTag root = new CompoundTag();
                 CompoundTag villagerData = new CompoundTag();
+                //? if >= 1.21.5 {
                 villagerData.putString("type", entry.getKey().location().toString());
+                //?} else {
+                /*villagerData.putString("type", BuiltInRegistries.VILLAGER_TYPE.getKey(entry.getKey()).toString());
+                *///?}
                 root.put("VillagerData", villagerData);
                 BehaviorTrade.Builder trade = new BehaviorTrade.Builder(
                     LootItem.lootTableItem(factory.trades.get(entry.getKey())).apply(
@@ -196,7 +224,11 @@ public class TradeProvider implements DataProvider {
             return trades.toArray(BehaviorTrade.Builder[]::new);
         } else if (original instanceof VillagerTrades.TippedArrowForItemsAndEmeralds factory) {
             List<Holder<Potion>> potions = BuiltInRegistries.POTION
+                //? if >= 1.21.2 {
                 .listElements()
+                //?} else {
+                /*.holders()
+                *///?}
                 .filter(reference -> !(reference.value()).getEffects().isEmpty() && server.potionBrewing().isBrewablePotion(reference))
                 .collect(Collectors.toList());
             LootPoolEntryContainer.Builder<?>[] entries = new LootPoolEntryContainer.Builder[potions.size()];
@@ -269,10 +301,14 @@ public class TradeProvider implements DataProvider {
             ).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
         } else if (original instanceof VillagerTrades.TypeSpecificTrade factory) {
             List<BehaviorTrade.Builder> trades = new ArrayList<>(factory.trades().size());
-            for (Map.Entry<ResourceKey<VillagerType>, VillagerTrades.ItemListing> entry : factory.trades().entrySet()) {
+            for (Map.Entry</*? if >= 1.21.5 {*/ ResourceKey<VillagerType> /*?} else {*/ /*VillagerType *//*?}*/, VillagerTrades.ItemListing> entry : factory.trades().entrySet()) {
                 CompoundTag root = new CompoundTag();
                 CompoundTag villagerData = new CompoundTag();
+                //? if >= 1.21.5 {
                 villagerData.putString("type", entry.getKey().location().toString());
+                //?} else {
+                /*villagerData.putString("type", BuiltInRegistries.VILLAGER_TYPE.getKey(entry.getKey()).toString());
+                *///?}
                 root.put("VillagerData", villagerData);
                 for (BehaviorTrade.Builder behaviorTrade : convert(entry.getValue(), id)) {
                     behaviorTrade.when(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().nbt(new NbtPredicate(root))));
@@ -287,7 +323,12 @@ public class TradeProvider implements DataProvider {
 
     private void enchantItem(LootPoolSingletonContainer.Builder<?> builder, Optional<ResourceKey<EnchantmentProvider>> optional, VillagerTrades.ItemListing factory) {
         if (optional.isPresent()) {
+            HolderLookup.RegistryLookup<EnchantmentProvider> lookup = server.registryAccess().lookupOrThrow(Registries.ENCHANTMENT_PROVIDER);
+            //? if >= 1.21.2 {
             EnchantmentProvider enchantmentProvider = server.registryAccess().lookupOrThrow(Registries.ENCHANTMENT_PROVIDER).getValue(optional.get());
+            //?} else {
+            /*EnchantmentProvider enchantmentProvider = server.registryAccess().lookupOrThrow(Registries.ENCHANTMENT_PROVIDER).getOrThrow(optional.get()).value();
+            *///?}
             if (enchantmentProvider instanceof SingleEnchantment singleEnchantment && singleEnchantment.level() instanceof ConstantInt constantInt) {
                 builder.apply(new SetEnchantmentsFunction.Builder().withEnchantment(singleEnchantment.enchantment(), new ConstantValue(constantInt.getValue())));
             } else {
@@ -316,7 +357,7 @@ public class TradeProvider implements DataProvider {
     }
 
     public enum OfferCountType {
-        VILLAGER(i -> 2), WANDERING_TRADER(WANDERING_TRADER_COUNT), EXPERIMENTAL_WANDERING_TRADER(EXPERIMENTAL_WANDERING_TRADER_COUNT);
+        VILLAGER(i -> 2), WANDERING_TRADER(WANDERING_TRADER_COUNT), EXPERIMENTAL_WANDERING_TRADER(EXPERIMENTAL1_21_4_WANDERING_TRADER_COUNT);
 
         private final IntUnaryOperator operator;
 

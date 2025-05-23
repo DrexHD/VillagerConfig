@@ -30,17 +30,17 @@ public abstract class VillagerMixin extends AbstractVillager {
     }
 
     @Inject(
-            method = "updateTrades",
-            at = @At(
-                    value = "HEAD"
-            ),
-            cancellable = true
+        method = "updateTrades",
+        at = @At(
+            value = "HEAD"
+        ),
+        cancellable = true
     )
     public void putCustomTrades(CallbackInfo ci) {
         TradeTable tradeTable = getTradeTable();
         if (tradeTable != null) {
             VillagerData villagerData = this.getVillagerData();
-            int level = villagerData.level();
+            int level = villagerData./*? if >= 1.21.5 {*/ level() /*?} else {*/ /*getLevel() *//*?}*/;
             VillagerTrades.ItemListing[] customOffers = tradeTable.getTradeOffers(this, level);
             this.addOffersFromItemListings(getOffers(), customOffers, customOffers.length);
             ci.cancel();
@@ -48,11 +48,11 @@ public abstract class VillagerMixin extends AbstractVillager {
     }
 
     @Redirect(
-            method = "shouldIncreaseLevel",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/entity/npc/VillagerData;canLevelUp(I)Z"
-            )
+        method = "shouldIncreaseLevel",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/npc/VillagerData;canLevelUp(I)Z"
+        )
     )
     public boolean adjustMaxLevel(int level) {
         // TODO: Client side mixin (MerchantScreen)
@@ -60,11 +60,11 @@ public abstract class VillagerMixin extends AbstractVillager {
     }
 
     @Redirect(
-            method = "shouldIncreaseLevel",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/entity/npc/VillagerData;getMaxXpPerLevel(I)I"
-            )
+        method = "shouldIncreaseLevel",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/npc/VillagerData;getMaxXpPerLevel(I)I"
+        )
     )
     public int adjustUpperLevelExperience(int level) {
         return customUpperLevelExperience(level);
@@ -91,7 +91,7 @@ public abstract class VillagerMixin extends AbstractVillager {
 
     private TradeTable getTradeTable() {
         if (this.level() instanceof ServerLevel) {
-            ResourceLocation identifier = BuiltInRegistries.VILLAGER_PROFESSION.getKey(this.getVillagerData().profession().value());
+            ResourceLocation identifier = BuiltInRegistries.VILLAGER_PROFESSION.getKey(this.getVillagerData()./*? if >= 1.21.5 {*/ profession().value() /*?} else {*/ /*getProfession() *//*?}*/);
             return TRADE_MANAGER.getTrade(identifier);
         }
         return null;
