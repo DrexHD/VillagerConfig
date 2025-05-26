@@ -23,15 +23,15 @@
     ],
     "preLaunch": [
       "com.llamalad7.mixinextras.MixinExtrasBootstrap::init"
+    ],
+    "fabric-datagen": [
+      "me.drex.villagerconfig.datagen.VanillaDataGenerator"
     ]
   },
   "custom": {
     "modmanager": {
       "curseforge": 400741,
       "modrinth": "OClpEDe3"
-    },
-    "mc-publish": {
-      "quilt": true
     }
   },
   "mixins": [
@@ -39,9 +39,7 @@
   ],
   "accessWidener": "villagerconfig.accesswidener",
   "depends": {
-    "fabricloader": ">=0.15.11",
     "fabric": "*",
-    "minecraft": ">=1.21-alpha.24.18.a",
     "fiber": ">=0.23.0-"
   }
 }

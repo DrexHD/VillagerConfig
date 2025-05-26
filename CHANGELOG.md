@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Empty trade files in trade generator in 1.21.1 & 1.21.4
+
 ## [4.3.4] - 2025-05-23
 ### Changed
 - Use stonecutter to support 1.21.1, 1.21.4 and 1.21.5

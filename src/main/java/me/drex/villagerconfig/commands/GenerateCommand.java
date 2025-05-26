@@ -10,9 +10,11 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.flag.FeatureFlags;
 
 import java.nio.file.Path;
+import java.util.concurrent.CompletableFuture;
 
 public class GenerateCommand {
 
@@ -37,7 +39,7 @@ public class GenerateCommand {
             }
         }
 
-        tradesPack.addProvider(packOutput -> new TradeProvider(packOutput, src.getServer(), experimental));
+        tradesPack.addProvider(packOutput -> new TradeProvider(packOutput, CompletableFuture.completedFuture(src.getServer().registryAccess()), experimental, FeatureFlags.VANILLA_SET));
         try {
             dataGenerator.run();
             src.sendSuccess(() -> Component.literal("Successfully generated trade " + (experimental ? "(experimental) " : "") + "data to " + GENERATED).withStyle(ChatFormatting.GREEN), false);

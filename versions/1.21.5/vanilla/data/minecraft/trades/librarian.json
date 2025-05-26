@@ -1,0 +1,568 @@
+{
+  "tiers": [
+    {
+      "groups": [
+        {
+          "num_to_select": 2.0,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 24.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:paper"
+              },
+              "max_uses": 16.0,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 1.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 2.0
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": {
+                      "type": "villagerconfig:multiply",
+                      "factors": [
+                        {
+                          "type": "villagerconfig:add",
+                          "addends": [
+                            2.0,
+                            {
+                              "type": "minecraft:uniform",
+                              "max": {
+                                "type": "villagerconfig:add",
+                                "addends": [
+                                  5.0,
+                                  {
+                                    "type": "villagerconfig:multiply",
+                                    "factors": [
+                                      {
+                                        "type": "villagerconfig:reference",
+                                        "id": "enchantmentLevel"
+                                      },
+                                      10.0
+                                    ]
+                                  }
+                                ]
+                              },
+                              "min": 0.0
+                            },
+                            {
+                              "type": "villagerconfig:multiply",
+                              "factors": [
+                                3.0,
+                                {
+                                  "type": "villagerconfig:reference",
+                                  "id": "enchantmentLevel"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "villagerconfig:reference",
+                          "id": "treasureMultiplier"
+                        }
+                      ]
+                    },
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:book"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "function": "villagerconfig:enchant_randomly",
+                    "include": "#minecraft:tradeable"
+                  }
+                ],
+                "name": "minecraft:book"
+              },
+              "trader_experience": 1.0
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 9.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:bookshelf"
+              },
+              "trader_experience": 1.0
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 0
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2.0,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 4.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:book"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 1.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 10.0
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": {
+                      "type": "villagerconfig:multiply",
+                      "factors": [
+                        {
+                          "type": "villagerconfig:add",
+                          "addends": [
+                            2.0,
+                            {
+                              "type": "minecraft:uniform",
+                              "max": {
+                                "type": "villagerconfig:add",
+                                "addends": [
+                                  5.0,
+                                  {
+                                    "type": "villagerconfig:multiply",
+                                    "factors": [
+                                      {
+                                        "type": "villagerconfig:reference",
+                                        "id": "enchantmentLevel"
+                                      },
+                                      10.0
+                                    ]
+                                  }
+                                ]
+                              },
+                              "min": 0.0
+                            },
+                            {
+                              "type": "villagerconfig:multiply",
+                              "factors": [
+                                3.0,
+                                {
+                                  "type": "villagerconfig:reference",
+                                  "id": "enchantmentLevel"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "villagerconfig:reference",
+                          "id": "treasureMultiplier"
+                        }
+                      ]
+                    },
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:book"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "function": "villagerconfig:enchant_randomly",
+                    "include": "#minecraft:tradeable"
+                  }
+                ],
+                "name": "minecraft:book"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 1.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:lantern"
+              },
+              "trader_experience": 5.0
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 10
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2.0,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 5.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:ink_sac"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 1.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 20.0
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": {
+                      "type": "villagerconfig:multiply",
+                      "factors": [
+                        {
+                          "type": "villagerconfig:add",
+                          "addends": [
+                            2.0,
+                            {
+                              "type": "minecraft:uniform",
+                              "max": {
+                                "type": "villagerconfig:add",
+                                "addends": [
+                                  5.0,
+                                  {
+                                    "type": "villagerconfig:multiply",
+                                    "factors": [
+                                      {
+                                        "type": "villagerconfig:reference",
+                                        "id": "enchantmentLevel"
+                                      },
+                                      10.0
+                                    ]
+                                  }
+                                ]
+                              },
+                              "min": 0.0
+                            },
+                            {
+                              "type": "villagerconfig:multiply",
+                              "factors": [
+                                3.0,
+                                {
+                                  "type": "villagerconfig:reference",
+                                  "id": "enchantmentLevel"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "villagerconfig:reference",
+                          "id": "treasureMultiplier"
+                        }
+                      ]
+                    },
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:book"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "function": "villagerconfig:enchant_randomly",
+                    "include": "#minecraft:tradeable"
+                  }
+                ],
+                "name": "minecraft:book"
+              },
+              "trader_experience": 10.0
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 1.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 4.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:glass"
+              },
+              "trader_experience": 10.0
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 70
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2.0,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:writable_book"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 1.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 30.0
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": {
+                      "type": "villagerconfig:multiply",
+                      "factors": [
+                        {
+                          "type": "villagerconfig:add",
+                          "addends": [
+                            2.0,
+                            {
+                              "type": "minecraft:uniform",
+                              "max": {
+                                "type": "villagerconfig:add",
+                                "addends": [
+                                  5.0,
+                                  {
+                                    "type": "villagerconfig:multiply",
+                                    "factors": [
+                                      {
+                                        "type": "villagerconfig:reference",
+                                        "id": "enchantmentLevel"
+                                      },
+                                      10.0
+                                    ]
+                                  }
+                                ]
+                              },
+                              "min": 0.0
+                            },
+                            {
+                              "type": "villagerconfig:multiply",
+                              "factors": [
+                                3.0,
+                                {
+                                  "type": "villagerconfig:reference",
+                                  "id": "enchantmentLevel"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "villagerconfig:reference",
+                          "id": "treasureMultiplier"
+                        }
+                      ]
+                    },
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:book"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "function": "villagerconfig:enchant_randomly",
+                    "include": "#minecraft:tradeable"
+                  }
+                ],
+                "name": "minecraft:book"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 5.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:clock"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 4.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "trader_experience": 15.0
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 150
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2.0,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 20.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:name_tag"
+              },
+              "trader_experience": 30.0
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 250
+    }
+  ]
+}
