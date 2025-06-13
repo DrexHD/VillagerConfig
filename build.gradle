@@ -4,7 +4,6 @@ plugins {
     id 'fabric-loom' version '1.10-SNAPSHOT'
     id 'maven-publish'
     id "me.modmuss50.mod-publish-plugin" version "0.8.4"
-    id 'org.jetbrains.changelog' version '2.+'
 }
 
 sourceCompatibility = JavaVersion.VERSION_21
@@ -70,8 +69,8 @@ publishMods {
     }
     github {
         accessToken = providers.environmentVariable("GITHUB_TOKEN")
-        repository = providers.environmentVariable("GITHUB_REPOSITORY").getOrElse("DrexHD/dryrun")
-        commitish = providers.environmentVariable("GITHUB_REF_NAME").getOrElse("dryrun")
+        repository = providers.environmentVariable("GITHUB_REPOSITORY").getOrElse("DrexHD/VillagerConfig")
+        commitish = providers.environmentVariable("GITHUB_REF_NAME").getOrElse("main")
     }
 }
 
@@ -95,7 +94,7 @@ jar {
 }
 
 private String fetchChangelog() {
-    def log = getChangelog.changelog.get()
+    def log = rootProject.extensions.getByType(org.jetbrains.changelog.ChangelogPluginExtension)
     if (log.has(project.mod_version)) {
         return log.renderItem(
                 log.get(project.mod_version).withHeader(false),

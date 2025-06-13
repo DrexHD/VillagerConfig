@@ -1,5 +1,6 @@
 plugins {
     id("dev.kikugie.stonecutter")
+    id("org.jetbrains.changelog") version "2.2.0"
 }
 stonecutter active "1.21.6-rc1"
 
@@ -16,4 +17,8 @@ stonecutter registerChiseled tasks.register("chiseledPublishMods", stonecutter.c
 stonecutter registerChiseled tasks.register("chiseledRunDatagen", stonecutter.chiseled) {
     group = "project"
     ofTask("runDatagen")
+}
+
+changelog {
+    path = rootProject.file("CHANGELOG.md").path
 }
