@@ -1,12 +1,17 @@
+import dev.kikugie.stonecutter.RunConfigType
+
 plugins {
     id("dev.kikugie.stonecutter")
-    id("org.jetbrains.changelog") version "2.2.0"
+    id("org.jetbrains.changelog")
+    id("net.neoforged.moddev") version "2.0.95" apply false
+    id("fabric-loom") version "1.10-SNAPSHOT" apply false
 }
-stonecutter active "1.21.6-rc1"
 
-stonecutter registerChiseled tasks.register("chiseledBuild", stonecutter.chiseled) { 
-    group = "project"
-    ofTask("build")
+stonecutter active "1.21.6"
+
+stonecutter registerChiseled tasks.register("chiseledBuild", stonecutter.chiseled) {
+	group = "project"
+	ofTask("build")
 }
 
 stonecutter registerChiseled tasks.register("chiseledPublishMods", stonecutter.chiseled) {
@@ -17,6 +22,10 @@ stonecutter registerChiseled tasks.register("chiseledPublishMods", stonecutter.c
 stonecutter registerChiseled tasks.register("chiseledRunDatagen", stonecutter.chiseled) {
     group = "project"
     ofTask("runDatagen")
+}
+
+stonecutter {
+	generateRunConfigs = listOf(RunConfigType.SWITCH)
 }
 
 changelog {

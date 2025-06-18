@@ -1,0 +1,27 @@
+modLoader = "javafml"
+loaderVersion = "*"
+license = "MIT"
+issueTrackerURL = "https://github.com/DrexHD/VillagerConfig/issues"
+
+[[mods]]
+modId = "villagerconfig"
+version = "${modVersion}"
+displayName = "VillagerConfig"
+authors = "Drex"
+description = "A mod to completely customize villagers."
+logoFile = "assets/villagerconfig/icon.png"
+logoBlur = false
+displayURL = "https://github.com/DrexHD/VillagerConfig"
+
+[[mixins]]
+config = "villagerconfig-neoforge.mixins.json"
+
+[[mixins]]
+config = "villagerconfig-common.mixins.json"
+
+[[dependencies.villagerconfig]]
+modId = "neoforge"
+type = "required"
+versionRange = "*"
+ordering = "NONE"
+side = "BOTH"

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "villagerconfig",
+  "version": "${modVersion}",
+  "name": "VillagerConfig",
+  "description": "A mod to completely customize villagers.",
+  "authors": [
+    "Drex"
+  ],
+  "contact": {
+    "homepage": "https://github.com/DrexHD/VillagerConfig",
+    "sources": "https://github.com/DrexHD/VillagerConfig"
+  },
+  "license": "LGPLv3",
+  "icon": "assets/villagerconfig/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.drex.villagerconfig.fabric.VillagerConfigFabric"
+    ],
+    "modmenu": [
+      "me.drex.villagerconfig.fabric.config.modmenu.VillagerConfigModMenuEntry"
+    ],
+    "preLaunch": [
+      "com.llamalad7.mixinextras.MixinExtrasBootstrap::init"
+    ],
+    "fabric-datagen": [
+      "me.drex.villagerconfig.fabric.datagen.VanillaDataGenerator"
+    ]
+  },
+  "mixins": [
+    "villagerconfig-common.mixins.json",
+    "villagerconfig-fabric.mixins.json"
+  ],
+  "accessWidener": "villagerconfig.accesswidener",
+  "depends": {
+    "fabric-api": "*"
+  }
+}

@@ -1,0 +1,12 @@
+{
+	"required": true,
+	"package": "me.drex.villagerconfig.neoforge.mixin",
+	"refmap": "villagerconfig.refmap.json",
+	"compatibilityLevel": "JAVA_${javaVersion}",
+	"minVersion": "0.8",
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"mixins": [
+	]
+}

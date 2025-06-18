@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.0] - 2025-06-18
+### Added
+- Neoforge support
+
 ## [4.3.5] - 2025-06-13
 ### Fixed
 - Empty trade files in trade generator in 1.21.1 & 1.21.4
