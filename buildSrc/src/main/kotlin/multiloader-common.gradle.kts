@@ -4,7 +4,7 @@ plugins {
 	id("java-library")
 }
 
-version = "${loader}-${modVersion}+${stonecutterBuild.current.version}"
+version = "${loader}-${modVersion}+${minecraftVersion}"
 
 base {
 	archivesName = propOrNull("archives_base_name")

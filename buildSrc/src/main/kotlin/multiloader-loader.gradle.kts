@@ -46,7 +46,7 @@ tasks {
         type.set(BETA)
         changelog.set(fetchChangelog())
 
-        displayName.set("VillagerConfig $modVersion")
+        displayName.set("VillagerConfig $loaderName $modVersion+$minecraftVersion")
         modLoaders.addAll(project.modLoaders)
 
         curseforge {

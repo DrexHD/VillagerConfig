@@ -20,6 +20,7 @@ val Project.minecraftVersion
     get() = versionedPropOrNull("minecraft_version") ?: project.stonecutterBuild.current.version
 
 val Project.loader get() = prop("loader")
+val Project.loaderName get() = prop("loader_name")
 val Project.modLoaders get() = prop("mod_loaders").split(", ")
 val Project.modrinthMinecraftVersions
     get() = versionedProp("modrinth_minecraft_versions").split(", ")
