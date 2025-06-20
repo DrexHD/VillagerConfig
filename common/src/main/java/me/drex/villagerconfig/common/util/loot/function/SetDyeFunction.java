@@ -47,7 +47,7 @@ public class SetDyeFunction extends LootItemConditionalFunction {
 
     @Override
     protected @NotNull ItemStack run(@NotNull ItemStack stack, @NotNull LootContext context) {
-        if (stack.is(ItemTags.DYEABLE)) return stack;
+        if (!stack.is(ItemTags.DYEABLE)) return stack;
         if (!add) {
             stack.set(DataComponents.DYED_COLOR, null);
         }
