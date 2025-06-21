@@ -1412,12 +1412,7 @@
               "trader_experience": 1.0
             }
           ]
-        }
-      ],
-      "total_exp_required": 0
-    },
-    {
-      "groups": [
+        },
         {
           "num_to_select": 1.0,
           "trades": [
@@ -1551,7 +1546,7 @@
           ]
         }
       ],
-      "total_exp_required": 10
+      "total_exp_required": 0
     }
   ]
 }
