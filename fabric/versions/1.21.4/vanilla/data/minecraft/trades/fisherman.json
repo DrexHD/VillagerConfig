@@ -370,90 +370,6 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "nbt": "{VillagerData:{type:\"minecraft:plains\"}}"
-                  }
-                }
-              ],
-              "cost_a": {
-                "type": "minecraft:item",
-                "functions": [
-                  {
-                    "add": false,
-                    "count": 1.0,
-                    "function": "minecraft:set_count"
-                  }
-                ],
-                "name": "minecraft:oak_boat"
-              },
-              "price_multiplier": 0.05,
-              "result": {
-                "type": "minecraft:item",
-                "name": "minecraft:emerald"
-              },
-              "trader_experience": 30.0
-            },
-            {
-              "conditions": [
-                {
-                  "condition": "minecraft:entity_properties",
-                  "entity": "this",
-                  "predicate": {
-                    "nbt": "{VillagerData:{type:\"minecraft:taiga\"}}"
-                  }
-                }
-              ],
-              "cost_a": {
-                "type": "minecraft:item",
-                "functions": [
-                  {
-                    "add": false,
-                    "count": 1.0,
-                    "function": "minecraft:set_count"
-                  }
-                ],
-                "name": "minecraft:spruce_boat"
-              },
-              "price_multiplier": 0.05,
-              "result": {
-                "type": "minecraft:item",
-                "name": "minecraft:emerald"
-              },
-              "trader_experience": 30.0
-            },
-            {
-              "conditions": [
-                {
-                  "condition": "minecraft:entity_properties",
-                  "entity": "this",
-                  "predicate": {
-                    "nbt": "{VillagerData:{type:\"minecraft:snow\"}}"
-                  }
-                }
-              ],
-              "cost_a": {
-                "type": "minecraft:item",
-                "functions": [
-                  {
-                    "add": false,
-                    "count": 1.0,
-                    "function": "minecraft:set_count"
-                  }
-                ],
-                "name": "minecraft:spruce_boat"
-              },
-              "price_multiplier": 0.05,
-              "result": {
-                "type": "minecraft:item",
-                "name": "minecraft:emerald"
-              },
-              "trader_experience": 30.0
-            },
-            {
-              "conditions": [
-                {
-                  "condition": "minecraft:entity_properties",
-                  "entity": "this",
-                  "predicate": {
                     "nbt": "{VillagerData:{type:\"minecraft:desert\"}}"
                   }
                 }
@@ -510,6 +426,34 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:plains\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 1.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:oak_boat"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 30.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
                     "nbt": "{VillagerData:{type:\"minecraft:savanna\"}}"
                   }
                 }
@@ -538,6 +482,34 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:snow\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 1.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:spruce_boat"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 30.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
                     "nbt": "{VillagerData:{type:\"minecraft:swamp\"}}"
                   }
                 }
@@ -552,6 +524,34 @@
                   }
                 ],
                 "name": "minecraft:dark_oak_boat"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 30.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:taiga\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 1.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:spruce_boat"
               },
               "price_multiplier": 0.05,
               "result": {

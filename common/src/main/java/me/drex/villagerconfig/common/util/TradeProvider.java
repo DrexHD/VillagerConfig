@@ -118,9 +118,9 @@ public class TradeProvider implements DataProvider {
             ResourceKey<VillagerProfession> key = entry.getKey();
             //? if >= 1.21.5 {
             ResourceKey<VillagerProfession> tradeKey = entry.getKey();
-            //?} else {
+             //?} else {
             /*VillagerProfession tradeKey = entry.getValue();
-             *///?}
+            *///?}
             Int2ObjectMap<VillagerTrades.ItemListing[]> trades = VillagerTrades.TRADES.getOrDefault(tradeKey, new Int2ObjectArrayMap<>());
             Int2ObjectMap<VillagerTrades.ItemListing[]> experimentalTrades = VillagerTrades.EXPERIMENTAL_TRADES.get(tradeKey);
             if (experimental && experimentalTrades != null) {
@@ -227,14 +227,14 @@ public class TradeProvider implements DataProvider {
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses).numberReference("enchantLevel", UniformGenerator.between(5, 19))};
         } else if (original instanceof VillagerTrades.EmeraldsForVillagerTypeItem factory) {
             List<BehaviorTrade.Builder> trades = new ArrayList<>(factory.trades.size());
-            for (var entry : factory.trades.entrySet()) {
+            for (var entry : sortedEntrySet(factory.trades.entrySet())) {
                 CompoundTag root = new CompoundTag();
                 CompoundTag villagerData = new CompoundTag();
                 //? if >= 1.21.5 {
                 villagerData.putString("type", entry.getKey().location().toString());
-                //?} else {
+                 //?} else {
                 /*villagerData.putString("type", BuiltInRegistries.VILLAGER_TYPE.getKey(entry.getKey()).toString());
-                 *///?}
+                *///?}
                 root.put("VillagerData", villagerData);
                 BehaviorTrade.Builder trade = new BehaviorTrade.Builder(
                     LootItem.lootTableItem(factory.trades.get(entry.getKey())).apply(
@@ -326,14 +326,14 @@ public class TradeProvider implements DataProvider {
             ).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
         } else if (original instanceof VillagerTrades.TypeSpecificTrade factory) {
             List<BehaviorTrade.Builder> trades = new ArrayList<>(factory.trades().size());
-            for (var entry : factory.trades().entrySet()) {
+            for (var entry : sortedEntrySet(factory.trades().entrySet())) {
                 CompoundTag root = new CompoundTag();
                 CompoundTag villagerData = new CompoundTag();
                 //? if >= 1.21.5 {
                 villagerData.putString("type", entry.getKey().location().toString());
-                //?} else {
+                 //?} else {
                 /*villagerData.putString("type", BuiltInRegistries.VILLAGER_TYPE.getKey(entry.getKey()).toString());
-                 *///?}
+                *///?}
                 root.put("VillagerData", villagerData);
                 for (BehaviorTrade.Builder behaviorTrade : convert(entry.getValue(), id, provider)) {
                     behaviorTrade.when(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().nbt(new NbtPredicate(root))));
@@ -355,6 +355,10 @@ public class TradeProvider implements DataProvider {
                 LOGGER.warn("Failed to generate trades '{}', encountered unexpected enchantment provider '{}'.", factory, enchantmentProvider);
             }
         }
+    }
+
+    private static <T> List<Map.Entry</*? if >= 1.21.5 {*/ ResourceKey<VillagerType> /*?} else {*/ /*VillagerType *//*?}*/, T>> sortedEntrySet(Set<Map.Entry</*? if >= 1.21.5 {*/ ResourceKey<VillagerType> /*?} else {*/ /*VillagerType *//*?}*/, T>> entrySet) {
+        return entrySet.stream().sorted(Comparator.comparing(o -> o.getKey()./*? if >= 1.21.5 {*/ location() /*?} else {*/ /*toString() *//*?}*/)).toList();
     }
 
     private static LootPoolSingletonContainer.Builder<?> lootTableItemStack(ItemStack itemStack) {
