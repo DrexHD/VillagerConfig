@@ -5,6 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.drex.villagerconfig.common.platform.PlatformHooks;
 import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 
@@ -12,12 +13,13 @@ import static net.minecraft.commands.Commands.literal;
 
 public class VillagerConfigCommand {
 
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext) {
         LiteralCommandNode<CommandSourceStack> root = dispatcher.register(
                 literal("villagerconfig")
                         .requires(src -> src.hasPermission(2))
                         .then(GenerateCommand.builder())
                         .then(ReloadCommand.builder())
+                        .then(TestCommand.builder(commandBuildContext))
                         .executes(VillagerConfigCommand::execute)
         );
         dispatcher.register(literal("vc").requires(src -> src.hasPermission(2)).executes(VillagerConfigCommand::execute).redirect(root));

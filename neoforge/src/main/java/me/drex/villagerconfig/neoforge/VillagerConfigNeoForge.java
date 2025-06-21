@@ -43,7 +43,7 @@ public final class VillagerConfigNeoForge {
     }
 
     private static void onRegisterCommands(RegisterCommandsEvent event) {
-        VillagerConfigCommand.register(event.getDispatcher());
+        VillagerConfigCommand.register(event.getDispatcher(), event.getBuildContext());
     }
 
     private static void onClientSetup(final FMLClientSetupEvent event) {

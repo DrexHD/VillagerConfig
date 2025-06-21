@@ -43,7 +43,7 @@ tasks {
             logger.error("Failed to find JAR task (remapJar or jar)")
         }
 
-        type.set(BETA)
+        type.set(STABLE)
         changelog.set(fetchChangelog())
 
         displayName.set("VillagerConfig $loaderName $modVersion+$minecraftVersion")

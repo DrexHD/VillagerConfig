@@ -1,23 +1,24 @@
 {
-	"required": true,
-	"minVersion": "0.8",
-	"package": "me.drex.villagerconfig.common.mixin",
-	"refmap": "villagerconfig.refmap.json",
-	"compatibilityLevel": "JAVA_${javaVersion}",
-	"mixins": [
-		"AbstractVillagerMixin",
-		"MerchantOfferAccessor",
-		"MerchantOfferMixin",
-		"VillagerDataAccessor",
-		"VillagerMixin",
-		"WanderingTraderMixin",
-		"ZombieMixin",
-		"loot.LootContextParamSetsAccessor",
-		"loot.LootContextParamSetsMixin",
-		"loot.LootItemFunctionsMixin",
-		"loot.NumberProvidersMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
-	}
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.drex.villagerconfig.common.mixin",
+  "refmap": "villagerconfig.refmap.json",
+  "compatibilityLevel": "JAVA_${javaVersion}",
+  "mixins": [
+    "AbstractVillagerMixin",
+    "MerchantOfferAccessor",
+    "MerchantOfferMixin",
+    "VillagerAccessor",
+    "VillagerDataAccessor",
+    "VillagerMixin",
+    "WanderingTraderMixin",
+    "ZombieMixin",
+    "loot.LootContextParamSetsAccessor",
+    "loot.LootContextParamSetsMixin",
+    "loot.LootItemFunctionsMixin",
+    "loot.NumberProvidersMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }
