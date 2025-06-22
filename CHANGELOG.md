@@ -6,13 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.2] - 2025-06-21
+### Fixed
+- Dependency management on NeoForge
+
 ## [4.4.1] - 2025-06-21
 ### Added
 - Test commands to quickly view randomly generated trade offers
-
-To make testing datapacks easier the mod has two commands, `/vc test villager <profession> [<level>]` can be used to
-open a randomly generated trade gui for the given villager profession. The level that should be unlocked can optionally
-be specified. `/vc test wanderingtrader` can be used to open a randomly generated trade gui of wandering traders.
 
 ### Changed
 - Improved wandering trader default file structure

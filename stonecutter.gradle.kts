@@ -3,7 +3,6 @@ import dev.kikugie.stonecutter.RunConfigType
 plugins {
     id("dev.kikugie.stonecutter")
     id("org.jetbrains.changelog")
-    id("net.neoforged.moddev") version "2.0.95" apply false
     id("fabric-loom") version "1.10-SNAPSHOT" apply false
 }
 

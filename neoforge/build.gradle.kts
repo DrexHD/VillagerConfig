@@ -1,40 +1,37 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
 	`multiloader-loader`
-	id("net.neoforged.moddev")
+	id("net.neoforged.gradle.userdev") version "7.0.185"
+	id("com.gradleup.shadow") version "8.3.6"
 }
-
-neoForge {
-	enable {
-		version = versionedProp("neoforge")
-	}
-}
-
-val additionalRuntimeClasspath = configurations.getByName("additionalRuntimeClasspath")
 
 dependencies {
-	implementation(jarJar("me.zeroeightsix:fiber:${versionedProp("fiber")}")!!)
-	additionalRuntimeClasspath("me.zeroeightsix:fiber:${versionedProp("fiber")}")
+	implementation("net.neoforged:neoforge:${versionedProp("neoforge")}")
+	implementation("me.zeroeightsix:fiber:${versionedProp("fiber")}")
 	implementation("me.shedaniel.cloth:cloth-config-neoforge:${versionedProp("cloth_config")}")
 }
 
-neoForge {
-	accessTransformers.from(project.file("src/main/resources/META-INF/accesstransformer.cfg").absolutePath)
+minecraft {
+	accessTransformers {
+		file(project.file("src/main/resources/META-INF/accesstransformer.cfg").absolutePath)
+	}
+}
 
-	runs {
-		register("client") {
-			client()
-			ideName = "NeoForge Client (${path})"
-		}
-		register("server") {
-			server()
-			ideName = "NeoForge Server (${path})"
-		}
+runs {
+	named("client") {
+		ideRunName = "NeoForge Client (${path})"
+	}
+	named("server") {
+		ideRunName = "NeoForge Server (${path})"
 	}
 
-	mods {
-		register("villagerconfig") {
-			sourceSet(sourceSets.main.get())
+	configureEach {
+		modSource(project.sourceSets.main.get())
+		dependencies {
+			runtime("me.zeroeightsix:fiber:${versionedProp("fiber")}")
 		}
+		workingDirectory("run")
 	}
 }
 
@@ -46,4 +43,21 @@ tasks {
 	processResources {
 		exclude("villagerconfig.accesswidener")
 	}
+}
+
+tasks.named<ShadowJar>("shadowJar") {
+	archiveClassifier = ""
+	dependencies {
+		relocate("blue.endless.jankson", "me.drex.villagerconfig.shadow.jankson")
+		relocate("io.github.fablabsmc", "me.drex.villagerconfig.shadow.fablabsmc")
+
+		include(dependency("me.zeroeightsix:fiber"))
+	}
+	minimize()
+}
+
+tasks.jarJar {
+	archiveClassifier = "dist"
+	val shadowJar = tasks.shadowJar.get()
+	dependsOn(shadowJar)
 }
