@@ -45,7 +45,7 @@ tasks {
 	}
 }
 
-tasks.named<ShadowJar>("shadowJar") {
+val shadowJar = tasks.named<ShadowJar>("shadowJar") {
 	archiveClassifier = ""
 	dependencies {
 		relocate("blue.endless.jankson", "me.drex.villagerconfig.shadow.jankson")
@@ -57,7 +57,10 @@ tasks.named<ShadowJar>("shadowJar") {
 }
 
 tasks.jarJar {
-	archiveClassifier = "dist"
-	val shadowJar = tasks.shadowJar.get()
-	dependsOn(shadowJar)
+    archiveClassifier = "dist"
+    dependsOn(shadowJar)
+}
+
+publishMods {
+    file.set(shadowJar.get().archiveFile)
 }

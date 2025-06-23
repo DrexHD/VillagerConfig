@@ -35,14 +35,6 @@ tasks {
     }
 
     publishMods {
-        val modJar = tasks.findByName("remapJar") ?: tasks.findByName("jar")
-
-        if (modJar is AbstractArchiveTask) {
-            file.set(modJar.archiveFile)
-        } else {
-            logger.error("Failed to find JAR task (remapJar or jar)")
-        }
-
         type.set(STABLE)
         changelog.set(fetchChangelog())
 

@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [4.4.2] - 2025-06-21
+## [4.4.3] - 2025-06-23
+### Fixed
+- Published NeoForge jar
+
+## [4.4.2] - 2025-06-23
 ### Fixed
 - Dependency management on NeoForge
 

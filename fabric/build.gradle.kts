@@ -43,3 +43,7 @@ fabricApi {
         outputDirectory = file("vanilla")
     }
 }
+
+publishMods {
+    file.set(tasks.remapJar.get().archiveFile)
+}
