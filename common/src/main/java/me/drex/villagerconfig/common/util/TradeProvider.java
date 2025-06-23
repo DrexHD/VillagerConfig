@@ -208,12 +208,12 @@ public class TradeProvider implements DataProvider {
                 suspciousStewBuilder
             ).traderExperience(factory.xp)};
         } else if (original instanceof VillagerTrades.ItemsAndEmeraldsToItems factory) {
-            LootPoolSingletonContainer.Builder<?> result = lootTableItemStack(factory.fromItem.itemStack());
+            LootPoolSingletonContainer.Builder<?> result = lootTableItemStack(factory.toItem);
             enchantItem(result, factory.enchantmentProvider, factory, provider);
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
                 LootItem.lootTableItem(Items.EMERALD).apply(SetItemCountFunction.setCount(ConstantValue.exactly(factory.emeraldCost))),
-                result,
-                lootTableItemStack(factory.toItem)
+                lootTableItemStack(factory.fromItem.itemStack()),
+                result
             ).priceMultiplier(factory.priceMultiplier).traderExperience(factory.villagerXp).maxUses(factory.maxUses)};
         } else if (original instanceof VillagerTrades.EnchantedItemForEmeralds factory) {
             Optional<HolderSet.Named<Enchantment>> optional = provider.lookupOrThrow(Registries.ENCHANTMENT).get(EnchantmentTags.ON_TRADED_EQUIPMENT);

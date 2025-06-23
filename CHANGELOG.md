@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.4] - 2025-06-23
+### Fixed
+- Experimental trade generation
+
 ## [4.4.3] - 2025-06-23
 ### Fixed
 - Published NeoForge jar
