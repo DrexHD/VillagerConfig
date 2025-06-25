@@ -25,5 +25,5 @@ val Project.modLoaders get() = prop("mod_loaders").split(", ")
 val Project.modrinthMinecraftVersions
     get() = versionedProp("modrinth_minecraft_versions").split(", ")
 val Project.curseforgeMinecraftVersions
-    get() = versionedProp("modrinth_minecraft_versions").split(", ")
+    get() = versionedProp("curseforge_minecraft_versions").split(", ")
 

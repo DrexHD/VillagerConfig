@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 /*import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import net.minecraft.resources.RegistryOps;
 *///?}
 import com.mojang.serialization.JsonOps;
 import me.drex.villagerconfig.common.VillagerConfig;
@@ -59,7 +60,7 @@ public class TradeManager extends SimpleJsonResourceReloadListener/*? if >= 1.21
         ImmutableMap.Builder<ResourceLocation, TradeTable> builder = ImmutableMap.builder();
         prepared.forEach((identifier, jsonElement) -> {
             try {
-                TradeTable table = TradeTable.CODEC.parse(provider.createSerializationContext(JsonOps.INSTANCE), jsonElement).getOrThrow();
+                TradeTable table = TradeTable.CODEC.parse(registryOps(), jsonElement).getOrThrow();
                 builder.put(identifier, table);
             } catch (Exception exception) {
                 LOGGER.error("Failed to load trade {}", identifier, exception);
@@ -68,6 +69,12 @@ public class TradeManager extends SimpleJsonResourceReloadListener/*? if >= 1.21
 
         this.trades = builder.build();
         LOGGER.info("Loaded {} trades", trades.size());
+    }
+    *///?}
+
+    //? if < 1.21.2 {
+    /*public RegistryOps<JsonElement> registryOps() {
+        return provider.createSerializationContext(JsonOps.INSTANCE);
     }
     *///?}
 }

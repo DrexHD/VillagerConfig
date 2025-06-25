@@ -5,6 +5,7 @@ import me.drex.villagerconfig.common.VillagerConfig;
 import me.drex.villagerconfig.common.commands.VillagerConfigCommand;
 import me.drex.villagerconfig.common.config.ConfigScreen;
 import me.drex.villagerconfig.common.util.TradeManager;
+import me.drex.villagerconfig.neoforge.util.NeoForgeTradeManager;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -51,7 +52,7 @@ public final class VillagerConfigNeoForge {
     }
 
     private static void onAddReloadListener(/*? if >= 1.21.4 {*/ AddServerReloadListenersEvent /*?} else {*/ /*AddReloadListenerEvent *//*?}*/ event) {
-        VillagerConfig.TRADE_MANAGER = new TradeManager(event.getRegistryAccess());
+        VillagerConfig.TRADE_MANAGER = new NeoForgeTradeManager(event.getRegistryAccess());
         event.addListener(/*? if >= 1.21.4 {*/TradeManager.ID,  /*?}*/VillagerConfig.TRADE_MANAGER);
     }
 
