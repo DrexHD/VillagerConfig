@@ -40,6 +40,7 @@ fabricApi {
     configureDataGeneration {
         client = true
         createRunConfiguration = true
+        addToResources = false
         outputDirectory = file("vanilla")
     }
 }

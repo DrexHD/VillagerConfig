@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.6] - 2025-08-05
+### Fixed
+- Custom trades not working
+
 ## [4.4.5] - 2025-06-25
 ### Fixed
 - Compatibility with NeoForge 21.1.181+
