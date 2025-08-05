@@ -1,4 +1,5 @@
-import dev.kikugie.stonecutter.build.StonecutterBuild
+import dev.kikugie.stonecutter.build.StonecutterBuildExtension
+import dev.kikugie.stonecutter.controller.StonecutterControllerExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
 
@@ -7,7 +8,8 @@ fun Project.propOrNull(key: String) = findProperty(key)?.toString()
 fun Project.versionedPropOrNull(key: String) = commonProject.propOrNull(key)
 fun Project.versionedProp(key: String) = commonProject.prop(key)
 
-val Project.stonecutterBuild get() = extensions.getByType<StonecutterBuild>()
+val Project.stonecutterBuild get() = extensions.getByType<StonecutterBuildExtension>()
+val Project.stonecutterController get() = extensions.getByType<StonecutterControllerExtension>()
 
 val Project.common
     get() = requireNotNull(stonecutterBuild.node.sibling("common")) {

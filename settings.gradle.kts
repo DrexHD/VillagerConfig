@@ -11,7 +11,7 @@ pluginManagement {
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.6+"
+    id("dev.kikugie.stonecutter") version "0.7.6"
 }
 
 val fabricVersions = providers.gradleProperty("fabric_versions").orNull?.split(", ") ?: emptyList()
