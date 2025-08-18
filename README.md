@@ -11,10 +11,11 @@ datapacks, customizing trade behavior, and more...
 
 ### Custom trades
 
-One of VillagerConfig's most powerful features are the custom trades. Custom trades allows mod-pack creators, server
-owners
+One of VillagerConfig's most powerful features are the custom trades. Custom trades allows mod-pack creators, server owners,
 and others to completely customize wandering trader and villager trades! If you want to create your own custom datapack,
-make sure to check out the [wiki](https://github.com/DrexHD/VillagerConfig/wiki/Get-started)!
+make sure to check out the [wiki](https://github.com/DrexHD/VillagerConfig/wiki/Creating-your-own-datapack)!
+
+Or check out the list of known [Datapacks using VillagerConfig](https://github.com/DrexHD/VillagerConfig/wiki/Datapacks-using-VillagerConfig)!
 
 ![](media/wandering_trader.png)
 
