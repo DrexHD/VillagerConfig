@@ -8,7 +8,8 @@
     "Drex"
   ],
   "contact": {
-    "homepage": "https://github.com/DrexHD/VillagerConfig",
+    "homepage": "https://github.com/DrexHD/VillagerConfig/wiki",
+    "issues": "https://github.com/DrexHD/VillagerConfig/issues",
     "sources": "https://github.com/DrexHD/VillagerConfig"
   },
   "license": "LGPLv3",
@@ -34,6 +35,12 @@
   ],
   "accessWidener": "villagerconfig.accesswidener",
   "depends": {
+    "fabricloader": ">=0.16.14",
+    "java": ">=21",
     "fabric-api": "*"
+  },
+  "recommends": {
+    "cloth-config": "*",
+    "modmenu": "*"
   }
 }
