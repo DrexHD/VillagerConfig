@@ -8,4 +8,8 @@ public interface PlatformHelper {
     String getVersion();
 
     Path getConfigDir();
+
+    default Path getModConfigDir() {
+        return getConfigDir().resolve("VillagerConfig");
+    }
 }

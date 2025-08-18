@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Config path location. The config was loaded from `config/villagerconfig.json5` from v4.4.0 to v4.4.6, but should have been loaded from `config/VillagerConfig/villagerconfig.json5`. **Make sure to migrate any changes you made in the wrong file to the fixed location.**
+
 ## [4.4.6] - 2025-08-05
 ### Fixed
 - Custom trades not working

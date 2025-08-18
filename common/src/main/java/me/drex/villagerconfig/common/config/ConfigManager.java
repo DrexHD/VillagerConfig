@@ -15,7 +15,7 @@ import java.nio.file.Path;
 
 public class ConfigManager {
 
-    public static final Path CONFIG_PATH = PlatformHooks.PLATFORM_HELPER.getConfigDir().resolve("villagerconfig.json5");
+    public static final Path CONFIG_PATH = PlatformHooks.PLATFORM_HELPER.getModConfigDir().resolve("villagerconfig.json5");
     private static final AnnotatedSettings ANNOTATED_SETTINGS = AnnotatedSettings.builder()
             .useNamingConvention(SettingNamingConvention.SNAKE_CASE)
             .build();
@@ -40,6 +40,7 @@ public class ConfigManager {
 
     public static void saveModConfig() {
         try {
+            Files.createDirectories(CONFIG_PATH.getParent());
             ANNOTATED_SETTINGS.applyToNode(TREE, CONFIG);
             FiberSerialization.serialize(TREE, Files.newOutputStream(CONFIG_PATH), serializer);
         } catch (IOException | FiberException e) {

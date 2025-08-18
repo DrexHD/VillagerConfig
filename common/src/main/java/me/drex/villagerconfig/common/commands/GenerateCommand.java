@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class GenerateCommand {
 
-    private static final Path GENERATED = PlatformHooks.PLATFORM_HELPER.getConfigDir().resolve("generated");
+    private static final Path GENERATED = PlatformHooks.PLATFORM_HELPER.getModConfigDir().resolve("generated");
 
     public static LiteralArgumentBuilder<CommandSourceStack> builder() {
         return Commands.literal("generate")
