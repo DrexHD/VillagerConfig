@@ -4,7 +4,7 @@ plugins {
     id("fabric-loom") version "1.11-SNAPSHOT" apply false
 }
 
-stonecutter active "1.21.8"
+stonecutter active "1.21.9"
 
 changelog {
     path = rootProject.file("CHANGELOG.md").path

@@ -1,5 +1,7 @@
 package me.drex.villagerconfig.common.mixin;
 
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import me.drex.villagerconfig.common.util.RandomUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
@@ -19,39 +21,37 @@ import static me.drex.villagerconfig.common.config.ConfigManager.CONFIG;
 @Mixin(Zombie.class)
 public abstract class ZombieMixin extends Monster {
 
-    private Difficulty difficulty = Difficulty.PEACEFUL;
-
     protected ZombieMixin(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
     }
 
     @Inject(
-            method = "killedEntity",
-            at = @At("HEAD")
+        method = "killedEntity",
+        at = @At("HEAD")
     )
-    public void calculateConversionChance(ServerLevel serverLevel, LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir) {
+    public void calculateConversionChance(CallbackInfoReturnable<Boolean> cir, @Share("difficulty") LocalRef<Difficulty> difficulty) {
         double conversionChance = CONFIG.features.conversionChance;
         if (conversionChance < 0D) {
-            difficulty = this.level().getDifficulty();
+            difficulty.set(this.level().getDifficulty());
         } else {
             if (!RandomUtil.chance(conversionChance)) {
-                difficulty = Difficulty.EASY;
+                difficulty.set(Difficulty.EASY);
             } else {
-                difficulty = Difficulty.HARD;
+                difficulty.set(Difficulty.HARD);
             }
         }
     }
 
     @Redirect(
-            method = "killedEntity",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/server/level/ServerLevel;getDifficulty()Lnet/minecraft/world/Difficulty;"
-            ),
-            require = 0
+        method = "killedEntity",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/server/level/ServerLevel;getDifficulty()Lnet/minecraft/world/Difficulty;"
+        ),
+        require = 0
     )
-    public Difficulty shouldConvert(ServerLevel serverLevel) {
-        return difficulty;
+    public Difficulty shouldConvert(ServerLevel serverLevel, @Share("difficulty") LocalRef<Difficulty> difficulty) {
+        return difficulty.get();
     }
 
 }

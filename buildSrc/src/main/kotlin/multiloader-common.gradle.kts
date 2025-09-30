@@ -51,5 +51,5 @@ tasks {
 }
 
 tasks.named("processResources") {
-	dependsOn(":common:${versionedPropOrNull("minecraft_version")}:stonecutterGenerate")
+	dependsOn(common.project.tasks.named("stonecutterGenerate"))
 }

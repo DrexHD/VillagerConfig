@@ -10,7 +10,7 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:${versionedProp("fabric-loader")}")
     modApi("net.fabricmc.fabric-api:fabric-api:${versionedProp("fabric-api")}")
 
-    modImplementation("com.terraformersmc:modmenu:${versionedProp("modmenu")}")
+    modCompileOnly("com.terraformersmc:modmenu:${versionedProp("modmenu")}")
     implementation(include("me.zeroeightsix:fiber:${versionedProp("fiber")}")!!)
     modImplementation("me.shedaniel.cloth:cloth-config-fabric:${versionedProp("cloth_config")}")
 }
