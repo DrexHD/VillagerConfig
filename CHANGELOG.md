@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [4.4.8] - 2025-10-02
 ### Fixed
 - Trade ordering being inconsistent with vanilla in some cases
+- Trade generation for invalid trade levels
 
 ## [4.4.7] - 2025-08-18
 ### Fixed

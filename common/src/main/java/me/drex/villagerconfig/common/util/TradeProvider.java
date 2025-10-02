@@ -118,9 +118,9 @@ public class TradeProvider implements DataProvider {
             ResourceKey<VillagerProfession> key = entry.getKey();
             //? if >= 1.21.5 {
             ResourceKey<VillagerProfession> tradeKey = entry.getKey();
-             //?} else {
+            //?} else {
             /*VillagerProfession tradeKey = entry.getValue();
-            *///?}
+             *///?}
             Int2ObjectMap<VillagerTrades.ItemListing[]> trades = VillagerTrades.TRADES.getOrDefault(tradeKey, new Int2ObjectArrayMap<>());
             Int2ObjectMap<VillagerTrades.ItemListing[]> experimentalTrades = VillagerTrades.EXPERIMENTAL_TRADES.get(tradeKey);
             if (experimental && experimentalTrades != null) {
@@ -157,8 +157,13 @@ public class TradeProvider implements DataProvider {
             int groups = tradeData.trades().size();
             TradeGroup[] tradeGroups = new TradeGroup[groups];
             tradeData.trades().forEach((level, factoryArr) -> {
+                int i = level - 1;
+                if (i < 0 || i >= tradeGroups.length) {
+                    LOGGER.warn("Invalid trade level {}, expected 1 - {}, for villager type {}", level, tradeGroups.length, id);
+                    return;
+                }
                 TradeGroup tradeGroup = new TradeGroup(ConstantValue.exactly(tradeData.offerCountType().getOfferCount(level)), Arrays.stream(factoryArr).map(itemListing -> convert(itemListing, id, provider)).flatMap(Stream::of).map(BehaviorTrade.Builder::build).filter(Objects::nonNull).toList());
-                tradeGroups[level - 1] = tradeGroup;
+                tradeGroups[i] = tradeGroup;
             });
             final TradeTier[] tiers;
             if (tradeData.useTiers()) {
@@ -232,9 +237,9 @@ public class TradeProvider implements DataProvider {
                 CompoundTag villagerData = new CompoundTag();
                 //? if >= 1.21.5 {
                 villagerData.putString("type", entry.getKey().location().toString());
-                 //?} else {
+                //?} else {
                 /*villagerData.putString("type", BuiltInRegistries.VILLAGER_TYPE.getKey(entry.getKey()).toString());
-                *///?}
+                 *///?}
                 root.put("VillagerData", villagerData);
                 BehaviorTrade.Builder trade = new BehaviorTrade.Builder(
                     LootItem.lootTableItem(factory.trades.get(entry.getKey())).apply(
@@ -331,9 +336,9 @@ public class TradeProvider implements DataProvider {
                 CompoundTag villagerData = new CompoundTag();
                 //? if >= 1.21.5 {
                 villagerData.putString("type", entry.getKey().location().toString());
-                 //?} else {
+                //?} else {
                 /*villagerData.putString("type", BuiltInRegistries.VILLAGER_TYPE.getKey(entry.getKey()).toString());
-                *///?}
+                 *///?}
                 root.put("VillagerData", villagerData);
                 for (BehaviorTrade.Builder behaviorTrade : convert(entry.getValue(), id, provider)) {
                     behaviorTrade.when(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().nbt(new NbtPredicate(root))));
