@@ -1,0 +1,1996 @@
+{
+  "tiers": [
+    {
+      "groups": [
+        {
+          "num_to_select": 2.0,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 24.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:paper"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 1.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 2.0
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 7.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:map"
+              },
+              "trader_experience": 1.0
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 0
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2.0,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 11.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:glass_pane"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 1.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 10.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:plains\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:village_taiga",
+                    "destination": "minecraft:on_taiga_village_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.village_taiga"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:snow\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:village_taiga",
+                    "destination": "minecraft:on_taiga_village_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.village_taiga"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:swamp\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:village_taiga",
+                    "destination": "minecraft:on_taiga_village_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.village_taiga"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:jungle\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:swamp_hut",
+                    "destination": "minecraft:on_swamp_explorer_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.explorer_swamp"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:snow\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:swamp_hut",
+                    "destination": "minecraft:on_swamp_explorer_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.explorer_swamp"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:taiga\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:swamp_hut",
+                    "destination": "minecraft:on_swamp_explorer_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.explorer_swamp"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:swamp\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:village_snowy",
+                    "destination": "minecraft:on_snowy_village_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.village_snowy"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:taiga\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:village_snowy",
+                    "destination": "minecraft:on_snowy_village_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.village_snowy"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:desert\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:village_savanna",
+                    "destination": "minecraft:on_savanna_village_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.village_savanna"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:jungle\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:village_savanna",
+                    "destination": "minecraft:on_savanna_village_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.village_savanna"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:plains\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:village_savanna",
+                    "destination": "minecraft:on_savanna_village_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.village_savanna"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:desert\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:village_plains",
+                    "destination": "minecraft:on_plains_village_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.village_plains"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:savanna\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:village_plains",
+                    "destination": "minecraft:on_plains_village_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.village_plains"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:snow\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:village_plains",
+                    "destination": "minecraft:on_plains_village_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.village_plains"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:taiga\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:village_plains",
+                    "destination": "minecraft:on_plains_village_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.village_plains"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:desert\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:jungle_temple",
+                    "destination": "minecraft:on_jungle_explorer_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.explorer_jungle"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:savanna\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:jungle_temple",
+                    "destination": "minecraft:on_jungle_explorer_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.explorer_jungle"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:swamp\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:jungle_temple",
+                    "destination": "minecraft:on_jungle_explorer_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.explorer_jungle"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:jungle\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:village_desert",
+                    "destination": "minecraft:on_desert_village_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.village_desert"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:savanna\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:village_desert",
+                    "destination": "minecraft:on_desert_village_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.village_desert"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 5.0
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 10
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2.0,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 1.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 20.0
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 13.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:monument",
+                    "destination": "minecraft:on_ocean_explorer_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.monument"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 10.0
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 12.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "decoration": "minecraft:trial_chambers",
+                    "destination": "minecraft:on_trial_chambers_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.trial_chambers"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 10.0
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 70
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2.0,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 7.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:item_frame"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:snow\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:blue_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:taiga\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:blue_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:plains\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:white_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:snow\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:white_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:savanna\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:red_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:snow\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:red_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:desert\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:green_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:jungle\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:green_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:savanna\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:green_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:desert\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:lime_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:taiga\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:lime_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:swamp\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:purple_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:taiga\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:purple_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:desert\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:cyan_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:snow\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:cyan_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:jungle\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:yellow_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:plains\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:yellow_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:desert\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:orange_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:savanna\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:orange_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:jungle\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:brown_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:plains\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:brown_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:savanna\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:magenta_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:snow\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:light_blue_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:swamp\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:light_blue_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:plains\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:pink_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:taiga\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:pink_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:desert\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:gray_banner"
+              },
+              "trader_experience": 15.0
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "nbt": "{VillagerData:{type:\"minecraft:swamp\"}}"
+                  }
+                }
+              ],
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 2.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:black_banner"
+              },
+              "trader_experience": 15.0
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 150
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2.0,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 8.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:globe_banner_pattern"
+              },
+              "trader_experience": 30.0
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "add": false,
+                    "count": 14.0,
+                    "function": "minecraft:set_count"
+                  }
+                ],
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:compass"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "functions": [
+                  {
+                    "destination": "minecraft:on_woodland_explorer_maps",
+                    "function": "minecraft:exploration_map",
+                    "search_radius": 100
+                  },
+                  {
+                    "function": "minecraft:set_name",
+                    "name": {
+                      "translate": "filled_map.mansion"
+                    },
+                    "target": "item_name"
+                  }
+                ],
+                "name": "minecraft:map"
+              },
+              "trader_experience": 30.0
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 250
+    }
+  ]
+}
