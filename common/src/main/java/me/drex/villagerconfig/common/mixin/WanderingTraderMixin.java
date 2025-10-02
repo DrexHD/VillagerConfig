@@ -32,7 +32,9 @@ public abstract class WanderingTraderMixin extends AbstractVillager {
             for (int level = 1; level <= tradeTable.maxLevel(); level++) {
                 VillagerTrades.ItemListing[] tradeOffers = tradeTable.getTradeOffers(this, level);
                 MerchantOffers tradeOfferList = this.getOffers();
-                this.addOffersFromItemListings(tradeOfferList, tradeOffers, tradeOffers.length);
+                for (VillagerTrades.ItemListing tradeOffer : tradeOffers) {
+                    tradeOfferList.add(tradeOffer.getOffer(this, this.random));
+                }
             }
         }
     }

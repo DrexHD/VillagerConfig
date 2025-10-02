@@ -9,6 +9,7 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -41,8 +42,11 @@ public abstract class VillagerMixin extends AbstractVillager {
         if (tradeTable != null) {
             VillagerData villagerData = this.getVillagerData();
             int level = villagerData./*? if >= 1.21.5 {*/ level() /*?} else {*/ /*getLevel() *//*?}*/;
-            VillagerTrades.ItemListing[] customOffers = tradeTable.getTradeOffers(this, level);
-            this.addOffersFromItemListings(getOffers(), customOffers, customOffers.length);
+            VillagerTrades.ItemListing[] tradeOffers = tradeTable.getTradeOffers(this, level);
+            MerchantOffers tradeOfferList = this.getOffers();
+            for (VillagerTrades.ItemListing tradeOffer : tradeOffers) {
+                tradeOfferList.add(tradeOffer.getOffer(this, this.random));
+            }
             ci.cancel();
         }
     }
