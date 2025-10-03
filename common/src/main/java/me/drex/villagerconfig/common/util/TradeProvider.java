@@ -154,20 +154,23 @@ public class TradeProvider implements DataProvider {
             ResourceLocation id = entry.getKey();
             TradeData tradeData = entry.getValue();
             Path path = this.pathResolver.json(id);
-            int groups = tradeData.trades().size();
-            TradeGroup[] tradeGroups = new TradeGroup[groups];
+            int maxLevel = 0;
+            while (tradeData.trades().containsKey(maxLevel + 1)) {
+                maxLevel++;
+            }
+
+            TradeGroup[] tradeGroups = new TradeGroup[maxLevel];
             tradeData.trades().forEach((level, factoryArr) -> {
-                int i = level - 1;
-                if (i < 0 || i >= tradeGroups.length) {
+                if (level <= 0 || level > tradeGroups.length) {
                     LOGGER.warn("Invalid trade level {}, expected 1 - {}, for villager type {}", level, tradeGroups.length, id);
                     return;
                 }
                 TradeGroup tradeGroup = new TradeGroup(ConstantValue.exactly(tradeData.offerCountType().getOfferCount(level)), Arrays.stream(factoryArr).map(itemListing -> convert(itemListing, id, provider)).flatMap(Stream::of).map(BehaviorTrade.Builder::build).filter(Objects::nonNull).toList());
-                tradeGroups[i] = tradeGroup;
+                tradeGroups[level - 1] = tradeGroup;
             });
             final TradeTier[] tiers;
             if (tradeData.useTiers()) {
-                tiers = new TradeTier[groups];
+                tiers = new TradeTier[maxLevel];
                 for (int i = 0; i < tradeGroups.length; i++) {
                     tiers[i] = new TradeTier((VillagerDataAccessor.getNextLevelXpThresholds()[i]), List.of(tradeGroups[i]));
                 }

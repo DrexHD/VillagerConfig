@@ -3,9 +3,9 @@ package me.drex.villagerconfig.neoforge.util;
 import me.drex.villagerconfig.common.util.TradeManager;
 import net.minecraft.core.HolderLookup;
 //? if < 1.21.2 {
-/*import com.google.gson.JsonElement;
+import com.google.gson.JsonElement;
 import net.minecraft.resources.RegistryOps;
-*///?}
+//?}
 
 public class NeoForgeTradeManager extends TradeManager {
     public NeoForgeTradeManager(HolderLookup.Provider provider) {
@@ -13,9 +13,9 @@ public class NeoForgeTradeManager extends TradeManager {
     }
 
     //? if < 1.21.2 {
-    /*@Override
+    @Override
     public RegistryOps<JsonElement> registryOps() {
         return makeConditionalOps();
     }
-    *///?}
+    //?}
 }
