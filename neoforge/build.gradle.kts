@@ -2,8 +2,8 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
 	`multiloader-loader`
-	id("net.neoforged.gradle.userdev") version "7.0.185"
-	id("com.gradleup.shadow") version "9.0.0-rc3"
+	id("net.neoforged.gradle.userdev") version "7.0.192"
+	id("com.gradleup.shadow") version "9.2.2"
 }
 
 dependencies {
