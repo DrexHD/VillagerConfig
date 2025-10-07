@@ -36,7 +36,7 @@ public final class VillagerConfigNeoForge {
         eventBus.addListener(VillagerConfigNeoForge::onRegisterCommands);
         eventBus.addListener(VillagerConfigNeoForge::onAddReloadListener);
 
-        if (FMLEnvironment./*? if >= 1.21.9 {*/ getDist() /*?} else {*/ /*dist*/ /*?}*/ == Dist.CLIENT) {
+        if (FMLEnvironment./*? if >= 1.21.9 {*/ getDist() /*?} else {*/ /*dist *//*?}*/ == Dist.CLIENT) {
             if (ModList.get().isLoaded("cloth_config")) {
                 modEventBus.addListener(VillagerConfigNeoForge::onClientSetup);
             }

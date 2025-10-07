@@ -18,7 +18,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
 //? if >= 1.21.2 {
 import net.minecraft.world.entity.EntitySpawnReason;
-//?}
+ //?}
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.item.trading.MerchantOffers;
@@ -31,11 +31,35 @@ public class TestCommand {
             .then(Commands.literal("villager")
                 .then(
                     Commands.argument("profession", ResourceArgument.resource(commandBuildContext, Registries.VILLAGER_PROFESSION))
-                        .executes(context -> testVillager(context.getSource(), ResourceArgument.getResource(context, "profession", Registries.VILLAGER_PROFESSION), -1))
+                        .executes(context ->
+                            testVillager(
+                                context.getSource(),
+                                /*? if >= 1.21.5 {*/ commandBuildContext.getOrThrow(VillagerType.PLAINS) /*?} else {*/ /*Holder.direct(VillagerType.PLAINS) *//*?}*/,
+                                ResourceArgument.getResource(context, "profession", Registries.VILLAGER_PROFESSION),
+                                -1
+                            )
+                        )
                         .then(
-                            Commands.argument("level", IntegerArgumentType.integer(1))
+                            Commands.argument("type", ResourceArgument.resource(commandBuildContext, Registries.VILLAGER_TYPE))
                                 .executes(context ->
-                                    testVillager(context.getSource(), ResourceArgument.getResource(context, "profession", Registries.VILLAGER_PROFESSION), IntegerArgumentType.getInteger(context, "level")))
+                                    testVillager(
+                                        context.getSource(),
+                                        ResourceArgument.getResource(context, "type", Registries.VILLAGER_TYPE),
+                                        ResourceArgument.getResource(context, "profession", Registries.VILLAGER_PROFESSION)
+                                        , -1
+                                    )
+                                )
+                                .then(
+                                    Commands.argument("level", IntegerArgumentType.integer(1))
+                                        .executes(context ->
+                                            testVillager(
+                                                context.getSource(),
+                                                ResourceArgument.getResource(context, "type", Registries.VILLAGER_TYPE),
+                                                ResourceArgument.getResource(context, "profession", Registries.VILLAGER_PROFESSION)
+                                                , IntegerArgumentType.getInteger(context, "level")
+                                            )
+                                        )
+                                )
                         )
                 )
             ).then(
@@ -44,14 +68,14 @@ public class TestCommand {
             );
     }
 
-    private static int testVillager(CommandSourceStack source, Holder.Reference<VillagerProfession> professionHolder, int level) throws CommandSyntaxException {
+    private static int testVillager(CommandSourceStack source, Holder<VillagerType> villagerType, Holder.Reference<VillagerProfession> professionHolder, int level) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
         Villager fakeVillager = EntityType.VILLAGER.create(source.getLevel()/*? if >= 1.21.2 {*/, EntitySpawnReason.COMMAND /*?}*/);
         assert fakeVillager != null;
         fakeVillager.setPos(player.position());
         //? if >= 1.21.5 {
         VillagerData villagerData = Villager.createDefaultVillagerData();
-        villagerData = villagerData.withProfession(professionHolder);
+        villagerData = villagerData.withProfession(professionHolder).withType(villagerType);
         //?} else {
         /*VillagerData villagerData = new VillagerData(VillagerType.PLAINS, professionHolder.value(), 1);
         *///?}

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.10] - 2025-10-07
+### Added
+- Villager type (villager biome) test command argument
+
 ## [4.4.9] - 2025-10-03
 ### Fixed
 - Ignore invalid trade levels during trade generation

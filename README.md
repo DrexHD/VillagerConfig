@@ -29,7 +29,7 @@ Check it out [here](https://villagerconfig.vercel.app/villagerconfig/?preset=but
 
 ### Testing
 
-To make testing datapacks easier the mod has two commands, `/vc test villager <profession> [<level>]` can be used to
+To make testing datapacks easier the mod has two commands, `/vc test villager <profession> [<type>] [<level>]` can be used to
 open a randomly generated trade gui for the given villager profession. The level that should be unlocked can optionally
 be specified. `/vc test wanderingtrader` can be used to open a randomly generated trade gui of wandering traders.
 
