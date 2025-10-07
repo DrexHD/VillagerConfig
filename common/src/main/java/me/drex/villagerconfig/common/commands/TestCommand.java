@@ -77,7 +77,7 @@ public class TestCommand {
         VillagerData villagerData = Villager.createDefaultVillagerData();
         villagerData = villagerData.withProfession(professionHolder).withType(villagerType);
         //?} else {
-        /*VillagerData villagerData = new VillagerData(VillagerType.PLAINS, professionHolder.value(), 1);
+        /*VillagerData villagerData = new VillagerData(villagerType.value(), professionHolder.value(), 1);
         *///?}
         fakeVillager.setVillagerData(villagerData);
 
