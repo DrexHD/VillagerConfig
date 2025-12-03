@@ -2,9 +2,11 @@ package me.drex.villagerconfig.fabric;
 
 import me.drex.villagerconfig.common.VillagerConfig;
 import me.drex.villagerconfig.common.commands.VillagerConfigCommand;
+import me.drex.villagerconfig.common.protocol.ClientboundMerchantXpPacket;
 import me.drex.villagerconfig.fabric.util.FabricTradeManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.server.packs.PackType;
 
@@ -22,6 +24,7 @@ public class VillagerConfigFabric implements ModInitializer {
             VillagerConfig.TRADE_MANAGER = tradeManager;
             return tradeManager;
         });
+        PayloadTypeRegistry.playS2C().register(ClientboundMerchantXpPacket.ID, ClientboundMerchantXpPacket.CODEC);
     }
 
 }

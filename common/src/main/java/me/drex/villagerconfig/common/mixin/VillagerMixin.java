@@ -1,8 +1,7 @@
 package me.drex.villagerconfig.common.mixin;
 
 import me.drex.villagerconfig.common.data.TradeTable;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
+import me.drex.villagerconfig.common.util.CustomVillagerData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.villager.AbstractVillager;
@@ -17,8 +16,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import static me.drex.villagerconfig.common.VillagerConfig.TRADE_MANAGER;
 
 @Mixin(Villager.class)
 public abstract class VillagerMixin extends AbstractVillager {
@@ -38,7 +35,7 @@ public abstract class VillagerMixin extends AbstractVillager {
         cancellable = true
     )
     public void putCustomTrades(/*? if > 1.21.10 {*/ServerLevel serverLevel, /*?}*/CallbackInfo ci) {
-        TradeTable tradeTable = getTradeTable();
+        TradeTable tradeTable = CustomVillagerData.getTradeTable((Villager) (Object) this);
         if (tradeTable != null) {
             VillagerData villagerData = this.getVillagerData();
             int level = villagerData./*? if >= 1.21.5 {*/ level() /*?} else {*/ /*getLevel() *//*?}*/;
@@ -59,8 +56,7 @@ public abstract class VillagerMixin extends AbstractVillager {
         )
     )
     public boolean adjustMaxLevel(int level) {
-        // TODO: Client side mixin (MerchantScreen)
-        return customCanLevelUp(level);
+        return CustomVillagerData.canLevelUp((Villager) (Object) this, level);
     }
 
     @Redirect(
@@ -71,34 +67,6 @@ public abstract class VillagerMixin extends AbstractVillager {
         )
     )
     public int adjustUpperLevelExperience(int level) {
-        return customUpperLevelExperience(level);
+        return CustomVillagerData.getMaxXpPerLevel((Villager) (Object) this, level);
     }
-
-    private int customUpperLevelExperience(int level) {
-        if (customCanLevelUp(level)) {
-            TradeTable tradeTable = getTradeTable();
-            if (tradeTable != null) {
-                return tradeTable.requiredExperience(level + 1);
-            }
-        }
-        return VillagerData.getMaxXpPerLevel(level);
-    }
-
-    private boolean customCanLevelUp(int level) {
-        TradeTable tradeTable = getTradeTable();
-        if (tradeTable != null) {
-            int maxLevel = tradeTable.maxLevel();
-            return level >= 1 && level < maxLevel;
-        }
-        return VillagerData.canLevelUp(level);
-    }
-
-    private TradeTable getTradeTable() {
-        if (this.level() instanceof ServerLevel) {
-            Identifier identifier = BuiltInRegistries.VILLAGER_PROFESSION.getKey(this.getVillagerData()./*? if >= 1.21.5 {*/ profession().value() /*?} else {*/ /*getProfession() *//*?}*/);
-            return TRADE_MANAGER.getTrade(identifier);
-        }
-        return null;
-    }
-
 }

@@ -4,6 +4,7 @@ package me.drex.villagerconfig.neoforge;
 import me.drex.villagerconfig.common.VillagerConfig;
 import me.drex.villagerconfig.common.commands.VillagerConfigCommand;
 import me.drex.villagerconfig.common.config.ConfigScreen;
+import me.drex.villagerconfig.common.protocol.ClientboundMerchantXpPacket;
 import me.drex.villagerconfig.common.util.TradeManager;
 import me.drex.villagerconfig.neoforge.util.NeoForgeTradeManager;
 import net.neoforged.api.distmarker.Dist;
@@ -17,11 +18,13 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 //? if >= 1.21.4 {
-import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
-//?} else {
-/*import net.neoforged.neoforge.event.AddReloadListenerEvent;
- *///?}
+/*import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
+*///?} else {
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
+ //?}
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 @Mod(VillagerConfig.MOD_ID)
 public final class VillagerConfigNeoForge {
@@ -35,8 +38,9 @@ public final class VillagerConfigNeoForge {
         VillagerConfig.initialize();
         eventBus.addListener(VillagerConfigNeoForge::onRegisterCommands);
         eventBus.addListener(VillagerConfigNeoForge::onAddReloadListener);
+        modEventBus.addListener(VillagerConfigNeoForge::registerCommon);
 
-        if (FMLEnvironment./*? if >= 1.21.9 {*/ getDist() /*?} else {*/ /*dist *//*?}*/ == Dist.CLIENT) {
+        if (FMLEnvironment./*? if >= 1.21.9 {*/ /*getDist() *//*?} else {*/ dist /*?}*/ == Dist.CLIENT) {
             if (ModList.get().isLoaded("cloth_config")) {
                 modEventBus.addListener(VillagerConfigNeoForge::onClientSetup);
             }
@@ -51,9 +55,18 @@ public final class VillagerConfigNeoForge {
         event.enqueueWork(() -> ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (client, screen) -> ConfigScreen.getConfigScreen(screen)));
     }
 
-    private static void onAddReloadListener(/*? if >= 1.21.4 {*/ AddServerReloadListenersEvent /*?} else {*/ /*AddReloadListenerEvent *//*?}*/ event) {
+    public static void registerCommon(RegisterPayloadHandlersEvent event) {
+        final PayloadRegistrar registrar = event.registrar("1");
+        registrar.playBidirectional(
+            ClientboundMerchantXpPacket.ID,
+            ClientboundMerchantXpPacket.CODEC,
+            (payload, context) -> payload.handle(context.player())
+        );
+    }
+
+    private static void onAddReloadListener(/*? if >= 1.21.4 {*/ /*AddServerReloadListenersEvent *//*?} else {*/ AddReloadListenerEvent /*?}*/ event) {
         VillagerConfig.TRADE_MANAGER = new NeoForgeTradeManager(event.getRegistryAccess());
-        event.addListener(/*? if >= 1.21.4 {*/TradeManager.ID,  /*?}*/VillagerConfig.TRADE_MANAGER);
+        event.addListener(/*? if >= 1.21.4 {*//*TradeManager.ID,  *//*?}*/VillagerConfig.TRADE_MANAGER);
     }
 
 }

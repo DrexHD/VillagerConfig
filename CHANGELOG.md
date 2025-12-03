@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.5.0] - 2025-12-03
+### Added
+- Server to client packet for syncing custom level requirements
+
 ## [4.4.11] - 2025-10-07
 ### Fixed
 - Villager type test command argument in 1.21–1.21.4

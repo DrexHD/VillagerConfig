@@ -6,8 +6,10 @@
   "compatibilityLevel": "JAVA_${javaVersion}",
   "mixins": [
     "AbstractVillagerMixin",
+    "MerchantMenuMixin",
     "MerchantOfferAccessor",
     "MerchantOfferMixin",
+    "MerchantMixin",
     "VillagerAccessor",
     "VillagerDataAccessor",
     "VillagerMixin",
@@ -20,5 +22,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "client.MerchantScreenMixin"
+  ]
 }

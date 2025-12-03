@@ -6,6 +6,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.drex.villagerconfig.common.VillagerConfig;
 import me.drex.villagerconfig.common.data.TradeTable;
 import me.drex.villagerconfig.common.mixin.VillagerAccessor;
+import me.drex.villagerconfig.common.platform.PlatformHooks;
+import me.drex.villagerconfig.common.protocol.ClientboundMerchantXpPacket;
+import me.drex.villagerconfig.common.util.CustomVillagerData;
 import me.drex.villagerconfig.common.util.TestMerchantMenu;
 import me.drex.villagerconfig.common.util.TradeProvider;
 import net.minecraft.commands.CommandBuildContext;
@@ -20,7 +23,7 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.EntitySpawnReason;
  //?}
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.npc.*;
+import net.minecraft.world.entity.npc.villager.*;
 import net.minecraft.world.entity.npc.villager.*;
 import net.minecraft.world.entity.npc/*? if > 1.21.10 {*/.wanderingtrader/*?}*/.WanderingTrader;
 import net.minecraft.world.item.trading.MerchantOffers;
@@ -111,12 +114,16 @@ public class TestCommand {
         return 1;
     }
 
-    private static void openMenu(AbstractVillager villager, int level, ServerPlayer player) {
-        OptionalInt optionalInt = player.openMenu(new SimpleMenuProvider((ix, inventory, playerx) -> new TestMerchantMenu(ix, inventory, villager), villager.getDisplayName()));
+    private static void openMenu(AbstractVillager abstractVillager, int level, ServerPlayer player) {
+        OptionalInt optionalInt = player.openMenu(new SimpleMenuProvider((ix, inventory, playerx) -> new TestMerchantMenu(ix, inventory, abstractVillager), abstractVillager.getDisplayName()));
         if (optionalInt.isPresent()) {
-            MerchantOffers merchantOffers = villager.getOffers();
+            MerchantOffers merchantOffers = abstractVillager.getOffers();
             if (!merchantOffers.isEmpty()) {
-                player.sendMerchantOffers(optionalInt.getAsInt(), merchantOffers, level, villager.getVillagerXp(), villager.showProgressBar(), villager.canRestock());
+                player.sendMerchantOffers(optionalInt.getAsInt(), merchantOffers, level, abstractVillager.getVillagerXp(), abstractVillager.showProgressBar(), abstractVillager.canRestock());
+                if (abstractVillager instanceof Villager villager) {
+                    ClientboundMerchantXpPacket packet = new ClientboundMerchantXpPacket(optionalInt.getAsInt(), CustomVillagerData.getMaxLevel(villager), CustomVillagerData.getNextLevelXpThresholds(villager));
+                    PlatformHooks.PLATFORM_HELPER.sendPacket(player, packet);
+                }
             }
         }
     }

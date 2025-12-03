@@ -56,8 +56,8 @@ public class TradeManager extends SimpleJsonResourceReloadListener/*? if >= 1.21
     }
     //?} else {
     /*@Override
-    protected void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, ProfilerFiller profiler) {
-        ImmutableMap.Builder<Identifier, TradeTable> builder = ImmutableMap.builder();
+    protected void apply(Map<ResourceLocation, JsonElement> prepared, ResourceManager manager, ProfilerFiller profiler) {
+        ImmutableMap.Builder<ResourceLocation, TradeTable> builder = ImmutableMap.builder();
         prepared.forEach((identifier, jsonElement) -> {
             try {
                 TradeTable table = TradeTable.CODEC.parse(registryOps(), jsonElement).getOrThrow();

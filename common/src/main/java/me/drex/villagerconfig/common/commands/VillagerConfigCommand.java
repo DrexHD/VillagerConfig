@@ -17,13 +17,13 @@ public class VillagerConfigCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext) {
         LiteralCommandNode<CommandSourceStack> root = dispatcher.register(
             literal("villagerconfig")
-                .requires(/*? if > 1.21.10 {*/ Commands.hasPermission(Commands.LEVEL_GAMEMASTERS) /*?} else {*/ /*src -> src.hasPermission(2)*/ /*?}*/)
+                .requires(/*? if > 1.21.10 {*/ Commands.hasPermission(Commands.LEVEL_GAMEMASTERS) /*?} else {*/ /*src -> src.hasPermission(2) *//*?}*/)
                 .then(GenerateCommand.builder())
                 .then(ReloadCommand.builder())
                 .then(TestCommand.builder(commandBuildContext))
                 .executes(VillagerConfigCommand::execute)
         );
-        dispatcher.register(literal("vc").requires(/*? if > 1.21.10 {*/ Commands.hasPermission(Commands.LEVEL_GAMEMASTERS) /*?} else {*/ /*src -> src.hasPermission(2)*/ /*?}*/).executes(VillagerConfigCommand::execute).redirect(root));
+        dispatcher.register(literal("vc").requires(/*? if > 1.21.10 {*/ Commands.hasPermission(Commands.LEVEL_GAMEMASTERS) /*?} else {*/ /*src -> src.hasPermission(2) *//*?}*/).executes(VillagerConfigCommand::execute).redirect(root));
     }
 
     private static int execute(CommandContext<CommandSourceStack> context) {

@@ -2,7 +2,6 @@ package me.drex.villagerconfig.common.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import me.drex.villagerconfig.common.util.interfaces.IVillager;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.AgeableMob;
@@ -26,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static me.drex.villagerconfig.common.config.ConfigManager.CONFIG;
 
 @Mixin(AbstractVillager.class)
-public abstract class AbstractVillagerMixin extends AgeableMob implements IVillager, Merchant {
+public abstract class AbstractVillagerMixin extends AgeableMob implements Merchant {
 
     @Shadow
     public abstract @NotNull MerchantOffers getOffers();

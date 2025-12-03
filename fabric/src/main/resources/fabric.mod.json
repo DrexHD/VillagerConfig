@@ -19,6 +19,9 @@
     "main": [
       "me.drex.villagerconfig.fabric.VillagerConfigFabric"
     ],
+    "client": [
+      "me.drex.villagerconfig.fabric.VillagerConfigFabricClient"
+    ],
     "modmenu": [
       "me.drex.villagerconfig.fabric.config.modmenu.VillagerConfigModMenuEntry"
     ],
