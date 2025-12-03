@@ -5,12 +5,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.drex.villagerconfig.common.mixin.MerchantOfferAccessor;
 import me.drex.villagerconfig.common.util.loot.VCLootContextParams;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -74,7 +74,7 @@ public class BehaviorTrade implements VillagerTrades.ItemListing {
 
     @Nullable
     @Override
-    public MerchantOffer getOffer(Entity entity, RandomSource random) {
+    public MerchantOffer getOffer(/*? if > 1.21.10 {*/ServerLevel level, /*?}*/Entity entity, RandomSource random) {
 
         LootParams lootParams = new LootParams.Builder((ServerLevel) entity.level())
             .withParameter(LootContextParams.ORIGIN, entity.position())

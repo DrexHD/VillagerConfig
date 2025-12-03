@@ -2,13 +2,13 @@ package me.drex.villagerconfig.common.mixin;
 
 import me.drex.villagerconfig.common.data.TradeTable;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.npc.AbstractVillager;
-import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.VillagerData;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.AbstractVillager;
+import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.entity.npc.villager.VillagerData;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,7 +37,7 @@ public abstract class VillagerMixin extends AbstractVillager {
         ),
         cancellable = true
     )
-    public void putCustomTrades(CallbackInfo ci) {
+    public void putCustomTrades(/*? if > 1.21.10 {*/ServerLevel serverLevel, /*?}*/CallbackInfo ci) {
         TradeTable tradeTable = getTradeTable();
         if (tradeTable != null) {
             VillagerData villagerData = this.getVillagerData();
@@ -45,7 +45,7 @@ public abstract class VillagerMixin extends AbstractVillager {
             VillagerTrades.ItemListing[] tradeOffers = tradeTable.getTradeOffers(this, level);
             MerchantOffers tradeOfferList = this.getOffers();
             for (VillagerTrades.ItemListing tradeOffer : tradeOffers) {
-                tradeOfferList.add(tradeOffer.getOffer(this, this.random));
+                tradeOfferList.add(tradeOffer.getOffer(/*? if > 1.21.10 {*/serverLevel, /*?}*/this, this.random));
             }
             ci.cancel();
         }
@@ -55,7 +55,7 @@ public abstract class VillagerMixin extends AbstractVillager {
         method = "shouldIncreaseLevel",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/npc/VillagerData;canLevelUp(I)Z"
+            target = "Lnet/minecraft/world/entity/npc/villager/VillagerData;canLevelUp(I)Z"
         )
     )
     public boolean adjustMaxLevel(int level) {
@@ -67,7 +67,7 @@ public abstract class VillagerMixin extends AbstractVillager {
         method = "shouldIncreaseLevel",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/npc/VillagerData;getMaxXpPerLevel(I)I"
+            target = "Lnet/minecraft/world/entity/npc/villager/VillagerData;getMaxXpPerLevel(I)I"
         )
     )
     public int adjustUpperLevelExperience(int level) {
@@ -95,7 +95,7 @@ public abstract class VillagerMixin extends AbstractVillager {
 
     private TradeTable getTradeTable() {
         if (this.level() instanceof ServerLevel) {
-            ResourceLocation identifier = BuiltInRegistries.VILLAGER_PROFESSION.getKey(this.getVillagerData()./*? if >= 1.21.5 {*/ profession().value() /*?} else {*/ /*getProfession() *//*?}*/);
+            Identifier identifier = BuiltInRegistries.VILLAGER_PROFESSION.getKey(this.getVillagerData()./*? if >= 1.21.5 {*/ profession().value() /*?} else {*/ /*getProfession() *//*?}*/);
             return TRADE_MANAGER.getTrade(identifier);
         }
         return null;

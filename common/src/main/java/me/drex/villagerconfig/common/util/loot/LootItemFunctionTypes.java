@@ -5,7 +5,7 @@ import me.drex.villagerconfig.common.util.loot.function.EnchantRandomlyLootFunct
 import me.drex.villagerconfig.common.util.loot.function.SetDyeFunction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
@@ -20,7 +20,7 @@ public class LootItemFunctionTypes {
     }
 
     private static <T extends LootItemFunction> LootItemFunctionType<T> register(String string, MapCodec<T> mapCodec) {
-        return Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, ResourceLocation.fromNamespaceAndPath(MOD_ID, string), new LootItemFunctionType<>(mapCodec));
+        return Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, Identifier.fromNamespaceAndPath(MOD_ID, string), new LootItemFunctionType<>(mapCodec));
     }
 
 }

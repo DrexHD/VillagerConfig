@@ -29,6 +29,18 @@ dependencies {
     }
 }
 
+stonecutter {
+    replacements.string(eval(current.version, "<=1.21.10")) {
+        replace("Identifier", "ResourceLocation")
+        replace("identifier()", "location()")
+        replace("Lnet/minecraft/world/entity/npc/villager/", "Lnet/minecraft/world/entity/npc/")
+        replace("net.minecraft.world.entity.npc.villager.", "net.minecraft.world.entity.npc.")
+        replace("net.minecraft.world.entity.monster.zombie.", "net.minecraft.world.entity.monster.")
+        replace("net.minecraft.advancements.criterion.", "net.minecraft.advancements.critereon.")
+        replace("net.minecraft.util.Util", "net.minecraft.Util")
+    }
+}
+
 val commonJava: Configuration by configurations.creating {
 	isCanBeResolved = false
 	isCanBeConsumed = true

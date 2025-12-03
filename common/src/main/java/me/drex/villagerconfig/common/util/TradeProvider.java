@@ -14,8 +14,8 @@ import me.drex.villagerconfig.common.util.loot.function.SetDyeFunction;
 import me.drex.villagerconfig.common.util.loot.number.AddLootNumberProvider;
 import me.drex.villagerconfig.common.util.loot.number.MultiplyLootNumberProvider;
 import me.drex.villagerconfig.common.util.loot.number.ReferenceLootNumberProvider;
-import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.NbtPredicate;
+import net.minecraft.advancements.criterion.EntityPredicate;
+import net.minecraft.advancements.criterion.NbtPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
@@ -27,13 +27,14 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.valueproviders.ConstantInt;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.entity.npc.VillagerType;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.VillagerType;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -74,7 +75,7 @@ public class TradeProvider implements DataProvider {
 
     private final boolean experimental;
     private final PotionBrewing potionBrewing;
-    public static final ResourceLocation WANDERING_TRADER_ID = ResourceLocation.withDefaultNamespace("wanderingtrader");
+    public static final Identifier WANDERING_TRADER_ID = Identifier.withDefaultNamespace("wanderingtrader");
 
     private static final IntUnaryOperator EXPERIMENTAL1_21_4_WANDERING_TRADER_COUNT = i -> {
 
@@ -111,7 +112,7 @@ public class TradeProvider implements DataProvider {
     }
 
     public @NotNull CompletableFuture<?> run(@NotNull CachedOutput writer, HolderLookup.Provider provider) {
-        HashMap<ResourceLocation, TradeData> map = Maps.newHashMap();
+        HashMap<Identifier, TradeData> map = Maps.newHashMap();
 
         // Save all villager trades
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
@@ -126,7 +127,7 @@ public class TradeProvider implements DataProvider {
             if (experimental && experimentalTrades != null) {
                 trades = experimentalTrades;
             }
-            map.put(key.location(), new TradeData(trades, VILLAGER, true));
+            map.put(key.identifier(), new TradeData(trades, VILLAGER, true));
         }
         // Save wandering trader trades
         //? if >= 1.21.5 {
@@ -151,7 +152,7 @@ public class TradeProvider implements DataProvider {
         }
         *///?}
         return CompletableFuture.allOf(map.entrySet().stream().map(entry -> {
-            ResourceLocation id = entry.getKey();
+            Identifier id = entry.getKey();
             TradeData tradeData = entry.getValue();
             Path path = this.pathResolver.json(id);
             int maxLevel = 0;
@@ -189,7 +190,7 @@ public class TradeProvider implements DataProvider {
         return "Trades";
     }
 
-    private BehaviorTrade.Builder[] convert(VillagerTrades.ItemListing original, ResourceLocation id, HolderLookup.Provider provider) {
+    private BehaviorTrade.Builder[] convert(VillagerTrades.ItemListing original, Identifier id, HolderLookup.Provider provider) {
         if (original instanceof VillagerTrades.EmeraldForItems factory) {
             return new BehaviorTrade.Builder[]{new BehaviorTrade.Builder(
                 lootTableItemStack(factory.itemStack.itemStack()),
@@ -239,7 +240,7 @@ public class TradeProvider implements DataProvider {
                 CompoundTag root = new CompoundTag();
                 CompoundTag villagerData = new CompoundTag();
                 //? if >= 1.21.5 {
-                villagerData.putString("type", entry.getKey().location().toString());
+                villagerData.putString("type", entry.getKey().identifier().toString());
                 //?} else {
                 /*villagerData.putString("type", BuiltInRegistries.VILLAGER_TYPE.getKey(entry.getKey()).toString());
                  *///?}
@@ -338,7 +339,7 @@ public class TradeProvider implements DataProvider {
                 CompoundTag root = new CompoundTag();
                 CompoundTag villagerData = new CompoundTag();
                 //? if >= 1.21.5 {
-                villagerData.putString("type", entry.getKey().location().toString());
+                villagerData.putString("type", entry.getKey().identifier().toString());
                 //?} else {
                 /*villagerData.putString("type", BuiltInRegistries.VILLAGER_TYPE.getKey(entry.getKey()).toString());
                  *///?}
@@ -366,7 +367,7 @@ public class TradeProvider implements DataProvider {
     }
 
     private static <T> List<Map.Entry</*? if >= 1.21.5 {*/ ResourceKey<VillagerType> /*?} else {*/ /*VillagerType *//*?}*/, T>> sortedEntrySet(Set<Map.Entry</*? if >= 1.21.5 {*/ ResourceKey<VillagerType> /*?} else {*/ /*VillagerType *//*?}*/, T>> entrySet) {
-        return entrySet.stream().sorted(Comparator.comparing(o -> o.getKey()./*? if >= 1.21.5 {*/ location() /*?} else {*/ /*toString() *//*?}*/)).toList();
+        return entrySet.stream().sorted(Comparator.comparing(o -> o.getKey()./*? if >= 1.21.5 {*/ identifier() /*?} else {*/ /*toString() *//*?}*/)).toList();
     }
 
     private static LootPoolSingletonContainer.Builder<?> lootTableItemStack(ItemStack itemStack) {

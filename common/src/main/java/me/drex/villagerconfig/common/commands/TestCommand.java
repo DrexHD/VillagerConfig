@@ -21,6 +21,8 @@ import net.minecraft.world.entity.EntitySpawnReason;
  //?}
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.*;
+import net.minecraft.world.entity.npc.villager.*;
+import net.minecraft.world.entity.npc/*? if > 1.21.10 {*/.wanderingtrader/*?}*/.WanderingTrader;
 import net.minecraft.world.item.trading.MerchantOffers;
 
 import java.util.OptionalInt;
@@ -82,7 +84,7 @@ public class TestCommand {
         fakeVillager.setVillagerData(villagerData);
 
         if (level < 0) {
-            TradeTable tradeTable = VillagerConfig.TRADE_MANAGER.getTrade(professionHolder.key().location());
+            TradeTable tradeTable = VillagerConfig.TRADE_MANAGER.getTrade(professionHolder.key().identifier());
             if (tradeTable != null) {
                 level = tradeTable.maxLevel();
             } else {
@@ -94,7 +96,7 @@ public class TestCommand {
         fakeVillager.getOffers();
 
         for (int i = 0; i < level - 1; i++) {
-            ((VillagerAccessor) fakeVillager).invokeIncreaseMerchantCareer();
+            ((VillagerAccessor) fakeVillager).invokeIncreaseMerchantCareer(/*? if > 1.21.10{*/ source.getLevel() /*?}*/);
         }
         openMenu(fakeVillager, fakeVillager.getVillagerData()./*? if >= 1.21.5 {*/ level() /*?} else {*/ /*getLevel() *//*?}*/, player);
         return 1;

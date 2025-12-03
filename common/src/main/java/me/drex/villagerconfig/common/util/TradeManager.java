@@ -14,7 +14,7 @@ import net.minecraft.core.HolderLookup;
 //? if >= 1.21.2 {
 import net.minecraft.resources.FileToIdConverter;
 //?}
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -25,10 +25,10 @@ import java.util.Map;
 
 public class TradeManager extends SimpleJsonResourceReloadListener/*? if >= 1.21.2 {*/ <TradeTable> /*?}*/ {
 
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VillagerConfig.MOD_ID, "trades");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(VillagerConfig.MOD_ID, "trades");
     private static final Logger LOGGER = VillagerConfig.LOGGER;
 
-    private Map<ResourceLocation, TradeTable> trades = ImmutableMap.of();
+    private Map<Identifier, TradeTable> trades = ImmutableMap.of();
     //? if < 1.21.2 {
     /*private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private final HolderLookup.Provider provider;
@@ -44,20 +44,20 @@ public class TradeManager extends SimpleJsonResourceReloadListener/*? if >= 1.21
     }
 
     @Nullable
-    public TradeTable getTrade(ResourceLocation id) {
+    public TradeTable getTrade(Identifier id) {
         return trades.get(id);
     }
 
     //? if >= 1.21.2 {
     @Override
-    protected void apply(Map<ResourceLocation, TradeTable> prepared, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+    protected void apply(Map<Identifier, TradeTable> prepared, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
         this.trades = prepared;
         LOGGER.info("Loaded {} trades", trades.size());
     }
     //?} else {
     /*@Override
-    protected void apply(Map<ResourceLocation, JsonElement> prepared, ResourceManager manager, ProfilerFiller profiler) {
-        ImmutableMap.Builder<ResourceLocation, TradeTable> builder = ImmutableMap.builder();
+    protected void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, ProfilerFiller profiler) {
+        ImmutableMap.Builder<Identifier, TradeTable> builder = ImmutableMap.builder();
         prepared.forEach((identifier, jsonElement) -> {
             try {
                 TradeTable table = TradeTable.CODEC.parse(registryOps(), jsonElement).getOrThrow();

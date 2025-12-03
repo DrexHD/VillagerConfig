@@ -3,12 +3,13 @@ package me.drex.villagerconfig.common.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import me.drex.villagerconfig.common.util.interfaces.IVillager;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.npc.AbstractVillager;
-import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.AbstractVillager;
+import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.trading.Merchant;
 import net.minecraft.world.item.trading.MerchantOffers;
@@ -46,11 +47,8 @@ public abstract class AbstractVillagerMixin extends AgeableMob implements IVilla
         super(entityType, world);
     }
 
-    @Inject(
-            method = "addOffersFromItemListings",
-            at = @At("HEAD")
-    )
-    public void generateRandom(MerchantOffers recipeList, VillagerTrades.ItemListing[] pool, int count, CallbackInfo ci) {
+    @Inject(method = "addOffersFromItemListings", at = @At("HEAD"))
+    public void generateRandom(/*? if > 1.21.10 {*/ ServerLevel serverLevel, /*?}*/MerchantOffers merchantOffers, VillagerTrades.ItemListing[] itemListings, int i, CallbackInfo ci) {
         if (CONFIG.features.tradeCycling) return;
         long seed = this.uuid.getLeastSignificantBits();
         if ((Object) this instanceof Villager villager) {
@@ -62,12 +60,12 @@ public abstract class AbstractVillagerMixin extends AgeableMob implements IVilla
     }
 
     @WrapOperation(
-            method = "addOffersFromItemListings",
-            at = @At(
-                    value = "FIELD",
-                    opcode = Opcodes.GETFIELD,
-                    target = "Lnet/minecraft/world/entity/npc/AbstractVillager;random:Lnet/minecraft/util/RandomSource;"
-            )
+        method = "addOffersFromItemListings",
+        at = @At(
+            value = "FIELD",
+            opcode = Opcodes.GETFIELD,
+            target = "Lnet/minecraft/world/entity/npc/villager/AbstractVillager;random:Lnet/minecraft/util/RandomSource;"
+        )
     )
     public RandomSource replaceRandom(AbstractVillager merchantEntity, Operation<RandomSource> original) {
         return CONFIG.features.tradeCycling ? original.call(merchantEntity) : this.semiRandom;

@@ -1,7 +1,7 @@
 package me.drex.villagerconfig.common.util.loot;
 
 import me.drex.villagerconfig.common.mixin.loot.LootContextParamSetsAccessor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 //? if >= 1.21.2 {
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.util.context.ContextKeySet;
@@ -23,6 +23,6 @@ public class VCLootContextParams {
     }
 
     private static <T> /*? if >= 1.21.2 {*/ ContextKey /*?} else {*/ /*LootContextParam *//*?}*/<T> create(String string) {
-        return new /*? if >= 1.21.2 {*/ ContextKey /*?} else {*/ /*LootContextParam *//*?}*/<>(ResourceLocation.fromNamespaceAndPath(MOD_ID, string));
+        return new /*? if >= 1.21.2 {*/ ContextKey /*?} else {*/ /*LootContextParam *//*?}*/<>(Identifier.fromNamespaceAndPath(MOD_ID, string));
     }
 }

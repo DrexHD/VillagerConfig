@@ -5,7 +5,7 @@ import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import static me.drex.villagerconfig.common.config.ConfigManager.CONFIG;
 
@@ -14,7 +14,7 @@ public class ConfigScreen {
     public static Screen getConfigScreen(Screen parentScreen) {
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parentScreen)
-                .setDefaultBackgroundTexture(ResourceLocation.parse("minecraft:textures/block/emerald_block.png"))
+                .setDefaultBackgroundTexture(Identifier.parse("minecraft:textures/block/emerald_block.png"))
                 .setTitle(Component.translatable("config.villagerconfig.title"));
 
         builder.setGlobalized(true);

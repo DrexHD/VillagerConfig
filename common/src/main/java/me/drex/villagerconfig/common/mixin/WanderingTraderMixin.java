@@ -6,9 +6,9 @@ import me.drex.villagerconfig.common.util.TradeManager;
 import me.drex.villagerconfig.common.util.TradeProvider;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.npc.AbstractVillager;
-import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.entity.npc.WanderingTrader;
+import net.minecraft.world.entity.npc.villager.AbstractVillager;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
+import net.minecraft.world.entity.npc/*? if > 1.21.10 {*/.wanderingtrader/*?}*/.WanderingTrader;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,7 +24,7 @@ public abstract class WanderingTraderMixin extends AbstractVillager {
     }
 
     @Inject(method = "updateTrades", at = @At("HEAD"), cancellable = true)
-    public void replaceTrades(CallbackInfo ci) {
+    public void replaceTrades(/*? if > 1.21.10 {*/ServerLevel serverLevel, /*?}*/CallbackInfo ci) {
         TradeTable tradeTable = getTradeTable();
         if (tradeTable != null) {
             // Cancel vanilla trades
@@ -33,7 +33,7 @@ public abstract class WanderingTraderMixin extends AbstractVillager {
                 VillagerTrades.ItemListing[] tradeOffers = tradeTable.getTradeOffers(this, level);
                 MerchantOffers tradeOfferList = this.getOffers();
                 for (VillagerTrades.ItemListing tradeOffer : tradeOffers) {
-                    tradeOfferList.add(tradeOffer.getOffer(this, this.random));
+                    tradeOfferList.add(tradeOffer.getOffer(/*? if > 1.21.10 {*/serverLevel, /*?}*/this, this.random));
                 }
             }
         }
