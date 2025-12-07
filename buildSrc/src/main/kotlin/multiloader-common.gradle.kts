@@ -25,6 +25,14 @@ repositories {
 	maven("https://maven.terraformersmc.com/releases/") { name = "TerraformersMC" }
 	maven("https://maven.shedaniel.me/")
 	maven("https://maven.fabricmc.net/")
+    maven {
+        name = "Maven for PR #2815" // https://github.com/neoforged/NeoForge/pull/2815
+        url = uri("https://prmaven.neoforged.net/NeoForge/pr2815")
+        content {
+            includeModule("net.neoforged", "neoforge")
+            includeModule("net.neoforged", "testframework")
+        }
+    }
 }
 
 tasks {

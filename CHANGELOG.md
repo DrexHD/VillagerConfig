@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.5.1] - 2025-12-07
+### Added
+- `pt_br` localization
+
+### Fixed
+- IllegalStateException on neoforge clients
+
 ## [4.5.0] - 2025-12-03
 ### Added
 - Server to client packet for syncing custom level requirements
