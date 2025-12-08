@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Log warning about invalid villager profession IDs
+
 ## [4.5.1] - 2025-12-07
 ### Added
 - `pt_br` localization

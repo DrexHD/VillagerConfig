@@ -12,6 +12,7 @@ import me.drex.villagerconfig.common.VillagerConfig;
 import me.drex.villagerconfig.common.data.TradeTable;
 import net.minecraft.core.HolderLookup;
 //? if >= 1.21.2 {
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.FileToIdConverter;
 //?}
 import net.minecraft.resources.Identifier;
@@ -21,6 +22,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Map;
 
 public class TradeManager extends SimpleJsonResourceReloadListener/*? if >= 1.21.2 {*/ <TradeTable> /*?}*/ {
@@ -53,6 +55,13 @@ public class TradeManager extends SimpleJsonResourceReloadListener/*? if >= 1.21
     protected void apply(Map<Identifier, TradeTable> prepared, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
         this.trades = prepared;
         LOGGER.info("Loaded {} trades", trades.size());
+
+        this.trades.forEach((identifier, tradeTable) -> {
+            if (BuiltInRegistries.VILLAGER_PROFESSION.get(identifier).isEmpty()) {
+                // TODO list available professions
+                LOGGER.warn("Found trade for unknown villager profession '{}'. Available professions: {}", identifier, Arrays.toString(BuiltInRegistries.VILLAGER_PROFESSION.keySet().toArray()));
+            }
+        });
     }
     //?} else {
     /*@Override
