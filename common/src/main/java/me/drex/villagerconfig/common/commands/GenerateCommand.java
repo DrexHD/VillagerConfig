@@ -1,17 +1,14 @@
 package me.drex.villagerconfig.common.commands;
 
-import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import me.drex.villagerconfig.common.VillagerConfig;
 import me.drex.villagerconfig.common.platform.PlatformHooks;
 import me.drex.villagerconfig.common.util.TradeProvider;
 import net.minecraft.ChatFormatting;
-import net.minecraft.SharedConstants;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.flag.FeatureFlags;
 
 import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
@@ -22,27 +19,17 @@ public class GenerateCommand {
 
     public static LiteralArgumentBuilder<CommandSourceStack> builder() {
         return Commands.literal("generate")
-            .then(
-                Commands.argument("experimental", BoolArgumentType.bool())
-                    .executes(ctx -> execute(ctx.getSource(), BoolArgumentType.getBool(ctx, "experimental")))
-            )
-            .executes(ctx -> execute(ctx.getSource(), false));
+            .executes(ctx -> execute(ctx.getSource()));
     }
 
-    private static int execute(CommandSourceStack src, boolean experimental) {
-        DataGenerator dataGenerator = new DataGenerator(GENERATED, SharedConstants.getCurrentVersion(), true);
+    private static int execute(CommandSourceStack src) {
+        DataGenerator dataGenerator = new DataGenerator.Uncached(GENERATED);
         DataGenerator.PackGenerator tradesPack = dataGenerator.getVanillaPack(true);
-        if (experimental) {
-            if (!src.getLevel().enabledFeatures().contains(FeatureFlags.TRADE_REBALANCE)) {
-                src.sendFailure(Component.literal("You need to enable experimental trade rebalance datapack to generate experimental trades"));
-                return 0;
-            }
-        }
 
-        tradesPack.addProvider(packOutput -> new TradeProvider(packOutput, CompletableFuture.completedFuture(src.getServer().registryAccess()), experimental, FeatureFlags.VANILLA_SET));
+        tradesPack.addProvider(packOutput -> new TradeProvider(packOutput, CompletableFuture.completedFuture(src.getServer().registryAccess())));
         try {
             dataGenerator.run();
-            src.sendSuccess(() -> Component.literal("Successfully generated trade " + (experimental ? "(experimental) " : "") + "data to " + GENERATED).withStyle(ChatFormatting.GREEN), false);
+            src.sendSuccess(() -> Component.literal("Successfully generated trade data to " + GENERATED).withStyle(ChatFormatting.GREEN), false);
             return 1;
         } catch (Throwable e) {
             src.sendFailure(Component.literal("An error occurred, please look into the console for more information."));

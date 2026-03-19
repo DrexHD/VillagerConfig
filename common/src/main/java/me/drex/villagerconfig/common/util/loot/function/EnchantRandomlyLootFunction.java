@@ -20,7 +20,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -62,6 +61,11 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
     }
 
     @Override
+    public MapCodec<? extends LootItemConditionalFunction> codec() {
+        return CODEC;
+    }
+
+    @Override
     protected @NotNull ItemStack run(@NotNull ItemStack stack, LootContext context) {
         RandomSource randomSource = context.getRandom();
         Optional<Holder<Enchantment>> optional = this.include.flatMap(holders -> holders.getRandomElement(randomSource)).or(
@@ -91,17 +95,12 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
             itemStack = new ItemStack(Items.ENCHANTED_BOOK);
         }
         itemStack.enchant(holder, level);
-        if (context./*? if >= 1.21.2 {*/ hasParameter /*?} else {*/ /*hasParam *//*?}*/(VCLootContextParams.NUMBER_REFERENCE)) {
-            Map<String, Float> referenceProviders = context./*? if >= 1.21.2 {*/ getParameter /*?} else {*/ /*getParam *//*?}*/(VCLootContextParams.NUMBER_REFERENCE);
+        if (context. hasParameter (VCLootContextParams.NUMBER_REFERENCE)) {
+            Map<String, Float> referenceProviders = context. getParameter (VCLootContextParams.NUMBER_REFERENCE);
             referenceProviders.put("enchantmentLevel", (float) level);
             referenceProviders.put("treasureMultiplier", holder.is(EnchantmentTags.DOUBLE_TRADE_PRICE) ? (float) 2 : 1);
         }
         return itemStack;
-    }
-
-    @Override
-    public @NotNull LootItemFunctionType getType() {
-        return LootItemFunctionTypes.ENCHANT_RANDOMLY;
     }
 
     public static class Builder

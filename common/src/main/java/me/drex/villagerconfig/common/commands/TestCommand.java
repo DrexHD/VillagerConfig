@@ -19,13 +19,11 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
-//? if >= 1.21.2 {
 import net.minecraft.world.entity.EntitySpawnReason;
- //?}
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.villager.*;
 import net.minecraft.world.entity.npc.villager.*;
-import net.minecraft.world.entity.npc/*? if > 1.21.10 {*/.wanderingtrader/*?}*/.WanderingTrader;
+import net.minecraft.world.entity.npc.wanderingtrader.WanderingTrader;
 import net.minecraft.world.item.trading.MerchantOffers;
 
 import java.util.OptionalInt;
@@ -39,7 +37,7 @@ public class TestCommand {
                         .executes(context ->
                             testVillager(
                                 context.getSource(),
-                                /*? if >= 1.21.5 {*/ commandBuildContext.getOrThrow(VillagerType.PLAINS) /*?} else {*/ /*Holder.direct(VillagerType.PLAINS) *//*?}*/,
+                                commandBuildContext.getOrThrow(VillagerType.PLAINS),
                                 ResourceArgument.getResource(context, "profession", Registries.VILLAGER_PROFESSION),
                                 -1
                             )
@@ -75,15 +73,12 @@ public class TestCommand {
 
     private static int testVillager(CommandSourceStack source, Holder<VillagerType> villagerType, Holder.Reference<VillagerProfession> professionHolder, int level) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
-        Villager fakeVillager = EntityType.VILLAGER.create(source.getLevel()/*? if >= 1.21.2 {*/, EntitySpawnReason.COMMAND /*?}*/);
+        Villager fakeVillager = EntityType.VILLAGER.create(source.getLevel(), EntitySpawnReason.COMMAND);
         assert fakeVillager != null;
         fakeVillager.setPos(player.position());
-        //? if >= 1.21.5 {
         VillagerData villagerData = Villager.createDefaultVillagerData();
         villagerData = villagerData.withProfession(professionHolder).withType(villagerType);
-        //?} else {
-        /*VillagerData villagerData = new VillagerData(villagerType.value(), professionHolder.value(), 1);
-        *///?}
+
         fakeVillager.setVillagerData(villagerData);
 
         if (level < 0) {
@@ -99,15 +94,15 @@ public class TestCommand {
         fakeVillager.getOffers();
 
         for (int i = 0; i < level - 1; i++) {
-            ((VillagerAccessor) fakeVillager).invokeIncreaseMerchantCareer(/*? if > 1.21.10{*/ source.getLevel() /*?}*/);
+            ((VillagerAccessor) fakeVillager).invokeIncreaseMerchantCareer(source.getLevel());
         }
-        openMenu(fakeVillager, fakeVillager.getVillagerData()./*? if >= 1.21.5 {*/ level() /*?} else {*/ /*getLevel() *//*?}*/, player);
+        openMenu(fakeVillager, fakeVillager.getVillagerData().level(), player);
         return 1;
     }
 
     private static int testWanderingTrader(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
-        WanderingTrader fakeTrader = EntityType.WANDERING_TRADER.create(source.getLevel()/*? if >= 1.21.2 {*/, EntitySpawnReason.COMMAND /*?}*/);
+        WanderingTrader fakeTrader = EntityType.WANDERING_TRADER.create(source.getLevel(), EntitySpawnReason.COMMAND);
         fakeTrader.setPos(player.position());
         fakeTrader.getOffers();
         openMenu(fakeTrader, 1, player);

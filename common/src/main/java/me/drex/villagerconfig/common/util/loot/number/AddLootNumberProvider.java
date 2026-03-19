@@ -2,9 +2,7 @@ package me.drex.villagerconfig.common.util.loot.number;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import me.drex.villagerconfig.common.util.loot.LootNumberProviderTypes;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
@@ -27,8 +25,8 @@ public record AddLootNumberProvider(List<NumberProvider> addends) implements Num
     }
 
     @Override
-    public @NotNull LootNumberProviderType getType() {
-        return LootNumberProviderTypes.ADD;
+    public MapCodec<? extends NumberProvider> codec() {
+        return CODEC;
     }
 
     public static AddLootNumberProvider create(NumberProvider... addends) {

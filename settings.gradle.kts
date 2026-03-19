@@ -11,16 +11,16 @@ pluginManagement {
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.8-alpha.14"
+    id("dev.kikugie.stonecutter") version "0.9"
 }
 
 val fabricVersions = providers.gradleProperty("fabric_versions").orNull?.split(", ") ?: emptyList()
 val neoforgeVersions = providers.gradleProperty("neoforge_versions").orNull?.split(", ") ?: emptyList()
-val commonVersions = (fabricVersions union neoforgeVersions).toList()
+val commonVersions = fabricVersions.toList()
 val dists = mapOf(
     "common" to commonVersions,
     "fabric" to fabricVersions,
-    "neoforge" to neoforgeVersions
+//    "neoforge" to neoforgeVersions
 )
 val uniqueVersions = dists.values.flatten().distinct()
 

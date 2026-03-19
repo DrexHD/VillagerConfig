@@ -3,7 +3,7 @@ package me.drex.villagerconfig.common.data;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.entity.npc.villager.AbstractVillager;
-import net.minecraft.world.entity.npc.villager.VillagerTrades;
+import net.minecraft.world.item.trading.MerchantOffer;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -25,14 +25,14 @@ public class TradeTier {
         this.groups = groups;
     }
 
-    protected VillagerTrades.ItemListing[] getTradeOffers(AbstractVillager villager) {
-        List<VillagerTrades.ItemListing> trades = new LinkedList<>();
+    protected MerchantOffer[] getTradeOffers(AbstractVillager villager) {
+        List<MerchantOffer> trades = new LinkedList<>();
         if (this.groups != null) {
             for (TradeGroup group : this.groups) {
                 trades.addAll(group.getTrades(villager));
             }
         }
-        return trades.toArray(VillagerTrades.ItemListing[]::new);
+        return trades.toArray(MerchantOffer[]::new);
     }
 
     protected int requiredExperience() {

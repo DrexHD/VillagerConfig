@@ -1,29 +1,20 @@
 plugins {
-    id("fabric-loom")
+    id("net.fabricmc.fabric-loom")
     `multiloader-loader`
 }
 
 dependencies {
     minecraft("com.mojang:minecraft:$minecraftVersion")
-    mappings(loom.officialMojangMappings())
 
-    modImplementation("net.fabricmc:fabric-loader:${versionedProp("fabric-loader")}")
-    modApi("net.fabricmc.fabric-api:fabric-api:${versionedProp("fabric-api")}")
+    implementation("net.fabricmc:fabric-loader:${versionedProp("fabric-loader")}")
+    api("net.fabricmc.fabric-api:fabric-api:${versionedProp("fabric-api")}")
 
-    modCompileOnly("com.terraformersmc:modmenu:${versionedProp("modmenu")}")
-    implementation(include("me.zeroeightsix:fiber:${versionedProp("fiber")}")!!)
-    modImplementation("me.shedaniel.cloth:cloth-config-fabric:${versionedProp("cloth_config")}")
+    compileOnly("com.terraformersmc:modmenu:${versionedProp("modmenu")}")
+    implementation(include("blue.endless:jankson:${versionedProp("jankson")}")!!)
+//    implementation("me.shedaniel.cloth:cloth-config-fabric:${versionedProp("cloth_config")}")
 }
 
 stonecutter {
-    replacements.string(eval(current.version, "<=1.21.10")) {
-        replace("Identifier", "ResourceLocation")
-        replace("identifier()", "location()")
-        replace("Lnet/minecraft/world/entity/npc/villager/", "Lnet/minecraft/world/entity/npc/")
-        replace("net.minecraft.world.entity.npc.villager.", "net.minecraft.world.entity.npc.")
-        replace("net.minecraft.advancements.criterion.", "net.minecraft.advancements.critereon.")
-        replace("net.minecraft.util.Util", "net.minecraft.Util")
-    }
 }
 
 loom {
@@ -57,5 +48,5 @@ fabricApi {
 }
 
 publishMods {
-    file.set(tasks.remapJar.get().archiveFile)
+    file.set(tasks.jar.get().archiveFile)
 }

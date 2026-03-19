@@ -21,7 +21,7 @@ public abstract class MerchantScreenMixin extends AbstractContainerScreen<@NotNu
         super(abstractContainerMenu, inventory, component);
     }
 
-    @ModifyConstant(method = "renderProgressBar", constant = @Constant(intValue = 5, ordinal = 0))
+    @ModifyConstant(method = "extractProgressBar", constant = @Constant(intValue = 5, ordinal = 0))
     public int adjustMaxLevel(int constant) {
         if (((IMerchantMenu) this.menu).villagerConfig$isCustom()) {
             return ((IMerchantMenu) this.menu).villagerConfig$getMaxLevel();
@@ -30,7 +30,7 @@ public abstract class MerchantScreenMixin extends AbstractContainerScreen<@NotNu
     }
 
     @WrapOperation(
-        method = "renderProgressBar",
+        method = "extractProgressBar",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/entity/npc/villager/VillagerData;getMinXpPerLevel(I)I"
@@ -48,7 +48,7 @@ public abstract class MerchantScreenMixin extends AbstractContainerScreen<@NotNu
     }
 
     @WrapOperation(
-        method = "renderProgressBar",
+        method = "extractProgressBar",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/entity/npc/villager/VillagerData;getMaxXpPerLevel(I)I"
@@ -66,7 +66,7 @@ public abstract class MerchantScreenMixin extends AbstractContainerScreen<@NotNu
     }
 
     @WrapOperation(
-        method = "renderProgressBar",
+        method = "extractProgressBar",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/entity/npc/villager/VillagerData;canLevelUp(I)Z"

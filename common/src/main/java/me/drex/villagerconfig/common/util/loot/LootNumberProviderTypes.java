@@ -7,22 +7,19 @@ import me.drex.villagerconfig.common.util.loot.number.ReferenceLootNumberProvide
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
 import static me.drex.villagerconfig.common.VillagerConfig.MOD_ID;
 
 public class LootNumberProviderTypes {
-
-    public static final LootNumberProviderType REFERENCE = register("reference", ReferenceLootNumberProvider.CODEC);
-    public static final LootNumberProviderType ADD = register("add", AddLootNumberProvider.CODEC);
-    public static final LootNumberProviderType MUL = register("multiply", MultiplyLootNumberProvider.CODEC);
-
     public static void init() {
+        register("reference", ReferenceLootNumberProvider.CODEC);
+        register("add", AddLootNumberProvider.CODEC);
+        register("multiply", MultiplyLootNumberProvider.CODEC);
     }
 
-    private static LootNumberProviderType register(String string, MapCodec<? extends NumberProvider> mapCodec) {
-        return Registry.register(BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE, Identifier.fromNamespaceAndPath(MOD_ID, string), new LootNumberProviderType(mapCodec));
+    private static MapCodec<? extends NumberProvider> register(String string, MapCodec<? extends NumberProvider> mapCodec) {
+        return Registry.register(BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE, Identifier.fromNamespaceAndPath(MOD_ID, string), mapCodec);
     }
 
 }

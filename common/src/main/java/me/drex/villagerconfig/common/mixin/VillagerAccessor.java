@@ -8,5 +8,5 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(Villager.class)
 public interface VillagerAccessor {
     @Invoker
-    void invokeIncreaseMerchantCareer(/*? if > 1.21.10 {*/ServerLevel level /*?}*/);
+    void invokeIncreaseMerchantCareer(ServerLevel level );
 }

@@ -3,7 +3,7 @@ package me.drex.villagerconfig.common.data;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.entity.npc.villager.AbstractVillager;
-import net.minecraft.world.entity.npc.villager.VillagerTrades;
+import net.minecraft.world.item.trading.MerchantOffer;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class TradeTable {
         return TradeTier.EMPTY;
     }
 
-    public VillagerTrades.ItemListing[] getTradeOffers(AbstractVillager villager, int level) {
+    public MerchantOffer[] getTradeOffers(AbstractVillager villager, int level) {
         TradeTier tradeTier = getTradeTier(level);
         return tradeTier.getTradeOffers(villager);
     }

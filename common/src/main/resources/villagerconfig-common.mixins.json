@@ -7,9 +7,9 @@
   "mixins": [
     "AbstractVillagerMixin",
     "MerchantMenuMixin",
+    "MerchantMixin",
     "MerchantOfferAccessor",
     "MerchantOfferMixin",
-    "MerchantMixin",
     "VillagerAccessor",
     "VillagerDataAccessor",
     "VillagerMixin",

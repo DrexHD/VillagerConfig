@@ -24,7 +24,7 @@ public class VillagerConfigFabric implements ModInitializer {
             VillagerConfig.TRADE_MANAGER = tradeManager;
             return tradeManager;
         });
-        PayloadTypeRegistry.playS2C().register(ClientboundMerchantXpPacket.ID, ClientboundMerchantXpPacket.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(ClientboundMerchantXpPacket.ID, ClientboundMerchantXpPacket.CODEC);
     }
 
 }

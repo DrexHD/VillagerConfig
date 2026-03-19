@@ -5,16 +5,12 @@ import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import me.drex.villagerconfig.common.util.loot.LootItemFunctionTypes;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,19 +42,18 @@ public class SetDyeFunction extends LootItemConditionalFunction {
     }
 
     @Override
+    public MapCodec<? extends LootItemConditionalFunction> codec() {
+        return CODEC;
+    }
+
+    @Override
     protected @NotNull ItemStack run(@NotNull ItemStack stack, @NotNull LootContext context) {
-        if (!stack.is(ItemTags.DYEABLE)) return stack;
         if (!add) {
             stack.set(DataComponents.DYED_COLOR, null);
         }
         List<DyeColor> colors = dyeColors.orElse(ImmutableList.copyOf(DyeColor.values()));
         DyeColor color = colors.get(context.getRandom().nextInt(colors.size()));
-        return DyedItemColor.applyDyes(stack, Collections.singletonList(DyeItem.byColor(color)));
-    }
-
-    @Override
-    public @NotNull LootItemFunctionType getType() {
-        return LootItemFunctionTypes.SET_DYE;
+        return DyedItemColor.applyDyes(stack, Collections.singletonList(color));
     }
 
     public static class Builder

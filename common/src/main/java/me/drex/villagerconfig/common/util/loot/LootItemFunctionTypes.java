@@ -7,20 +7,18 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
 import static me.drex.villagerconfig.common.VillagerConfig.MOD_ID;
 
 public class LootItemFunctionTypes {
 
-    public static final LootItemFunctionType<SetDyeFunction> SET_DYE = register("set_dye", SetDyeFunction.CODEC);
-    public static final LootItemFunctionType<EnchantRandomlyLootFunction> ENCHANT_RANDOMLY = register("enchant_randomly", EnchantRandomlyLootFunction.CODEC);
-
     public static void init() {
+        register("set_dye", SetDyeFunction.CODEC);
+        register("enchant_randomly", EnchantRandomlyLootFunction.CODEC);
     }
 
-    private static <T extends LootItemFunction> LootItemFunctionType<T> register(String string, MapCodec<T> mapCodec) {
-        return Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, Identifier.fromNamespaceAndPath(MOD_ID, string), new LootItemFunctionType<>(mapCodec));
+    private static MapCodec<? extends LootItemFunction> register(String string, MapCodec<? extends LootItemFunction> mapCodec) {
+        return Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, Identifier.fromNamespaceAndPath(MOD_ID, string), mapCodec);
     }
 
 }

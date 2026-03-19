@@ -3,19 +3,20 @@ package me.drex.villagerconfig.common.data;
 import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import me.drex.villagerconfig.common.config.ConfigManager;
+import me.drex.villagerconfig.common.util.RandomUtil;
 import me.drex.villagerconfig.common.util.loot.VCLootContextParams;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Unit;
 import net.minecraft.world.entity.npc.villager.AbstractVillager;
+import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class TradeGroup {
 
@@ -32,15 +33,22 @@ public class TradeGroup {
         this.trades = trades;
     }
 
-    public List<BehaviorTrade> getTrades(AbstractVillager villager) {
+    public List<MerchantOffer> getTrades(AbstractVillager villager) {
         LootParams lootParams = new LootParams.Builder((ServerLevel) villager.level())
             .withParameter(LootContextParams.ORIGIN, villager.position())
             .withParameter(LootContextParams.THIS_ENTITY, villager)
             .withParameter(VCLootContextParams.NUMBER_REFERENCE, Collections.emptyMap())
+            .withParameter(LootContextParams.ADDITIONAL_COST_COMPONENT_ALLOWED, Unit.INSTANCE)
             .create(VCLootContextParams.VILLAGER_LOOT_CONTEXT);
-        LootContext lootContext = new LootContext.Builder(lootParams).create(Optional.empty());
+        LootContext.Builder builder = new LootContext.Builder(lootParams);
+        if (!ConfigManager.CONFIG.features.tradeCycling) {
+            builder.withOptionalRandomSeed(RandomUtil.getSeed(villager));
+        }
+        LootContext lootContext = builder.create(Optional.empty());
 
-        List<BehaviorTrade> applicableTrades = trades.stream().filter(behaviorTrade -> behaviorTrade.compositeCondition.test(lootContext)).toList();
+        List<MerchantOffer> applicableTrades = trades.stream()
+            .map(behaviorTrade -> behaviorTrade.getOffer(lootContext))
+            .filter(Objects::nonNull).toList();
 
         HashSet<Integer> set = Sets.newHashSet();
         int count = numToSelect.getInt(lootContext);
@@ -51,7 +59,7 @@ public class TradeGroup {
         } else {
             return applicableTrades;
         }
-        BehaviorTrade[] factories = new BehaviorTrade[set.size()];
+        MerchantOffer[] factories = new MerchantOffer[set.size()];
         int index = 0;
         for (Integer integer : set) {
             factories[index] = applicableTrades.get(integer);

@@ -1,10 +1,10 @@
 plugins {
     id("dev.kikugie.stonecutter")
     id("org.jetbrains.changelog")
-    id("fabric-loom") version "1.13-SNAPSHOT" apply false
+    id("net.fabricmc.fabric-loom") version "1.15-SNAPSHOT" apply false
 }
 
-stonecutter active "1.21.11"
+stonecutter active "26.1"
 
 changelog {
     path = rootProject.file("CHANGELOG.md").path
