@@ -32,10 +32,6 @@ loom {
             ideConfigGenerated(true)
         }
     }
-
-    mixin {
-        defaultRefmapName = "villagerconfig.refmap.json"
-    }
 }
 
 fabricApi {

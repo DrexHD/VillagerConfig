@@ -2,14 +2,14 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
 	`multiloader-loader`
-	id("net.neoforged.gradle.userdev") version "7.1.4"
+	id("net.neoforged.gradle.userdev") version "7.1.21"
 	id("com.gradleup.shadow") version "9.2.2"
 }
 
 dependencies {
 	implementation("net.neoforged:neoforge:${versionedProp("neoforge")}")
-	implementation("me.zeroeightsix:fiber:${versionedProp("fiber")}")
-	implementation("me.shedaniel.cloth:cloth-config-neoforge:${versionedProp("cloth_config")}")
+	implementation(jarJar("blue.endless:jankson:${versionedProp("jankson")}")!!)
+//	implementation("me.shedaniel.cloth:cloth-config-neoforge:${versionedProp("cloth_config")}")
 }
 
 minecraft {
@@ -28,9 +28,6 @@ runs {
 
 	configureEach {
 		modSource(project.sourceSets.main.get())
-		dependencies {
-			runtime("me.zeroeightsix:fiber:${versionedProp("fiber")}")
-		}
 		workingDirectory("run")
 	}
 }

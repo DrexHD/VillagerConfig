@@ -20,7 +20,7 @@ val commonVersions = fabricVersions.toList()
 val dists = mapOf(
     "common" to commonVersions,
     "fabric" to fabricVersions,
-//    "neoforge" to neoforgeVersions
+    "neoforge" to neoforgeVersions
 )
 val uniqueVersions = dists.values.flatten().distinct()
 
