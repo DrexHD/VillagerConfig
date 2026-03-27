@@ -9,7 +9,7 @@ plugins {
 dependencies {
 	implementation("net.neoforged:neoforge:${versionedProp("neoforge")}")
 	implementation(jarJar("blue.endless:jankson:${versionedProp("jankson")}")!!)
-//	implementation("me.shedaniel.cloth:cloth-config-neoforge:${versionedProp("cloth_config")}")
+	implementation("me.shedaniel.cloth:cloth-config-neoforge:${versionedProp("cloth_config")}")
 }
 
 minecraft {

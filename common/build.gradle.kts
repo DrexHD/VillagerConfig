@@ -23,9 +23,9 @@ dependencies {
 
     compileOnly("net.fabricmc:fabric-loader:${versionedProp("fabric-loader")}")
 	compileOnly("blue.endless:jankson:${versionedProp("jankson")}")
-//    compileOnly("me.shedaniel.cloth:cloth-config-fabric:${versionedProp("cloth_config")}") {
-//        exclude("net.fabricmc.fabric-api")
-//    }
+    compileOnly("me.shedaniel.cloth:cloth-config-fabric:${versionedProp("cloth_config")}") {
+        exclude("net.fabricmc.fabric-api")
+    }
 }
 
 stonecutter {

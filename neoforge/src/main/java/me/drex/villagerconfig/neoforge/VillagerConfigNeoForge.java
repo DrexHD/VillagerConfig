@@ -3,6 +3,7 @@ package me.drex.villagerconfig.neoforge;
 
 import me.drex.villagerconfig.common.VillagerConfig;
 import me.drex.villagerconfig.common.commands.VillagerConfigCommand;
+import me.drex.villagerconfig.common.config.ConfigScreen;
 import me.drex.villagerconfig.common.protocol.ClientboundMerchantXpPacket;
 import me.drex.villagerconfig.neoforge.util.NeoForgeTradeManager;
 import net.neoforged.api.distmarker.Dist;
@@ -49,8 +50,7 @@ public final class VillagerConfigNeoForge {
     }
 
     private static void onClientSetup(final FMLClientSetupEvent event) {
-        // TODO 26.1
-//        event.enqueueWork(() -> ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (client, screen) -> ConfigScreen.getConfigScreen(screen)));
+        event.enqueueWork(() -> ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (client, screen) -> ConfigScreen.getConfigScreen(screen)));
     }
 
     public static void registerClient(RegisterClientPayloadHandlersEvent event) {

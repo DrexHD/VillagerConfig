@@ -11,7 +11,7 @@ dependencies {
 
     compileOnly("com.terraformersmc:modmenu:${versionedProp("modmenu")}")
     implementation(include("blue.endless:jankson:${versionedProp("jankson")}")!!)
-//    implementation("me.shedaniel.cloth:cloth-config-fabric:${versionedProp("cloth_config")}")
+    implementation("me.shedaniel.cloth:cloth-config-fabric:${versionedProp("cloth_config")}")
 }
 
 stonecutter {
