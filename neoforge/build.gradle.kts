@@ -1,9 +1,6 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
 	`multiloader-loader`
 	id("net.neoforged.gradle.userdev") version "7.1.21"
-	id("com.gradleup.shadow") version "9.2.2"
 }
 
 dependencies {
@@ -42,22 +39,6 @@ tasks {
 	}
 }
 
-val shadowJar = tasks.named<ShadowJar>("shadowJar") {
-	archiveClassifier = ""
-	dependencies {
-		relocate("blue.endless.jankson", "me.drex.villagerconfig.shadow.jankson")
-		relocate("io.github.fablabsmc", "me.drex.villagerconfig.shadow.fablabsmc")
-
-		include(dependency("me.zeroeightsix:fiber"))
-	}
-	minimize()
-}
-
-tasks.jarJar {
-    archiveClassifier = "dist"
-    dependsOn(shadowJar)
-}
-
 publishMods {
-    file.set(shadowJar.get().archiveFile)
+	file.set(tasks.jarJar.get().archiveFile)
 }

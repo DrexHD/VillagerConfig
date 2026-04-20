@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.5.4] - 2026-04-20
+### Fixed
+- Crash when launching on NeoForge
+
 ## [4.5.3] - 2026-03-27
 ### Changed
 - Add back config screen (removed during 26.1 port)
