@@ -13,7 +13,7 @@ import static me.drex.villagerconfig.common.VillagerConfig.TRADE_MANAGER;
 public class CustomVillagerData {
     public static TradeTable getTradeTable(Villager villager) {
         if (villager.level() instanceof ServerLevel) {
-            Identifier identifier = BuiltInRegistries.VILLAGER_PROFESSION.getKey(villager.getVillagerData(). profession().value() );
+            Identifier identifier = BuiltInRegistries.VILLAGER_PROFESSION.getKey(villager.getVillagerData().profession().value());
             return TRADE_MANAGER.getTrade(identifier);
         }
         return null;

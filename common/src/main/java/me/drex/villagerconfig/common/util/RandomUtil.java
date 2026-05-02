@@ -15,7 +15,7 @@ public class RandomUtil {
         long seed = abstractVillager.getUUID().getLeastSignificantBits();
         if (abstractVillager instanceof Villager villager) {
             // This is used to make sure, different levels choose different trade index
-            int level = villager.getVillagerData(). level() ;
+            int level = villager.getVillagerData().level() ;
             seed += level;
         }
         return seed;

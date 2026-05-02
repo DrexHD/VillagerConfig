@@ -37,7 +37,7 @@ public class TradeGroup {
         LootParams lootParams = new LootParams.Builder((ServerLevel) villager.level())
             .withParameter(LootContextParams.ORIGIN, villager.position())
             .withParameter(LootContextParams.THIS_ENTITY, villager)
-            .withParameter(VCLootContextParams.NUMBER_REFERENCE, Collections.emptyMap())
+            .withParameter(VCLootContextParams.NUMBER_REFERENCE, new HashMap<>())
             .withParameter(LootContextParams.ADDITIONAL_COST_COMPONENT_ALLOWED, Unit.INSTANCE)
             .create(VCLootContextParams.VILLAGER_LOOT_CONTEXT);
         LootContext.Builder builder = new LootContext.Builder(lootParams);

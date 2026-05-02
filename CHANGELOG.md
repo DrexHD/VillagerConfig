@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.5.5] - 2026-05-02
+### Fixed
+UnsupportedOperationException when using `villagerconfig:enchant_randomly` loot function
+
 ## [4.5.4] - 2026-04-20
 ### Fixed
 - Crash when launching on NeoForge

@@ -41,7 +41,7 @@ public abstract class VillagerMixin extends AbstractVillager {
         TradeTable tradeTable = CustomVillagerData.getTradeTable((Villager) (Object) this);
         if (tradeTable != null) {
             VillagerData villagerData = this.getVillagerData();
-            int level = villagerData. level() ;
+            int level = villagerData.level() ;
             MerchantOffer[] tradeOffers = tradeTable.getTradeOffers(this, level);
             MerchantOffers tradeOfferList = this.getOffers();
             tradeOfferList.addAll(Arrays.asList(tradeOffers));

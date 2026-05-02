@@ -15,10 +15,10 @@ public record ReferenceLootNumberProvider(String id) implements NumberProvider {
 
     @Override
     public float getFloat(LootContext context) {
-        if (!context. hasParameter (VCLootContextParams.NUMBER_REFERENCE)) {
+        if (!context.hasParameter(VCLootContextParams.NUMBER_REFERENCE)) {
             return 0f;
         }
-        return context. getParameter (VCLootContextParams.NUMBER_REFERENCE).getOrDefault(id, 0f);
+        return context.getParameter(VCLootContextParams.NUMBER_REFERENCE).getOrDefault(id, 0f);
     }
 
     @Override
