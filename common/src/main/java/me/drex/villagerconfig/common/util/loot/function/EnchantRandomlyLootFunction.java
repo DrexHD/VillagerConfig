@@ -64,17 +64,22 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
     @Override
     protected @NotNull ItemStack run(@NotNull ItemStack stack, LootContext context) {
         RandomSource randomSource = context.getRandom();
-        Optional<Holder<Enchantment>> optional = this.include.flatMap(holders -> holders.getRandomElement(randomSource)).or(
-            () -> {
-                boolean isBook = stack.is(Items.BOOK);
-                HolderSet<Enchantment> excluded = exclude.orElse(HolderSet.direct());
-                List<Holder.Reference<Enchantment>> list = context.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).listElements()
-                    .filter(reference -> isBook || reference.value().canEnchant(stack))
-                    .filter(reference -> !excluded.contains(reference))
-                    .toList();
-                return Util.getRandomSafe(list, randomSource);
-            }
-        );
+        boolean isBook = stack.is(Items.BOOK);
+        HolderSet<Enchantment> excluded = exclude.orElse(HolderSet.direct());
+
+        List<Holder<Enchantment>> list = this.include
+            .map(HolderSet::stream)
+            .orElseGet(() -> {
+                var enchantments = context.getLevel()
+                    .registryAccess()
+                    .lookupOrThrow(Registries.ENCHANTMENT);
+                return enchantments.listElements()
+                    .map(h -> h);
+            }).filter(holder -> isBook || holder.value().canEnchant(stack))
+            .filter(reference -> !excluded.contains(reference)).toList();
+
+        Optional<Holder<Enchantment>> optional = Util.getRandomSafe(list, randomSource);
+
         if (optional.isEmpty()) {
             LOGGER.warn("Couldn't find a compatible enchantment for {}", stack);
             return stack;
