@@ -91,7 +91,7 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
     private ItemStack enchantItem(ItemStack itemStack, Holder<Enchantment> holder, RandomSource randomSource, LootContext context) {
         Enchantment enchantment = holder.value();
         int level = Mth.nextInt(randomSource, enchantment.getMinLevel(), enchantment.getMaxLevel());
-        level = Mth.clamp(level, this.minLevel, this.maxLevel);
+        level = Mth.clamp(level, Math.min(this.minLevel, enchantment.getMinLevel()), this.maxLevel);
         if (itemStack.is(Items.BOOK)) {
             itemStack = new ItemStack(Items.ENCHANTED_BOOK);
         }
