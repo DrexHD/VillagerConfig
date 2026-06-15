@@ -4,7 +4,6 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import me.drex.villagerconfig.common.util.loot.LootItemFunctionTypes;
 import me.drex.villagerconfig.common.util.loot.VCLootContextParams;
 import net.minecraft.util.Util;
 import net.minecraft.core.Holder;
@@ -90,8 +89,10 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
 
     private ItemStack enchantItem(ItemStack itemStack, Holder<Enchantment> holder, RandomSource randomSource, LootContext context) {
         Enchantment enchantment = holder.value();
-        int level = Mth.nextInt(randomSource, enchantment.getMinLevel(), enchantment.getMaxLevel());
-        level = Mth.clamp(level, Math.min(this.minLevel, enchantment.getMinLevel()), this.maxLevel);
+        int minLevel = Math.clamp(this.minLevel, enchantment.getMinLevel(), enchantment.getMaxLevel());
+        int maxLevel = Math.clamp(this.maxLevel, enchantment.getMinLevel(), enchantment.getMaxLevel());
+
+        int level = Mth.nextInt(randomSource, minLevel, maxLevel);
         if (itemStack.is(Items.BOOK)) {
             itemStack = new ItemStack(Items.ENCHANTED_BOOK);
         }
