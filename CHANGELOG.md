@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.5.7] - 2026-06-15
+### Changed
+- Improved `villagerconfig:enchant_randomly` `min_level` and `max_level` logic
+
 ## [4.5.6] - 2026-05-12
 ### Changed
 - Allow `villagerconfig:enchant_randomly` `include` & `exclude` to be set at the same time
