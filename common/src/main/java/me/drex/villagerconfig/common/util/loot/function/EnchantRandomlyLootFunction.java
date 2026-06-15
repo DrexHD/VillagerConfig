@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import me.drex.villagerconfig.common.util.loot.LootItemFunctionTypes;
 import me.drex.villagerconfig.common.util.loot.VCLootContextParams;
 import net.minecraft.util.Util;
 import net.minecraft.core.Holder;
