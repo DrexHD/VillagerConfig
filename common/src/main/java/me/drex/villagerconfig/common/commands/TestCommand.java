@@ -20,7 +20,11 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+//? if > 26.1 {
+import net.minecraft.world.entity.EntityTypes;
+//? } else {
+//import net.minecraft.world.entity.EntityType;
+//? }
 import net.minecraft.world.entity.npc.villager.*;
 import net.minecraft.world.entity.npc.villager.*;
 import net.minecraft.world.entity.npc.wanderingtrader.WanderingTrader;
@@ -73,7 +77,11 @@ public class TestCommand {
 
     private static int testVillager(CommandSourceStack source, Holder<VillagerType> villagerType, Holder.Reference<VillagerProfession> professionHolder, int level) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
-        Villager fakeVillager = EntityType.VILLAGER.create(source.getLevel(), EntitySpawnReason.COMMAND);
+        //? if > 26.1 {
+        Villager fakeVillager = EntityTypes.VILLAGER.create(source.getLevel(), EntitySpawnReason.COMMAND);
+        //? } else {
+        //Villager fakeVillager = EntityType.VILLAGER.create(source.getLevel(), EntitySpawnReason.COMMAND);
+        //? }
         assert fakeVillager != null;
         fakeVillager.setPos(player.position());
         VillagerData villagerData = Villager.createDefaultVillagerData();
@@ -102,7 +110,11 @@ public class TestCommand {
 
     private static int testWanderingTrader(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
-        WanderingTrader fakeTrader = EntityType.WANDERING_TRADER.create(source.getLevel(), EntitySpawnReason.COMMAND);
+        //? if > 26.1 {
+        WanderingTrader fakeTrader = EntityTypes.WANDERING_TRADER.create(source.getLevel(), EntitySpawnReason.COMMAND);
+        //? } else {
+        //WanderingTrader fakeTrader = EntityType.WANDERING_TRADER.create(source.getLevel(), EntitySpawnReason.COMMAND);
+        //? }
         fakeTrader.setPos(player.position());
         fakeTrader.getOffers();
         openMenu(fakeTrader, 1, player);

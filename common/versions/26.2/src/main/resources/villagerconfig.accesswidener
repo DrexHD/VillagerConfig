@@ -1,0 +1,14 @@
+accessWidener v1 official
+accessible method net/minecraft/server/packs/resources/SimpleJsonResourceReloadListener <init> (Lcom/mojang/serialization/DynamicOps;Lcom/mojang/serialization/Codec;Lnet/minecraft/resources/FileToIdConverter;)V
+accessible field net/minecraft/world/level/storage/loot/entries/LootPoolSingletonContainer$Builder functions Lcom/google/common/collect/ImmutableList$Builder;
+accessible field net/minecraft/world/item/trading/TradeSet amount Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+
+accessible field net/minecraft/world/item/trading/VillagerTrade wants Lnet/minecraft/world/item/trading/TradeCost;
+accessible field net/minecraft/world/item/trading/VillagerTrade additionalWants Ljava/util/Optional;
+accessible field net/minecraft/world/item/trading/VillagerTrade gives Lnet/minecraft/world/item/ItemStackTemplate;
+accessible field net/minecraft/world/item/trading/VillagerTrade merchantPredicate Ljava/util/Optional;
+accessible field net/minecraft/world/item/trading/VillagerTrade givenItemModifiers Ljava/util/List;
+accessible field net/minecraft/world/item/trading/VillagerTrade maxUses Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/item/trading/VillagerTrade reputationDiscount Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/item/trading/VillagerTrade xp Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/item/trading/VillagerTrade doubleTradePriceEnchantments Ljava/util/Optional;
