@@ -1,6 +1,6 @@
 plugins {
 	`multiloader-loader`
-	id("net.neoforged.gradle.userdev") version "7.1.21"
+	id("net.neoforged.gradle.userdev") version "7.1.38"
 }
 
 dependencies {
