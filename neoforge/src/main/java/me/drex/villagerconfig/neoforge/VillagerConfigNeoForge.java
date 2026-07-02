@@ -63,7 +63,7 @@ public final class VillagerConfigNeoForge {
     public static void registerCommon(RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar("1");
 
-        registrar.playBidirectional(
+        registrar.optional().playBidirectional(
             ClientboundMerchantXpPacket.ID,
             ClientboundMerchantXpPacket.CODEC,
             (payload, context) -> payload.handle(context.player())

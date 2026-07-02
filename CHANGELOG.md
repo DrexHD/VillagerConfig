@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.5.8] - 2026-07-02
+### Changed
+- Mark the clientbound merchant packet as optional (NeoForge only)
+
 ## [4.5.7] - 2026-06-15
 ### Changed
 - Improved `villagerconfig:enchant_randomly` `min_level` and `max_level` logic
