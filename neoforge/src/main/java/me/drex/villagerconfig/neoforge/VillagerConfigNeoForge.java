@@ -71,7 +71,11 @@ public final class VillagerConfigNeoForge {
     }
 
     private static void onAddReloadListener(AddServerReloadListenersEvent event) {
-        VillagerConfig.TRADE_MANAGER = new NeoForgeTradeManager(event.getRegistryAccess());
+        //? if >= 26.3 {
+        VillagerConfig.TRADE_MANAGER = new NeoForgeTradeManager(event.getServerResources().getRegistryLookup());
+        //? } else {
+        //VillagerConfig.TRADE_MANAGER = new NeoForgeTradeManager(event.getRegistryAccess());
+        //? }
         event.addListener(TradeManager.ID, VillagerConfig.TRADE_MANAGER);
     }
 
