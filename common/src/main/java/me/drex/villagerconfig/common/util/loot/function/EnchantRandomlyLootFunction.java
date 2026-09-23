@@ -4,11 +4,14 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import me.drex.villagerconfig.common.util.loot.VCLootContextParams;
 import net.minecraft.util.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
+//? if >= 26.3 {
+import net.minecraft.core.registries.codec.RegistryCodecs;
+//? } else {
+//import net.minecraft.core.RegistryCodecs;
+//? }
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.Mth;
@@ -35,9 +38,17 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
         instance -> commonFields(instance)
             .and(
                 instance.group(
-                    RegistryCodecs.homogeneousList(Registries.ENCHANTMENT).optionalFieldOf("include")
+                    //? if >= 26.3 {
+                    RegistryCodecs.holderSet(Registries.ENCHANTMENT).optionalFieldOf("include")
+                    //? } else {
+                    //RegistryCodecs.homogeneousList(Registries.ENCHANTMENT).optionalFieldOf("include")
+                    //? }
                         .forGetter(enchantRandomlyFunction -> enchantRandomlyFunction.include),
-                    RegistryCodecs.homogeneousList(Registries.ENCHANTMENT).optionalFieldOf("exclude")
+                    //? if >= 26.3 {
+                    RegistryCodecs.holderSet(Registries.ENCHANTMENT).optionalFieldOf("exclude")
+                    //? } else {
+                    //RegistryCodecs.homogeneousList(Registries.ENCHANTMENT).optionalFieldOf("exclude")
+                    //? }
                         .forGetter(enchantRandomlyFunction -> enchantRandomlyFunction.exclude),
                     Codec.INT.optionalFieldOf("min_level", 0).forGetter(enchantRandomlyLootFunction -> enchantRandomlyLootFunction.minLevel),
                     Codec.INT.optionalFieldOf("max_level", Integer.MAX_VALUE).forGetter(enchantRandomlyLootFunction -> enchantRandomlyLootFunction.maxLevel)
@@ -51,7 +62,11 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
     private final int minLevel;
     private final int maxLevel;
 
-    EnchantRandomlyLootFunction(List<LootItemCondition> conditions, Optional<HolderSet<Enchantment>> include, Optional<HolderSet<Enchantment>> exclude, int minLevel, int maxLevel) {
+    //? if >= 26.3 {
+    EnchantRandomlyLootFunction(Optional<Holder<LootItemCondition>> conditions, Optional<HolderSet<Enchantment>> include, Optional<HolderSet<Enchantment>> exclude, int minLevel, int maxLevel) {
+    //? } else {
+    //EnchantRandomlyLootFunction(List<LootItemCondition> conditions, Optional<HolderSet<Enchantment>> include, Optional<HolderSet<Enchantment>> exclude, int minLevel, int maxLevel) {
+    //? }
         super(conditions);
         this.include = include;
         this.exclude = exclude;
@@ -101,11 +116,6 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
             itemStack = new ItemStack(Items.ENCHANTED_BOOK);
         }
         itemStack.enchant(holder, level);
-        if (context.hasParameter(VCLootContextParams.NUMBER_REFERENCE)) {
-            Map<String, Float> referenceProviders = context.getParameter(VCLootContextParams.NUMBER_REFERENCE);
-            referenceProviders.put("enchantmentLevel", (float) level);
-            referenceProviders.put("treasureMultiplier", holder.is(EnchantmentTags.DOUBLE_TRADE_PRICE) ? (float) 2 : 1);
-        }
         return itemStack;
     }
 
@@ -139,7 +149,11 @@ public class EnchantRandomlyLootFunction extends LootItemConditionalFunction {
 
         @Override
         public @NotNull LootItemFunction build() {
-            return new EnchantRandomlyLootFunction(this.getConditions(), include, exclude, minLevel, maxLevel);
+            //? if >= 26.3 {
+            return new EnchantRandomlyLootFunction(this.getCondition(), include, exclude, minLevel, maxLevel);
+            //? } else {
+            //return new EnchantRandomlyLootFunction(this.getConditions(), include, exclude, minLevel, maxLevel);
+            //? }
         }
 
         @Override

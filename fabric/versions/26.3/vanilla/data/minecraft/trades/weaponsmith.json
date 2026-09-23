@@ -1,0 +1,325 @@
+{
+  "tiers": [
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 15
+                },
+                "name": "minecraft:coal"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 2
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 3
+                },
+                "name": "minecraft:emerald"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:iron_axe"
+              },
+              "trader_experience": 1
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 2
+                },
+                "name": "minecraft:emerald"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "modifier": [
+                  {
+                    "type": "minecraft:set_count",
+                    "count": 1
+                  },
+                  {
+                    "type": "minecraft:sequence",
+                    "functions": [
+                      {
+                        "type": "minecraft:enchant_with_levels",
+                        "include_additional_cost_component": true,
+                        "levels": {
+                          "type": "minecraft:uniform",
+                          "max": 19,
+                          "min": 5
+                        },
+                        "options": "#minecraft:on_traded_equipment"
+                      },
+                      {
+                        "type": "minecraft:filtered",
+                        "item_filter": {
+                          "items": "minecraft:iron_sword",
+                          "predicates": {
+                            "minecraft:enchantments": [
+                              {}
+                            ]
+                          }
+                        },
+                        "on_fail": {
+                          "type": "minecraft:discard"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "name": "minecraft:iron_sword"
+              },
+              "trader_experience": 1
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 0
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 4
+                },
+                "name": "minecraft:iron_ingot"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 10
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 36
+                },
+                "name": "minecraft:emerald"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:bell"
+              },
+              "trader_experience": 5
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 10
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 24
+                },
+                "name": "minecraft:flint"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 20
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 70
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 12
+                },
+                "name": "minecraft:emerald"
+              },
+              "max_uses": 3,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": [
+                  {
+                    "type": "minecraft:set_count",
+                    "count": 1
+                  },
+                  {
+                    "type": "minecraft:sequence",
+                    "functions": [
+                      {
+                        "type": "minecraft:enchant_with_levels",
+                        "include_additional_cost_component": true,
+                        "levels": {
+                          "type": "minecraft:uniform",
+                          "max": 19,
+                          "min": 5
+                        },
+                        "options": "#minecraft:on_traded_equipment"
+                      },
+                      {
+                        "type": "minecraft:filtered",
+                        "item_filter": {
+                          "items": "minecraft:diamond_axe",
+                          "predicates": {
+                            "minecraft:enchantments": [
+                              {}
+                            ]
+                          }
+                        },
+                        "on_fail": {
+                          "type": "minecraft:discard"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "name": "minecraft:diamond_axe"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:diamond"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 30
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 150
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 8
+                },
+                "name": "minecraft:emerald"
+              },
+              "max_uses": 3,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": [
+                  {
+                    "type": "minecraft:set_count",
+                    "count": 1
+                  },
+                  {
+                    "type": "minecraft:sequence",
+                    "functions": [
+                      {
+                        "type": "minecraft:enchant_with_levels",
+                        "include_additional_cost_component": true,
+                        "levels": {
+                          "type": "minecraft:uniform",
+                          "max": 19,
+                          "min": 5
+                        },
+                        "options": "#minecraft:on_traded_equipment"
+                      },
+                      {
+                        "type": "minecraft:filtered",
+                        "item_filter": {
+                          "items": "minecraft:diamond_sword",
+                          "predicates": {
+                            "minecraft:enchantments": [
+                              {}
+                            ]
+                          }
+                        },
+                        "on_fail": {
+                          "type": "minecraft:discard"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "name": "minecraft:diamond_sword"
+              },
+              "trader_experience": 30
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 250
+    }
+  ]
+}

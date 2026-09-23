@@ -12,6 +12,13 @@ import static me.drex.villagerconfig.common.VillagerConfig.MOD_ID;
 
 public class LootItemFunctionTypes {
 
+    //? if >= 26.3 {
+    public static void init(Registry<MapCodec<? extends LootItemFunction>> registry) {
+        Registry.register(registry, Identifier.fromNamespaceAndPath(MOD_ID, "set_dye"), SetDyeFunction.CODEC);
+        Registry.register(registry, Identifier.fromNamespaceAndPath(MOD_ID, "enchant_randomly"), EnchantRandomlyLootFunction.CODEC);
+    }
+    //? } else {
+    /*
     public static void init() {
         register("set_dye", SetDyeFunction.CODEC);
         register("enchant_randomly", EnchantRandomlyLootFunction.CODEC);
@@ -20,5 +27,7 @@ public class LootItemFunctionTypes {
     private static MapCodec<? extends LootItemFunction> register(String string, MapCodec<? extends LootItemFunction> mapCodec) {
         return Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, Identifier.fromNamespaceAndPath(MOD_ID, string), mapCodec);
     }
+    */
+    //? }
 
 }

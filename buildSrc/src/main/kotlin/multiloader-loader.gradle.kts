@@ -45,6 +45,8 @@ tasks {
             accessToken.set(providers.environmentVariable("CURSEFORGE_TOKEN"))
             projectId.set("400741")
             minecraftVersions.addAll(curseforgeMinecraftVersions)
+            client = true
+            server = true
         }
 
         modrinth {

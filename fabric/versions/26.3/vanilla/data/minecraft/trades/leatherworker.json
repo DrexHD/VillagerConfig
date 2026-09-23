@@ -1,0 +1,518 @@
+{
+  "tiers": [
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 6
+                },
+                "name": "minecraft:leather"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 2
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 3
+                },
+                "name": "minecraft:emerald"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "modifier": [
+                  {
+                    "type": "minecraft:set_count",
+                    "count": 1
+                  },
+                  {
+                    "type": "minecraft:sequence",
+                    "functions": [
+                      {
+                        "type": "minecraft:set_random_dyes",
+                        "number_of_dyes": {
+                          "type": "minecraft:add",
+                          "inputs": [
+                            1,
+                            {
+                              "type": "minecraft:binomial",
+                              "n": 2,
+                              "p": 0.75
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "minecraft:filtered",
+                        "item_filter": {
+                          "items": "minecraft:leather_leggings",
+                          "predicates": {
+                            "minecraft:dyed_color": {}
+                          }
+                        },
+                        "on_fail": {
+                          "type": "minecraft:discard"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "name": "minecraft:leather_leggings"
+              },
+              "trader_experience": 1
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 7
+                },
+                "name": "minecraft:emerald"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "modifier": [
+                  {
+                    "type": "minecraft:set_count",
+                    "count": 1
+                  },
+                  {
+                    "type": "minecraft:sequence",
+                    "functions": [
+                      {
+                        "type": "minecraft:set_random_dyes",
+                        "number_of_dyes": {
+                          "type": "minecraft:add",
+                          "inputs": [
+                            1,
+                            {
+                              "type": "minecraft:binomial",
+                              "n": 2,
+                              "p": 0.75
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "minecraft:filtered",
+                        "item_filter": {
+                          "items": "minecraft:leather_chestplate",
+                          "predicates": {
+                            "minecraft:dyed_color": {}
+                          }
+                        },
+                        "on_fail": {
+                          "type": "minecraft:discard"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "name": "minecraft:leather_chestplate"
+              },
+              "trader_experience": 1
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 0
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 26
+                },
+                "name": "minecraft:flint"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 10
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 5
+                },
+                "name": "minecraft:emerald"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "modifier": [
+                  {
+                    "type": "minecraft:set_count",
+                    "count": 1
+                  },
+                  {
+                    "type": "minecraft:sequence",
+                    "functions": [
+                      {
+                        "type": "minecraft:set_random_dyes",
+                        "number_of_dyes": {
+                          "type": "minecraft:add",
+                          "inputs": [
+                            1,
+                            {
+                              "type": "minecraft:binomial",
+                              "n": 2,
+                              "p": 0.75
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "minecraft:filtered",
+                        "item_filter": {
+                          "items": "minecraft:leather_helmet",
+                          "predicates": {
+                            "minecraft:dyed_color": {}
+                          }
+                        },
+                        "on_fail": {
+                          "type": "minecraft:discard"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "name": "minecraft:leather_helmet"
+              },
+              "trader_experience": 5
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 4
+                },
+                "name": "minecraft:emerald"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "modifier": [
+                  {
+                    "type": "minecraft:set_count",
+                    "count": 1
+                  },
+                  {
+                    "type": "minecraft:sequence",
+                    "functions": [
+                      {
+                        "type": "minecraft:set_random_dyes",
+                        "number_of_dyes": {
+                          "type": "minecraft:add",
+                          "inputs": [
+                            1,
+                            {
+                              "type": "minecraft:binomial",
+                              "n": 2,
+                              "p": 0.75
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "minecraft:filtered",
+                        "item_filter": {
+                          "items": "minecraft:leather_boots",
+                          "predicates": {
+                            "minecraft:dyed_color": {}
+                          }
+                        },
+                        "on_fail": {
+                          "type": "minecraft:discard"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "name": "minecraft:leather_boots"
+              },
+              "trader_experience": 5
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 10
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 9
+                },
+                "name": "minecraft:rabbit_hide"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 20
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 7
+                },
+                "name": "minecraft:emerald"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "modifier": [
+                  {
+                    "type": "minecraft:set_count",
+                    "count": 1
+                  },
+                  {
+                    "type": "minecraft:sequence",
+                    "functions": [
+                      {
+                        "type": "minecraft:set_random_dyes",
+                        "number_of_dyes": {
+                          "type": "minecraft:add",
+                          "inputs": [
+                            1,
+                            {
+                              "type": "minecraft:binomial",
+                              "n": 2,
+                              "p": 0.75
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "minecraft:filtered",
+                        "item_filter": {
+                          "items": "minecraft:leather_chestplate",
+                          "predicates": {
+                            "minecraft:dyed_color": {}
+                          }
+                        },
+                        "on_fail": {
+                          "type": "minecraft:discard"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "name": "minecraft:leather_chestplate"
+              },
+              "trader_experience": 1
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 70
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 4
+                },
+                "name": "minecraft:turtle_scute"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 30
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 6
+                },
+                "name": "minecraft:emerald"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "modifier": [
+                  {
+                    "type": "minecraft:set_count",
+                    "count": 1
+                  },
+                  {
+                    "type": "minecraft:sequence",
+                    "functions": [
+                      {
+                        "type": "minecraft:set_random_dyes",
+                        "number_of_dyes": {
+                          "type": "minecraft:add",
+                          "inputs": [
+                            1,
+                            {
+                              "type": "minecraft:binomial",
+                              "n": 2,
+                              "p": 0.75
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "minecraft:filtered",
+                        "item_filter": {
+                          "items": "minecraft:leather_horse_armor",
+                          "predicates": {
+                            "minecraft:dyed_color": {}
+                          }
+                        },
+                        "on_fail": {
+                          "type": "minecraft:discard"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "name": "minecraft:leather_horse_armor"
+              },
+              "trader_experience": 15
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 150
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 6
+                },
+                "name": "minecraft:emerald"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:saddle"
+              },
+              "trader_experience": 30
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 5
+                },
+                "name": "minecraft:emerald"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "modifier": [
+                  {
+                    "type": "minecraft:set_count",
+                    "count": 1
+                  },
+                  {
+                    "type": "minecraft:sequence",
+                    "functions": [
+                      {
+                        "type": "minecraft:set_random_dyes",
+                        "number_of_dyes": {
+                          "type": "minecraft:add",
+                          "inputs": [
+                            1,
+                            {
+                              "type": "minecraft:binomial",
+                              "n": 2,
+                              "p": 0.75
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "minecraft:filtered",
+                        "item_filter": {
+                          "items": "minecraft:leather_helmet",
+                          "predicates": {
+                            "minecraft:dyed_color": {}
+                          }
+                        },
+                        "on_fail": {
+                          "type": "minecraft:discard"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "name": "minecraft:leather_helmet"
+              },
+              "trader_experience": 5
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 250
+    }
+  ]
+}

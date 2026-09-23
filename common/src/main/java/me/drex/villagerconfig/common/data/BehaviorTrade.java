@@ -3,22 +3,21 @@ package me.drex.villagerconfig.common.data;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import me.drex.villagerconfig.common.config.ConfigManager;
 import me.drex.villagerconfig.common.mixin.MerchantOfferAccessor;
-import me.drex.villagerconfig.common.util.RandomUtil;
-import me.drex.villagerconfig.common.util.loot.VCLootContextParams;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
+//? if >= 26.3 {
+import net.minecraft.core.registries.codec.RegistryCodecs;
+//? } else {
+//import net.minecraft.core.RegistryCodecs;
+//? }
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.util.Mth;
-import net.minecraft.util.Unit;
 import net.minecraft.util.Util;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.npc.villager.AbstractVillager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -30,11 +29,18 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntries;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntry;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+//? if >= 26.3 {
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
+//? } else {
+//import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+//import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+//import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+//? }
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.jspecify.annotations.Nullable;
 
@@ -50,32 +56,76 @@ public class BehaviorTrade {
         LootPoolEntries.CODEC.fieldOf("cost_a").forGetter(behaviorTrade -> behaviorTrade.costA),
         LootPoolEntries.CODEC.optionalFieldOf("cost_b").forGetter(behaviorTrade -> behaviorTrade.costB),
         LootPoolEntries.CODEC.fieldOf("result").forGetter(behaviorTrade -> behaviorTrade.result),
-        NumberProviders.CODEC.optionalFieldOf("price_multiplier", ConstantValue.exactly(0.2f)).forGetter(behaviorTrade -> behaviorTrade.priceMultiplier),
-        NumberProviders.CODEC.optionalFieldOf("trader_experience", ConstantValue.exactly(0)).forGetter(behaviorTrade -> behaviorTrade.traderExperience),
-        NumberProviders.CODEC.optionalFieldOf("max_uses", ConstantValue.exactly(12)).forGetter(behaviorTrade -> behaviorTrade.maxUses),
+        //? if >= 26.3 {
+        ContextFloatProviders.CODEC.optionalFieldOf("price_multiplier", ContextFloatProviders.exactly(0.2f)).forGetter(behaviorTrade -> behaviorTrade.priceMultiplier),
+        //? } else {
+        //NumberProviders.CODEC.optionalFieldOf("price_multiplier", ConstantValue.exactly(0.2f)).forGetter(behaviorTrade -> behaviorTrade.priceMultiplier),
+        //? }
+        //? if >= 26.3 {
+        ContextIntProviders.CODEC.optionalFieldOf("trader_experience", ContextIntProviders.exactly(0)).forGetter(behaviorTrade -> behaviorTrade.traderExperience),
+        //? } else {
+        //NumberProviders.CODEC.optionalFieldOf("trader_experience", ConstantValue.exactly(0)).forGetter(behaviorTrade -> behaviorTrade.traderExperience),
+        //? }
+        //? if >= 26.3 {
+        ContextIntProviders.CODEC.optionalFieldOf("max_uses", ContextIntProviders.exactly(12)).forGetter(behaviorTrade -> behaviorTrade.maxUses),
+        //? } else {
+        //NumberProviders.CODEC.optionalFieldOf("max_uses", ConstantValue.exactly(12)).forGetter(behaviorTrade -> behaviorTrade.maxUses),
+        //? }
         LootItemCondition.DIRECT_CODEC.listOf().optionalFieldOf("conditions", List.of()).forGetter(behaviorTrade -> behaviorTrade.conditions),
-        Codec.unboundedMap(Codec.STRING, NumberProviders.CODEC).optionalFieldOf("reference_providers", Map.of()).forGetter(behaviorTrade -> behaviorTrade.referenceProviders),
+        //? if >= 26.3 {
+        Codec.unboundedMap(Codec.STRING, ContextFloatProviders.CODEC).optionalFieldOf("reference_providers", Map.of()).forGetter(behaviorTrade -> behaviorTrade.referenceProviders),
+        //? } else {
+        //Codec.unboundedMap(Codec.STRING, NumberProviders.CODEC).optionalFieldOf("reference_providers", Map.of()).forGetter(behaviorTrade -> behaviorTrade.referenceProviders),
+        //? }
         Codec.BOOL.optionalFieldOf("reward_experience", true).forGetter(behaviorTrade -> behaviorTrade.rewardExperience),
-        RegistryCodecs.homogeneousList(Registries.ENCHANTMENT).optionalFieldOf("double_trade_price_enchantments").forGetter(behaviorTrade -> behaviorTrade.doubleTradePriceEnchantments)
+        //? if >= 26.3 {
+        RegistryCodecs.holderSet(Registries.ENCHANTMENT).optionalFieldOf("double_trade_price_enchantments").forGetter(behaviorTrade -> behaviorTrade.doubleTradePriceEnchantments)
+        //? } else {
+        //RegistryCodecs.homogeneousList(Registries.ENCHANTMENT).optionalFieldOf("double_trade_price_enchantments").forGetter(behaviorTrade -> behaviorTrade.doubleTradePriceEnchantments)
+        //? }
     ).apply(instance, BehaviorTrade::new));
 
     private final LootPoolEntryContainer costA;
     private final Optional<LootPoolEntryContainer> costB;
     private final LootPoolEntryContainer result;
-    private final NumberProvider priceMultiplier;
-    private final NumberProvider traderExperience;
-    private final NumberProvider maxUses;
+    //? if >= 26.3 {
+    private final Holder<ContextFloatProvider> priceMultiplier;
+    //? } else {
+    //private final NumberProvider priceMultiplier;
+    //? }
+    //? if >= 26.3 {
+    private final Holder<ContextIntProvider> traderExperience;
+    //? } else {
+    //private final NumberProvider traderExperience;
+    //? }
+    //? if >= 26.3 {
+    private final Holder<ContextIntProvider> maxUses;
+    //? } else {
+    //private final NumberProvider maxUses;
+    //? }
     protected final Predicate<LootContext> compositeCondition;
     private final List<LootItemCondition> conditions;
-    private final Map<String, NumberProvider> referenceProviders;
+    //? if >= 26.3 {
+    private final Map<String, Holder<ContextFloatProvider>> referenceProviders;
+    //? } else {
+    //private final Map<String, NumberProvider> referenceProviders;
+    //? }
     private final boolean rewardExperience;
     private final Optional<HolderSet<Enchantment>> doubleTradePriceEnchantments;
 
 
     BehaviorTrade(
         LootPoolEntryContainer costA, Optional<LootPoolEntryContainer> costB, LootPoolEntryContainer result,
-        NumberProvider priceMultiplier, NumberProvider traderExperience, NumberProvider maxUses,
-        List<LootItemCondition> conditions, Map<String, NumberProvider> referenceProviders, boolean rewardExperience,
+        //? if >= 26.3 {
+        Holder<ContextFloatProvider> priceMultiplier, Holder<ContextIntProvider> traderExperience, Holder<ContextIntProvider> maxUses,
+        //? } else {
+        //NumberProvider priceMultiplier, NumberProvider traderExperience, NumberProvider maxUses,
+        //? }
+        //? if >= 26.3 {
+        List<LootItemCondition> conditions, Map<String, Holder<ContextFloatProvider>> referenceProviders, boolean rewardExperience,
+        //? } else {
+        //List<LootItemCondition> conditions, Map<String, NumberProvider> referenceProviders, boolean rewardExperience,
+        //? }
         Optional<HolderSet<Enchantment>> doubleTradePriceEnchantments
     ) {
         this.costA = costA;
@@ -126,9 +176,21 @@ public class BehaviorTrade {
             itemCostA,
             itemCostB,
             result.get(),
-            maxUses.getInt(lootContext),
-            traderExperience.getInt(lootContext),
-            priceMultiplier.getFloat(lootContext)
+            //? if >= 26.3 {
+            maxUses.value().getInt(lootContext),
+            //? } else {
+            //maxUses.getInt(lootContext),
+            //? }
+            //? if >= 26.3 {
+            traderExperience.value().getInt(lootContext),
+            //? } else {
+            //traderExperience.getInt(lootContext),
+            //? }
+            //? if >= 26.3 {
+            priceMultiplier.value().getFloat(lootContext)
+            //? } else {
+            //priceMultiplier.getFloat(lootContext)
+            //? }
         );
         ((MerchantOfferAccessor) tradeOffer).setRewardExp(rewardExperience);
         return tradeOffer;
@@ -159,11 +221,19 @@ public class BehaviorTrade {
         int count = Mth.clamp(stack.count(), 0, stack.getItem().getDefaultMaxStackSize());
         ItemCost itemCost = new ItemCost(stack.getItem(), count);
         return itemCost.withComponents(builder -> {
+            //? if >= 26.3 {
+            for (var component : stack.getComponentsPatch().split().added()) {
+                builder.expect((DataComponentType<Object>) component.type(), component.value());
+            }
+            //? } else {
+            /*
             for (Map.Entry<DataComponentType<?>, Optional<?>> componentPatch : stack.getComponentsPatch().entrySet()) {
                 Optional<?> value = componentPatch.getValue();
                 DataComponentType<?> key = componentPatch.getKey();
                 value.ifPresent(o -> builder.expect((DataComponentType<Object>) key, o));
             }
+            */
+            //? }
             return builder;
         });
     }
@@ -201,7 +271,11 @@ public class BehaviorTrade {
             .create(LootContextParamSets.EMPTY);
         LootContext simpleContext = new LootContext.Builder(lootParams).create(Optional.empty());
         return referenceProviders.entrySet().stream().collect(
-            Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getFloat(simpleContext))
+            //? if >= 26.3 {
+            Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().value().getFloat(simpleContext))
+            //? } else {
+            //Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getFloat(simpleContext))
+            //? }
         );
     }
 
@@ -210,11 +284,27 @@ public class BehaviorTrade {
         private final LootPoolEntryContainer costA;
         private Optional<LootPoolEntryContainer> costB = Optional.empty();
         private final LootPoolEntryContainer result;
-        private NumberProvider priceMultiplier = ConstantValue.exactly(0.2F);
-        private NumberProvider traderExperience = ConstantValue.exactly(1);
-        private NumberProvider maxUses = ConstantValue.exactly(12);
+        //? if >= 26.3 {
+        private Holder<ContextFloatProvider> priceMultiplier = ContextFloatProviders.exactly(0.2F);
+        //? } else {
+        //private NumberProvider priceMultiplier = ConstantValue.exactly(0.2F);
+        //? }
+        //? if >= 26.3 {
+        private Holder<ContextIntProvider> traderExperience = ContextIntProviders.exactly(1);
+        //? } else {
+        //private NumberProvider traderExperience = ConstantValue.exactly(1);
+        //? }
+        //? if >= 26.3 {
+        private Holder<ContextIntProvider> maxUses = ContextIntProviders.exactly(12);
+        //? } else {
+        //private NumberProvider maxUses = ConstantValue.exactly(12);
+        //? }
         private final List<LootItemCondition> conditions = Lists.newArrayList();
-        private final Map<String, NumberProvider> referenceProviders = new HashMap<>();
+        //? if >= 26.3 {
+        private final Map<String, Holder<ContextFloatProvider>> referenceProviders = new HashMap<>();
+        //? } else {
+        //private final Map<String, NumberProvider> referenceProviders = new HashMap<>();
+        //? }
         private boolean rewardExperience = true;
         private Optional<HolderSet<Enchantment>> doubleTradePriceEnchantments = Optional.empty();
 
@@ -235,22 +325,48 @@ public class BehaviorTrade {
         }
 
         public Builder priceMultiplier(float priceMultiplier) {
-            return priceMultiplier(ConstantValue.exactly(priceMultiplier));
+            //? if >= 26.3 {
+            return priceMultiplier(ContextFloatProviders.exactly(priceMultiplier));
+            //? } else {
+            //return priceMultiplier(ConstantValue.exactly(priceMultiplier));
+            //? }
         }
 
-        public Builder priceMultiplier(NumberProvider priceMultiplier) {
+        //? if >= 26.3 {
+        public Builder priceMultiplier(Holder<ContextFloatProvider> priceMultiplier) {
+        //? } else {
+        //public Builder priceMultiplier(NumberProvider priceMultiplier) {
+        //? }
             this.priceMultiplier = priceMultiplier;
             return this;
         }
 
-        public Builder traderExperience(float traderExp) {
-            return traderExperience(ConstantValue.exactly(traderExp));
+        //? if >= 26.3 {
+        public Builder traderExperience(int traderExp) {
+        //? } else {
+        //public Builder traderExperience(float traderExp) {
+        //? }
+            //? if >= 26.3 {
+            return traderExperience(ContextIntProviders.exactly(traderExp));
+            //? } else {
+            //return traderExperience(ConstantValue.exactly(traderExp));
+            //? }
         }
 
-        public Builder traderExperience(NumberProvider traderExp) {
+        //? if >= 26.3 {
+        public Builder traderExperience(Holder<ContextIntProvider> traderExp) {
+        //? } else {
+        //public Builder traderExperience(NumberProvider traderExp) {
+        //? }
             this.traderExperience = traderExp;
             return this;
         }
+
+        //? if >= 26.3 {
+        public Builder when(Holder<LootItemCondition> condition) {
+            return when(condition.value());
+        }
+        //? }
 
         public Builder when(LootItemCondition.Builder builder) {
             this.conditions.add(builder.build());
@@ -262,16 +378,32 @@ public class BehaviorTrade {
             return this;
         }
 
-        public Builder maxUses(float maxUses) {
-            return maxUses(ConstantValue.exactly(maxUses));
+        //? if >= 26.3 {
+        public Builder maxUses(int maxUses) {
+        //? } else {
+        //public Builder maxUses(float maxUses) {
+        //? }
+            //? if >= 26.3 {
+            return maxUses(ContextIntProviders.exactly(maxUses));
+            //? } else {
+            //return maxUses(ConstantValue.exactly(maxUses));
+            //? }
         }
 
-        public Builder maxUses(NumberProvider maxUses) {
+        //? if >= 26.3 {
+        public Builder maxUses(Holder<ContextIntProvider> maxUses) {
+        //? } else {
+        //public Builder maxUses(NumberProvider maxUses) {
+        //? }
             this.maxUses = maxUses;
             return this;
         }
 
-        public Builder numberReference(String id, NumberProvider numberProvider) {
+        //? if >= 26.3 {
+        public Builder numberReference(String id, Holder<ContextFloatProvider> numberProvider) {
+        //? } else {
+        //public Builder numberReference(String id, NumberProvider numberProvider) {
+        //? }
             this.referenceProviders.put(id, numberProvider);
             return this;
         }

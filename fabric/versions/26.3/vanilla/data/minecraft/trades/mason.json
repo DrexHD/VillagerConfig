@@ -1,0 +1,985 @@
+{
+  "tiers": [
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 10
+                },
+                "name": "minecraft:clay_ball"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 2
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 10
+                },
+                "name": "minecraft:brick"
+              },
+              "trader_experience": 1
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 0
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 20
+                },
+                "name": "minecraft:stone"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 10
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 4
+                },
+                "name": "minecraft:chiseled_stone_bricks"
+              },
+              "trader_experience": 5
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 10
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 16
+                },
+                "name": "minecraft:granite"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 20
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 16
+                },
+                "name": "minecraft:andesite"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 20
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 16
+                },
+                "name": "minecraft:diorite"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 20
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 4
+                },
+                "name": "minecraft:dripstone_block"
+              },
+              "trader_experience": 10
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 4
+                },
+                "name": "minecraft:polished_andesite"
+              },
+              "trader_experience": 10
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 4
+                },
+                "name": "minecraft:polished_diorite"
+              },
+              "trader_experience": 10
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 4
+                },
+                "name": "minecraft:polished_granite"
+              },
+              "trader_experience": 10
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 70
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 12
+                },
+                "name": "minecraft:quartz"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 30
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:white_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:orange_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:magenta_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:light_blue_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:yellow_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:lime_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:pink_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:gray_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:light_gray_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:cyan_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:purple_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:blue_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:brown_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:green_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:red_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:black_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:white_glazed_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:orange_glazed_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:magenta_glazed_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:light_blue_glazed_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:yellow_glazed_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:lime_glazed_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:pink_glazed_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:gray_glazed_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:light_gray_glazed_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:cyan_glazed_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:purple_glazed_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:blue_glazed_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:brown_glazed_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:green_glazed_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:red_glazed_terracotta"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:black_glazed_terracotta"
+              },
+              "trader_experience": 15
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 150
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:quartz_pillar"
+              },
+              "trader_experience": 30
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:quartz_block"
+              },
+              "trader_experience": 30
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 250
+    }
+  ]
+}

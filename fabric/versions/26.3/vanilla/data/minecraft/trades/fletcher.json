@@ -1,0 +1,383 @@
+{
+  "tiers": [
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 32
+                },
+                "name": "minecraft:stick"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 2
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 16
+                },
+                "name": "minecraft:arrow"
+              },
+              "trader_experience": 1
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 10
+                },
+                "name": "minecraft:gravel"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 10
+                },
+                "name": "minecraft:flint"
+              },
+              "trader_experience": 1
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 0
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 26
+                },
+                "name": "minecraft:flint"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 10
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 2
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:bow"
+              },
+              "trader_experience": 5
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 10
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 14
+                },
+                "name": "minecraft:string"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 20
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 3
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:crossbow"
+              },
+              "trader_experience": 10
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 70
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 24
+                },
+                "name": "minecraft:feather"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 30
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 2
+                },
+                "name": "minecraft:emerald"
+              },
+              "max_uses": 3,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": [
+                  {
+                    "type": "minecraft:set_count",
+                    "count": 1
+                  },
+                  {
+                    "type": "minecraft:sequence",
+                    "functions": [
+                      {
+                        "type": "minecraft:enchant_with_levels",
+                        "include_additional_cost_component": true,
+                        "levels": {
+                          "type": "minecraft:uniform",
+                          "max": 19,
+                          "min": 5
+                        },
+                        "options": "#minecraft:on_traded_equipment"
+                      },
+                      {
+                        "type": "minecraft:filtered",
+                        "item_filter": {
+                          "items": "minecraft:bow",
+                          "predicates": {
+                            "minecraft:enchantments": [
+                              {}
+                            ]
+                          }
+                        },
+                        "on_fail": {
+                          "type": "minecraft:discard"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "name": "minecraft:bow"
+              },
+              "trader_experience": 15
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 150
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 8
+                },
+                "name": "minecraft:tripwire_hook"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 30
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 3
+                },
+                "name": "minecraft:emerald"
+              },
+              "max_uses": 3,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": [
+                  {
+                    "type": "minecraft:set_count",
+                    "count": 1
+                  },
+                  {
+                    "type": "minecraft:sequence",
+                    "functions": [
+                      {
+                        "type": "minecraft:enchant_with_levels",
+                        "include_additional_cost_component": true,
+                        "levels": {
+                          "type": "minecraft:uniform",
+                          "max": 19,
+                          "min": 5
+                        },
+                        "options": "#minecraft:on_traded_equipment"
+                      },
+                      {
+                        "type": "minecraft:filtered",
+                        "item_filter": {
+                          "items": "minecraft:crossbow",
+                          "predicates": {
+                            "minecraft:enchantments": [
+                              {}
+                            ]
+                          }
+                        },
+                        "on_fail": {
+                          "type": "minecraft:discard"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "name": "minecraft:crossbow"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 2
+                },
+                "name": "minecraft:emerald"
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 5
+                },
+                "name": "minecraft:arrow"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": [
+                  {
+                    "type": "minecraft:set_count",
+                    "count": 5
+                  },
+                  {
+                    "type": "minecraft:set_random_potion",
+                    "options": "#minecraft:tradeable"
+                  }
+                ],
+                "name": "minecraft:tipped_arrow"
+              },
+              "trader_experience": 30
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 250
+    }
+  ]
+}

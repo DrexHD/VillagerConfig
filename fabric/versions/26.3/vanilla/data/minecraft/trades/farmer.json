@@ -1,0 +1,371 @@
+{
+  "tiers": [
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 20
+                },
+                "name": "minecraft:wheat"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 2
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 26
+                },
+                "name": "minecraft:potato"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 2
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 22
+                },
+                "name": "minecraft:carrot"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 2
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 15
+                },
+                "name": "minecraft:beetroot"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 2
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 6
+                },
+                "name": "minecraft:bread"
+              },
+              "trader_experience": 1
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 0
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 6
+                },
+                "name": "minecraft:pumpkin"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 10
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 4
+                },
+                "name": "minecraft:pumpkin_pie"
+              },
+              "trader_experience": 5
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "max_uses": 16,
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 4
+                },
+                "name": "minecraft:apple"
+              },
+              "trader_experience": 5
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 10
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 3
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 18
+                },
+                "name": "minecraft:cookie"
+              },
+              "trader_experience": 10
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 4
+                },
+                "name": "minecraft:melon"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "trader_experience": 20
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 70
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 3
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:cake"
+              },
+              "trader_experience": 15
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 1
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": [
+                  {
+                    "type": "minecraft:set_count",
+                    "count": 1
+                  },
+                  {
+                    "type": "minecraft:set_stew_effect",
+                    "effects": [
+                      {
+                        "type": "minecraft:night_vision",
+                        "duration": 5
+                      },
+                      {
+                        "type": "minecraft:jump_boost",
+                        "duration": 8
+                      },
+                      {
+                        "type": "minecraft:weakness",
+                        "duration": 7
+                      },
+                      {
+                        "type": "minecraft:blindness",
+                        "duration": 6
+                      },
+                      {
+                        "type": "minecraft:poison",
+                        "duration": 14
+                      },
+                      {
+                        "type": "minecraft:saturation",
+                        "duration": 7
+                      }
+                    ]
+                  }
+                ],
+                "name": "minecraft:suspicious_stew"
+              },
+              "trader_experience": 15
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 150
+    },
+    {
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 3
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 3
+                },
+                "name": "minecraft:golden_carrot"
+              },
+              "trader_experience": 30
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 4
+                },
+                "name": "minecraft:emerald"
+              },
+              "price_multiplier": 0.05,
+              "result": {
+                "type": "minecraft:item",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 3
+                },
+                "name": "minecraft:glistering_melon_slice"
+              },
+              "trader_experience": 30
+            }
+          ]
+        }
+      ],
+      "total_exp_required": 250
+    }
+  ]
+}

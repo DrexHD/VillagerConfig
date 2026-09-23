@@ -5,6 +5,9 @@ import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+//? if >= 26.3 {
+import net.minecraft.core.Holder;
+//? }
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -35,7 +38,11 @@ public class SetDyeFunction extends LootItemConditionalFunction {
     private final Optional<List<DyeColor>> dyeColors;
     private final boolean add;
 
-    protected SetDyeFunction(List<LootItemCondition> conditions, Optional<List<DyeColor>> dyeColors, boolean add) {
+    //? if >= 26.3 {
+    protected SetDyeFunction(Optional<Holder<LootItemCondition>> conditions, Optional<List<DyeColor>> dyeColors, boolean add) {
+    //? } else {
+    //protected SetDyeFunction(List<LootItemCondition> conditions, Optional<List<DyeColor>> dyeColors, boolean add) {
+    //? }
         super(conditions);
         this.dyeColors = dyeColors;
         this.add = add;
@@ -81,7 +88,11 @@ public class SetDyeFunction extends LootItemConditionalFunction {
 
         @Override
         public @NotNull SetDyeFunction build() {
-            return new SetDyeFunction(this.getConditions(), this.dyeColors.isEmpty() ? Optional.empty() : Optional.of(ImmutableList.copyOf(this.dyeColors)), add);
+            //? if >= 26.3 {
+            return new SetDyeFunction(this.getCondition(), this.dyeColors.isEmpty() ? Optional.empty() : Optional.of(ImmutableList.copyOf(this.dyeColors)), add);
+            //? } else {
+            //return new SetDyeFunction(this.getConditions(), this.dyeColors.isEmpty() ? Optional.empty() : Optional.of(ImmutableList.copyOf(this.dyeColors)), add);
+            //? }
         }
 
     }

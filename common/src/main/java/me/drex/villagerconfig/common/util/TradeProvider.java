@@ -21,11 +21,19 @@ import net.minecraft.world.item.trading.TradeSet;
 import net.minecraft.world.item.trading.TradeSets;
 import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+//? if >= 26.3 {
+import net.minecraft.world.level.storage.loot.entries.UniformContainerBase;
+//? } else {
+//import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+//? }
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SetComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+//? if >= 26.3 {
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
+//? } else {
+//import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+//? }
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -82,7 +90,11 @@ public class TradeProvider implements DataProvider {
                     return;
                 }
                 TradeSet tradeSet = provider.getOrThrow(tradeSetKey).value();
-                TradeGroup tradeGroup = new TradeGroup(tradeSet.amount, tradeSet.getTrades().stream().map(itemListing -> convert(itemListing.value())).map(BehaviorTrade.Builder::build).toList());
+                //? if >= 26.3 {
+                TradeGroup tradeGroup = new TradeGroup(tradeSet.amount(), tradeSet.trades().stream().map(itemListing -> convert(itemListing.value())).map(BehaviorTrade.Builder::build).toList());
+                //? } else {
+                //TradeGroup tradeGroup = new TradeGroup(tradeSet.amount, tradeSet.getTrades().stream().map(itemListing -> convert(itemListing.value())).map(BehaviorTrade.Builder::build).toList());
+                //? }
                 tradeGroups[level - 1] = tradeGroup;
             });
             final TradeTier[] tiers;
@@ -102,18 +114,44 @@ public class TradeProvider implements DataProvider {
     }
 
     private BehaviorTrade.Builder convert(VillagerTrade villagerTrade) {
-        LootPoolSingletonContainer.Builder<?> costA = convertCost(villagerTrade.wants);
+        //? if >= 26.3 {
+        UniformContainerBase.Builder<?> costA = convertCost(villagerTrade.wants);
+        //? } else {
+        //LootPoolSingletonContainer.Builder<?> costA = convertCost(villagerTrade.wants);
+        //? }
 
-        LootPoolSingletonContainer.Builder<?> result = LootItem.lootTableItem(villagerTrade.gives.item().value())
-            .apply(SetItemCountFunction.setCount(ConstantValue.exactly(villagerTrade.gives.count())));
+        //? if >= 26.3 {
+        UniformContainerBase.Builder<?> result = LootItem.lootTableItem(villagerTrade.gives.item().value())
+        //? } else {
+        //LootPoolSingletonContainer.Builder<?> result = LootItem.lootTableItem(villagerTrade.gives.item().value())
+        //? }
+            //? if >= 26.3 {
+            .apply(SetItemCountFunction.setCount(ContextIntProviders.exactly(villagerTrade.gives.count())));
+            //? } else {
+            //.apply(SetItemCountFunction.setCount(ConstantValue.exactly(villagerTrade.gives.count())));
+            //? }
+        //? if >= 26.3 {
+        var resultComponents = villagerTrade.gives.components().split();
+        if (!resultComponents.removed().isEmpty()) throw new IllegalStateException("Component value is empty");
+        for (var component : resultComponents.added()) {
+            result.apply(SetComponentsFunction.setComponent((DataComponentType<Object>) component.type(), component.value()));
+        }
+        //? } else {
+        /*
         for (Map.Entry<DataComponentType<?>, Optional<?>> entry : villagerTrade.gives.components().entrySet()) {
             Optional<?> value = entry.getValue();
             if (value.isEmpty()) throw new IllegalStateException("Component value is empty");
             result.apply(SetComponentsFunction.setComponent((DataComponentType) entry.getKey(), value.get()));
         }
-        for (LootItemFunction givenItemModifier : villagerTrade.givenItemModifiers) {
-            result.functions.add(givenItemModifier);
-        }
+        */
+        //? }
+        //? if >= 26.3 {
+        villagerTrade.givenItemModifier.ifPresent(result::apply);
+        //? } else {
+        //for (LootItemFunction givenItemModifier : villagerTrade.givenItemModifiers) {
+        //    result.functions.add(givenItemModifier);
+        //}
+        //? }
 
         BehaviorTrade.Builder tradeBuilder = new BehaviorTrade.Builder(costA, result)
             .maxUses(villagerTrade.maxUses)
@@ -127,14 +165,32 @@ public class TradeProvider implements DataProvider {
         return tradeBuilder;
     }
 
-    private LootPoolSingletonContainer.Builder<?> convertCost(TradeCost tradeCost) {
-        LootPoolSingletonContainer.Builder<?> costA = LootItem.lootTableItem(tradeCost.item().value())
+    //? if >= 26.3 {
+    private UniformContainerBase.Builder<?> convertCost(TradeCost tradeCost) {
+    //? } else {
+    //private LootPoolSingletonContainer.Builder<?> convertCost(TradeCost tradeCost) {
+    //? }
+        //? if >= 26.3 {
+        UniformContainerBase.Builder<?> costA = LootItem.lootTableItem(tradeCost.item().value())
+        //? } else {
+        //LootPoolSingletonContainer.Builder<?> costA = LootItem.lootTableItem(tradeCost.item().value())
+        //? }
             .apply(SetItemCountFunction.setCount(tradeCost.count()));
+        //? if >= 26.3 {
+        var costComponents = tradeCost.components().asPatch().split();
+        if (!costComponents.removed().isEmpty()) throw new IllegalStateException("Expected component is empty");
+        for (var component : costComponents.added()) {
+            costA.apply(SetComponentsFunction.setComponent((DataComponentType<Object>) component.type(), component.value()));
+        }
+        //? } else {
+        /*
         for (Map.Entry<DataComponentType<?>, Optional<?>> entry : tradeCost.components().asPatch().entrySet()) {
             Optional<?> value = entry.getValue();
             if (value.isEmpty()) throw new IllegalStateException("Expected component is empty");
             costA.apply(SetComponentsFunction.setComponent((DataComponentType) entry.getKey(), value.get()));
         }
+        */
+        //? }
         return costA;
     }
 
